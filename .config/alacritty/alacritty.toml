@@ -1,0 +1,46 @@
+
+[window]
+
+opacity = 0.7
+
+padding.x = 30
+padding.y = 20
+
+decorations = "Full"
+decorations_theme_variant = "Dark"
+
+[font]
+size = 10.0
+
+[font.bold]
+family = "CaskaydiaCove Nerd Font Mono" 
+style = "Bold"
+
+[font.bold_italic]
+family = "CaskaydiaCove Nerd Font Mono" 
+style = "Bold Italic"
+
+[font.italic]
+family = "CaskaydiaCove Nerd Font Mono" 
+style = "Italic"
+
+[font.normal]
+family = "CaskaydiaCove Nerd Font Mono" 
+style = "Regular"
+# family = "Source Code Pro"
+# family = "Liberation Mono"
+# family = "Source Code Pro"
+
+
+[keyboard]
+
+bindings = [
+	{ key = "J", mods = "Control|Shift", action = "ScrollLineDown" },
+	{ key = "K", mods = "Control|Shift", action = "ScrollLineUp" },
+	{ key = "D", mods = "Control|Shift", action = "ScrollPageDown" },
+	{ key = "U", mods = "Control|Shift", action = "ScrollPageUp" },
+	# { key = "A", mods = "Control", action = "ScrollLineUpScrollLineUp" },
+]
+
+
+
