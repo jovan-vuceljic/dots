@@ -22,7 +22,7 @@ alias fzf="fzf --preview color='always {}'"
 alias pacs="sudo pacman -Syu"
 alias nmaps="sudo nmap -sn 192.168.0.0/24"
 alias mem="df -H --output=source,size,used,avail | grep 480G | sort -u"
-alias kittyimg="kitten icat"
+alias img="kitten icat"
 alias dmz="cat  ~/.config/fish/dmz.txt"
 alias xremaps="sudo xremap ~/.config/xremap/config.yml"
 # alias llama="~/projects/llama.cpp/build/bin/llama-server -m /home/anon/projects/llama.cpp/models/Llama-3.2-3B-Instruct-F16.gguf"
@@ -34,6 +34,7 @@ alias notes="cd ~/sync/notes && nvim"
 alias ipadd="sudo ip route add 192.168.0.1 dev wg0"
 alias copy="wl-copy"
 alias current="cd ~/projects/wingman/website/ && nvim"
+alias cat="vimcat"
 
 # List Directory
 alias ls="lsd"
@@ -66,4 +67,9 @@ abbr scrp "~/projects/scripts/"
 zoxide init --cmd cd fish | source
 
 
-
+# pnpm
+set -gx PNPM_HOME "/home/coja/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
