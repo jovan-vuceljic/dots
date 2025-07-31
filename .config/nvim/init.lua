@@ -18,7 +18,7 @@ if vim.g.neovide then
   -- vim.g.neovide_fullscreen = true
   -- vim.g.neovide_padding_bottom = 0
   -- vim.g.neovide_light_radius = 5
-  -- vim.g.neovide_show_border = false 
+  -- vim.g.neovide_show_border = false
   -- vim.g.neovide_light_angle_degrees = 45
 end
 
