@@ -27,7 +27,6 @@ vim.opt.wrap = false
 
 ----- end of custom -----
 
-
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
@@ -59,6 +58,7 @@ dofile(vim.g.base46_cache .. "statusline")
 require "options"
 require "nvchad.autocmds"
 require "gen"
+require "render-markdown"
 
 vim.schedule(function()
   require "mappings"
