@@ -7,6 +7,7 @@ set -g fish_cursor_default block
 set -g fish_cursor_visual underscore
 set -g fish_user_key_bindings
 set -g ask
+set -g tuis
 # set -Ux BAT_THEME gruvbox
 
 #set -xU MANPAGER 'less -R --use-color -Dd+r -Du+b'
