@@ -31,4 +31,6 @@ pyradio
 kew
 matrix
 cava
-
+pipes-rs
+asciiquarium
+tclock
