@@ -33,4 +33,5 @@ matrix
 cava
 pipes-rs
 asciiquarium
+cbonsai
 tclock
