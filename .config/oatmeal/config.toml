@@ -8,7 +8,7 @@ backend-health-check-timeout = 1000
 editor = "clipboard"
 
 # The initial model on a backend to consume. Defaults to the first model available from the backend if not set.
-model = "dolphin-llama3:latest"
+model = "gemma3n:latest"
 
 # Ollama API URL when using the Ollama backend.
 ollama-url = "http://localhost:11434"
