@@ -1,0 +1,13 @@
+# see https://github.com/sigoden/aichat/blob/main/config.example.yaml
+
+model: ollama:gemma3:12b
+clients:
+- type: openai-compatible
+  name: ollama
+  api_base: http://127.0.0.1:11434/v1
+  models:
+  - name: deepcoder:14b
+  - name: gemma3:12b
+  - name: gemma3n:latest
+  - name: gpt-oss:latest
+  - name: qwen3:14b
