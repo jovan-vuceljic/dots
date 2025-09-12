@@ -6,6 +6,7 @@ tdf
 dysk
 dust
 ncdu
+duf
 systemctl-tui
 btop
 bandwhich
@@ -19,6 +20,8 @@ lazygit
 lazydocker
 lazyjorunal
 oatmeal
+aichat
+tenere
 tt
 pastel
 hexyl
@@ -35,3 +38,4 @@ pipes-rs
 asciiquarium
 cbonsai
 tclock
+asciinema
