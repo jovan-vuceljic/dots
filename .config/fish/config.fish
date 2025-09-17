@@ -18,7 +18,6 @@ set -g tuis
 alias grep="grep --color=auto"
 alias img="kitten icat"
 alias dmz="cat  ~/.config/fish/dmz.txt"
-alias xremaps="sudo xremap ~/.config/xremap/config.yml"
 
 alias cdots="cd ~/.dotfiles/.config/"
 alias dots="cd ~/.dotfiles/.config/ && nvim"

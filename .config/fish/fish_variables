@@ -4,6 +4,7 @@ SETUVAR --export BAT_THEME:gruvbox
 SETUVAR --export EDITOR:nvim
 SETUVAR --export MANPAGER:nvim\x20\x2bMan\x21
 SETUVAR --export MANROFFOPT:\x2dP\x20\x2dc
+SETUVAR --path PATH:\x1d
 SETUVAR --export SSH_AGENT_PID:797
 SETUVAR --export SSH_AUTH_SOCK:/tmp/ssh\x2dXXXXXXnIccdf/agent\x2e796
 SETUVAR SSH_KEYS_TO_AUTOLOAD:/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai\x1e/home/coja/\x2essh/id_ed25519_wingmanai
