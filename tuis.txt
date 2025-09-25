@@ -15,13 +15,13 @@ gping
 bmon
 profanity
 nmtui
+impala
 bluetui
+lazyssh
 lazygit
 lazydocker
 lazyjorunal
-oatmeal
 aichat
-tenere
 tt
 pastel
 hexyl
@@ -32,7 +32,8 @@ vim
 tetrigo
 pyradio
 kew
-matrix
+cmatrix
+neo-matrix
 cava
 pipes-rs
 asciiquarium

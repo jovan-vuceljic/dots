@@ -54,6 +54,7 @@ abbr ... "cd ../.."
 abbr .3 "cd ../../.."
 abbr .4 "cd ../../../.."
 abbr .5 "cd ../../../../.."
+abbr tts "tt -notheme -bold -showwpm -json"
 
 abbr vpnhome "sudo wg-quick up wg0"
 abbr ipadd "sudo ip route add 192.168.0.1 dev wg0"
