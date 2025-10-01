@@ -17,12 +17,13 @@ profanity
 nmtui
 impala
 bluetui
-lazyssh
+sshm
 lazygit
 lazydocker
 lazyjorunal
 aichat
 tt
+gittype
 pastel
 hexyl
 tmux
