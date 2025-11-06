@@ -66,6 +66,7 @@ abbr pacs "sudo pacman -Syu --noconfirm"
 abbr yays "yay --noconfirm --sudoloop"
 abbr nmaps "sudo nmap -sn 192.168.0.0/24"
 abbr lg "lazygit"
+abbr llamacpp "~/projects/random-clones/llama.cpp/build/bin/llama-server --port 11343 -m ~/projects/random-clones/llama.cpp/models/Qwen3-Coder-30B-A3B-Instruct-UD-IQ2_XXS.gguf"
 
 abbr pwwa "~/projects/wingman/website/src/assets/"
 abbr scrp "~/projects/scripts/"
