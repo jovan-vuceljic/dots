@@ -1,6 +1,6 @@
 # see https://github.com/sigoden/aichat/blob/main/config.example.yaml
 
-model: llamacpp:default
+model: duskadiy:Qwen3-Coder-30B-Instruct-IQ4_XS
 clients:
 - type: openai-compatible
   name: ollama
@@ -16,5 +16,9 @@ clients:
   api_base: http://127.0.0.1:11343/v1
   models:
   - name: default
-  - name: qwen3-coder:30b
-  - name: qwen3:14b
+- type: openai-compatible
+  name: duskadiy
+  api_base: https://llm.duskadiy.com/api/v1
+  api_key: ***
+  models:
+  - name: Qwen3-Coder-30B-Instruct-IQ4_XS
