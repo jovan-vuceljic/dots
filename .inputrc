@@ -1,0 +1,17 @@
+set editing-mode vi
+set keymap vi
+set editing-mode vi
+set show-mode-in-prompt on
+set vi-ins-mode-string "[I] "
+set vi-cmd-mode-string "[N] "
+set match-hidden-files off
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+set colored-stats on
+
+"\C- ": shell-expand-line
+"\C-x": glob-expand-word
+Control-g: "g\n"
+Control-y: "| ccze\n"
+Control-o: "\C-u yazi\n\C-u"
+Control-l: "\C-u clear -x && ls\n"
