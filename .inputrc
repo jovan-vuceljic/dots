@@ -1,13 +1,24 @@
+
+# Vi mode
 set editing-mode vi
 set keymap vi
-set editing-mode vi
 set show-mode-in-prompt on
-set vi-ins-mode-string "[I] "
-set vi-cmd-mode-string "[N] "
-set match-hidden-files off
+set vi-ins-mode-string "\1\e[32m\2[I] \1\e[0m\2"
+set vi-cmd-mode-string "\1\e[31m\2[N] \1\e[0m\2"
+
+# exclude .files
+set match-hidden-files off 
+
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
 set colored-stats on
+set colored-completion-prefix on
+set mark-symlinked-directories on
+set completion-ignore-case on
+
+# Ignore duplicates in history where supported
+set skip-completed-text on 
+
 
 "\C- ": shell-expand-line
 "\C-x": glob-expand-word
