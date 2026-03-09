@@ -25,6 +25,12 @@ return {
         "typescript",
         "javascript",
         "markdown",
+        "latex",
+        "norg",
+        "scss",
+        "svelte",
+        "typst",
+        "vue",
       },
     },
   },
@@ -32,12 +38,12 @@ return {
   {
     "David-Kunz/gen.nvim",
     opts = {
-      model = "dolphin-mistral:latest", -- The default model to use.
+      model = "Qwen3-Coder-30B-Instruct-IQ2-4k",
       quit_map = "q", -- set keymap to close the response window
       retry_map = "<c-r>", -- set keymap to re-send the current prompt
       accept_map = "<c-cr>", -- set keymap to replace the previous selection with the last result
       host = "localhost", -- The host running the Ollama service.
-      port = "11434", -- The port on which the Ollama service is listening.
+      port = "11343", -- The port on which the Ollama service is listening.
       display_mode = "vertical-split", -- The display mode. Can be "float" or "split" or "horizontal-split" or "vertical-split".
       show_prompt = false, -- Shows the prompt submitted to Ollama. Can be true (3 lines) or "full".
       show_model = false, -- Displays which model you are using at the beginning of your chat session.
@@ -65,11 +71,73 @@ return {
       debug = false, -- Prints errors and the command which is run.
     },
   },
+
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {},
+  },
+
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+      bigfile = { enabled = true },
+      dashboard = { enabled = true },
+      explorer = { enabled = true },
+      indent = { enabled = true },
+      input = { enabled = true },
+      picker = { enabled = true },
+      notifier = { enabled = true },
+      quickfile = { enabled = true },
+      scope = { enabled = true },
+      scroll = { enabled = true },
+      statuscolumn = { enabled = true },
+      words = { enabled = true },
+    },
+  },
+
+  {
+    "nickjvandyke/opencode.nvim",
+    version = "*", -- Latest stable release
+    dependencies = {
+      {
+        -- `snacks.nvim` integration is recommended, but optional
+        ---@module "snacks" <- Loads `snacks.nvim` types for configuration intellisense
+        "folke/snacks.nvim",
+        optional = true,
+        opts = {
+          input = {}, -- Enhances `ask()`
+          picker = { -- Enhances `select()`
+            actions = {
+              opencode_send = function(...)
+                return require("opencode").snacks_picker_send(...)
+              end,
+            },
+            win = {
+              input = {
+                keys = {
+                  ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    config = function()
+      ---@type opencode.Opts
+      vim.g.opencode_opts = {
+        -- Your configuration, if any; goto definition on the type or field for details
+      }
+      vim.o.autoread = true -- Required for `opts.events.reload`
+    end,
   },
 }

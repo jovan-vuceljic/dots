@@ -26,3 +26,34 @@ map("n", "<leader>fk", ":Telescope keymaps<CR>", { desc = "Find keymaps" })
 map("n", "<leader>fd", ":Telescope diagnostics<CR>", { desc = "Diagnostics" })
 
 map({ "n", "v" }, "<leader>ge", "<cmd>:Gen<cr>", { desc = "Gen.nvim" })
+
+-- Opencode
+map({ "n", "x" }, "<leader>ga", function()
+  require("opencode").ask("@this: ", { submit = true })
+end, { desc = "Ask opencode…" })
+
+map({ "n", "x" }, "<leader>gx", function()
+  require("opencode").select()
+end, { desc = "Execute opencode action…" })
+
+map({ "n", "t" }, "<leader>g.", function()
+  require("opencode").toggle()
+end, { desc = "Toggle opencode" })
+
+map({ "n", "x" }, "<leader>go", function()
+  return require("opencode").operator "@this "
+end, { desc = "Add range to opencode", expr = true })
+map("n", "<leader>goo", function()
+  return require("opencode").operator "@this " .. "_"
+end, { desc = "Add line to opencode", expr = true })
+
+map("n", "<leader>gu", function()
+  require("opencode").command "session.half.page.up"
+end, { desc = "Scroll opencode up" })
+map("n", "<leader>gd", function()
+  require("opencode").command "session.half.page.down"
+end, { desc = "Scroll opencode down" })
+
+-- You may want these if you use the opinionated `<C-a>` and `<C-x>` keymaps above — otherwise consider `<leader>o…` (and remove terminal mode from the `toggle` keymap)
+-- map("n", "+", "<C-a>", { desc = "Increment under cursor", noremap = true })
+-- map("n", "-", "<C-x>", { desc = "Decrement under cursor", noremap = true })
