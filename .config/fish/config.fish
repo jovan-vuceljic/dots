@@ -42,12 +42,10 @@ alias lt="ls --tree"
 
 # Git
 alias gg="serie"
-alias gs="git status"
-alias gca="git add -p . && git commit"
+alias gs="git status --short"
 alias gd="git diff --word-diff"
 alias gl="git log --graph --show-signature"
 alias gla="git log --all --decorate --oneline --graph"
-alias gm="git merge"
 
 # Handy change dir shortcuts
 abbr .. "cd .."
@@ -72,6 +70,7 @@ abbr llamacpp " ~/projects/random-clones/llama.cpp/build/bin/llama-server --alia
 
 abbr pwwa "~/projects/wingman/website/src/assets/"
 abbr scrp "~/projects/scripts/"
+abbr startsim "cd ~/software/wmclient/ && ./wmsimulator.sh"
 
 zoxide init --cmd cd fish | source
 
