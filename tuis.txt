@@ -51,3 +51,4 @@ whosthere
 voxcli
 bookokrat
 tennis
+llmfit
