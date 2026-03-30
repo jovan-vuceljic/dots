@@ -41,11 +41,11 @@ alias lla="ls -la"
 alias lt="ls --tree"
 
 # Git
-alias gg="serie"
 alias gs="git status --short"
 alias gd="git diff --word-diff"
 alias gl="git log --graph --show-signature"
 alias gla="git log --all --decorate --oneline --graph"
+alias gls="serie"
 
 # Handy change dir shortcuts
 abbr .. "cd .."
