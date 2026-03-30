@@ -20,6 +20,19 @@ map("n", "<leader>dj", ":lua vim.diagnostic.goto_next()<cr>", { desc = "Go to ne
 map("n", "<leader>dk", ":lua vim.diagnostic.goto_prev()<cr>", { desc = "Go to previous" })
 map("n", "<leader>da", ":lua vim.lsp.buf.code_action()<cr>", { desc = "Code actions", noremap = true, silent = true })
 
+map({ "n", "t" }, "<A-i>", function()
+  require("nvchad.term").toggle {
+    pos = "float",
+    id = "floatTerm",
+    float_opts = {
+      row = 0.1,
+      col = 0.1,
+      width = 0.8,
+      height = 0.8,
+    },
+  }
+end, { desc = "terminal toggle floating term" })
+
 map("n", "<leader>fr", ":Telescope resume<CR>", { desc = "Resume last search" })
 map("n", "<leader>fs", ":Telescope grep_string<CR>", { desc = "Find selected string" })
 map("n", "<leader>fk", ":Telescope keymaps<CR>", { desc = "Find keymaps" })
