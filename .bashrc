@@ -20,7 +20,7 @@ alias dots="cd ~/.dotfiles/.config/ && nvim"
 alias aliases="bat ~/.config/fish/config.fish"
 
 # List Directory
-alias ls="lsd"
+# alias ls="lsd"
 alias l="ls -l"
 alias la="ls -a"
 alias lla="ls -la"
@@ -38,4 +38,4 @@ alias gis='git status'
 PS1='[\u@\h \W]\$' 
 set -o vi
 
-eval "$(zoxide init --cmd cd bash)"
+# eval "$(zoxide init --cmd cd bash)"
