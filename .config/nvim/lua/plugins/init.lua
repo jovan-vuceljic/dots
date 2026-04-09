@@ -18,8 +18,8 @@ return {
     opts = {
       ensure_installed = {
         "vim",
-        "lua",
         "vimdoc",
+        "lua",
         "html",
         "css",
         "typescript",
@@ -31,6 +31,7 @@ return {
         "svelte",
         "typst",
         "vue",
+        "regex",
       },
     },
   },
@@ -50,12 +51,12 @@ return {
       no_auto_close = false, -- Never closes the window automatically.
       file = false, -- Write the payload to a temporary file to keep the command short.
       hidden = false, -- Hide the generation window (if true, will implicitly set `prompt.replace = true`), requires Neovim >= 0.10
-      init = function(options)
+      init = function()
         pcall(io.popen, "ollama serve > /dev/null 2>&1 &")
       end,
       -- Function to initialize Ollama
       command = function(options)
-        local body = { model = options.model, stream = true }
+        -- local body = { model = options.model, stream = true }
         return "curl --silent --no-buffer -X POST http://"
           .. options.host
           .. ":"
