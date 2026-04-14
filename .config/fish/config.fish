@@ -2,21 +2,21 @@ set -gx EDITOR nvim
 set -gx PAGER less
 set -Ux MANPAGER "nvim +Man!"
 set -x NEWT_COLORS 'root=black,black;window=black,black;border=white,black;listbox=white,black;label=blue,black;checkbox=red,black;title=green,black;button=white,red;actsellistbox=white,red;actlistbox=white,gray;compactbutton=white,gray;actcheckbox=white,blue;entry=lightgray,black;textbox=blue,black' nmtui
-# set -g fish_greeting
-# set -g fish_cursor_insert line
-# set -g fish_cursor_default block
-# set -g fish_cursor_visual underscore
-# set -g fish_user_key_bindings
-# set -Ux BAT_THEME gruvbox
+# set -gx BAT_THEME "Catppuccin Mocha"
 
-#set -xU MANPAGER 'less -R --use-color -Dd+r -Du+b'
-#set -xU MANROFFOPT '-P -c'
-
-# alias fzf="fzf --preview color='always {}'"
-# alias llama="~/projects/llama.cpp/build/bin/llama-server -m /home/anon/projects/llama.cpp/models/Llama-3.2-3B-Instruct-F16.gguf"
+# Shorts
+alias fzf="fzf --multi --preview 'bat --style=numbers --color=always {}' | xargs -n 1 nvim"
 alias grep="grep --color=auto"
-alias img="kitten icat"
-alias dmz="cat  ~/.config/fish/dmz.txt"
+
+# Git
+alias gs="git status --short"
+alias gca="git add -p . && git commit"
+alias gd="git diff --word-diff"
+alias gl="git log --graph --show-signature"
+alias gla="git log --all --decorate --oneline --graph"
+alias gls="serie"
+alias gm="git merge"
+alias gm="git merge"
 
 alias cdots="cd ~/.dotfiles/.config/"
 alias dots="cd ~/.dotfiles/.config/ && nvim"
@@ -71,6 +71,11 @@ abbr scrp "~/projects/scripts/"
 abbr startsim "cd ~/software/wmclient/ && ./wmsimulator.sh"
 
 zoxide init --cmd cd fish | source
+export PATH="$HOME/.cargo/bin:$PATH"
+thefuck --alias | source
+
+# Created by `pipx` on 2025-05-31 20:14:06
+set PATH $PATH /home/anon/.local/bin
 
 # pnpm
 set -gx PNPM_HOME "/home/coja/.local/share/pnpm"

@@ -1,3 +1,3 @@
-function sshf --description 'select ssh host with fzf' 
-  ssh $(grep Host -w .ssh/config | awk '{print $2}' | fzf)
+function sshf --description 'fzf select for ssh hosts' 
+  ssh $(grep Host -w ~/.ssh/config | awk '{print $2}' | bashs "fzf --multi") 
 end
