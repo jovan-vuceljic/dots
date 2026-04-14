@@ -13,6 +13,19 @@ return {
   },
 
   {
+    "olimorris/codecompanion.nvim",
+    version = "^19.0.0",
+    lazy = false,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = function()
+      return require "configs.codecompanion"
+    end,
+  },
+
+  {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
     build = ":TSUpdate",
@@ -53,8 +66,8 @@ return {
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
-      bigfile = { enabled = true },
-      dashboard = { enabled = true },
+      bigfile = { enabled = false },
+      dashboard = { enabled = false },
       explorer = { enabled = true },
       indent = { enabled = true },
       input = { enabled = true },

@@ -19,7 +19,7 @@ local M = {
   },
 
   nvdash = {
-    load_on_startup = false,
+    load_on_startup = true,
     -- buttons = {
     --   { txt = "  Find File", keys = "Spc f f", cmd = "Telescope find_files custom" },
     --   { txt = "  Recent Files", keys = "Spc f o", cmd = "Telescope oldfiles" },
