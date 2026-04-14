@@ -1,4 +1,4 @@
-require("render-markdown").setup {
+return {
   -- Whether markdown should be rendered by default.
   enabled = true,
   -- Vim modes that will show a rendered view of the markdown file, :h mode(), for all enabled
@@ -24,7 +24,7 @@ require("render-markdown").setup {
   -- Only intended to be used for plugin development / debugging.
   log_runtime = false,
   -- Filetypes this plugin will run on.
-  file_types = { "markdown" },
+  file_types = { "markdown", "gitcommit", "codecompanion" },
   -- Takes buffer as input, if it returns true this plugin will not attach to the buffer
   ignore = function()
     return false
@@ -92,7 +92,24 @@ require("render-markdown").setup {
     -- Highlight to use when adding whitespace, should match background.
     highlight = "Normal",
   },
-  latex = { enabled = false },
+  latex = {
+    -- Turn on / off latex rendering.
+    enabled = true,
+    -- Additional modes to render latex.
+    render_modes = false,
+    -- Executable used to convert latex formula to rendered unicode.
+    converter = "latex2text",
+    -- Highlight for latex blocks.
+    highlight = "RenderMarkdownMath",
+    -- Determines where latex formula is rendered relative to block.
+    -- | above | above latex block |
+    -- | below | below latex block |
+    position = "above",
+    -- Number of empty lines above latex blocks.
+    top_pad = 0,
+    -- Number of empty lines below latex blocks.
+    bottom_pad = 0,
+  },
   on = {
     -- Called when plugin initially attaches to a buffer.
     attach = function() end,
