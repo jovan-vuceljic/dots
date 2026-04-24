@@ -21,4 +21,11 @@ clients:
   api_base: https://llm.duskadiy.com/api/v1
   api_key: ***
   models:
+  - name: Qwen3.5-27B-UD-Q3_K_XL
+  - name: Qwen3.5-9B-Q8_0
   - name: Qwen3-Coder-30B-Instruct-IQ4_XS
+  - name: GLM-4.7-Flash-UD-Q3_K_XL
+  - name: llama-3.1-8b-instruct
+  - name: DeepSeek-Coder-V2-Lite-Instruct-Q8_0
+  - name: gemma-4-E4B-it-UD-Q8_K_XL
+  - name: gemma-4-26B-A4B-it-UD-IQ4_XS
