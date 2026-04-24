@@ -1,0 +1,127 @@
+  "permission": {
+    "bash": {
+      "rm *": "deny",
+      "cat .env*": "deny",
+      "grep .env*": "deny",
+      "grep -r --exclude-dir={node_modules,.git} *": "allow",
+      "grep *": "allow",
+      "mkdir *": "allow",
+      "touch *": "allow",
+      "npm list": "allow",
+      "npm help": "allow",
+      "npm version": "allow",
+      "pnpm list": "allow",
+      "pnpm help": "allow",
+      "npx --version": "allow",
+      "tsc *": "allow",
+      "which *": "allow",
+      "ls *": "allow",
+      "cat *": "allow",
+      "git status": "allow",
+      "git diff": "allow",
+      "git log": "allow",
+      "git *": "ask",
+      "npm install": "deny",
+      "npm i": "deny",
+      "pnpm i": "deny",
+      "pnpm install": "deny",
+      "npm *": "ask",
+      "pnpm *": "ask",
+      "npx *": "ask",
+      "*": "ask"
+    },
+    "edit": {
+      "*": "deny"
+    }
+  },
+  "provider": {
+    "duskadiy": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "DuskaDIY",
+      "options": {
+        "baseURL": "https://llm.duskadiy.com/api/v1"
+      },
+      "models": {
+        "gemma-4-26B-A4B-it-UD-IQ4_XS" : {
+          "name": "llama.cpp/gemma-4-26B-A4B-it-UD-IQ4_XS",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        },
+       "DeepSeek-Coder-V2-Lite-Instruct-Q8_0": {
+          "name": "llama.cpp/DeepSeek-Coder-V2-Lite-Instruct-Q8_0",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        },
+        "Qwen3-Coder-30B-Instruct-IQ4_XS" : {
+          "name": "llama.cpp/Qwen3-Coder-30B-Instruct-IQ4_XS",
+          "limit": {
+            "context": 8192,
+            "output": 8192
+          }
+        }
+      }
+    }
+  },
+  "agent" : {
+    "plan" : {
+      "mode" : "primary",
+      "model": "duskadiy/gemma-4-26B-A4B-it-UD-IQ4_XS",
+      "permissions" : {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    },
+    "build" : {
+      "mode" : "primary",
+      "model": "duskadiy/gemma-4-26B-A4B-it-UD-IQ4_XS",
+      "permissions" : {
+        "edit": "allow",
+        "bash": "ask"
+      }
+    },
+    "code-reviewer": {
+      "description": "Reviews code for best practices and potential issues",
+      "prompt": "You are a code reviewer. Focus on security, performance, and maintainability.",
+      "mode": "subagent",
+      "model": "duskadiy/DeepSeek-Coder-V2-Lite-Instruct-Q8_0",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    },
+    "test-runner": {
+      "description": "Runs and interprets test suites",
+      "prompt": "You are a test runner. Focus on identifying failing tests and providing clear reproduction steps.",
+      "mode": "subagent",
+      "model": "duskadiy/DeepSeek-Coder-V2-Lite-Instruct-Q8_0",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    },
+    "doc-writer": {
+      "description": "Maintains project documentation and docstrings",
+      "prompt": "You are a technical writer. Focus on clarity, accuracy, and keeping documentation in sync with code changes.",
+      "mode": "subagent",
+      "model": "duskadiy/gemma-4-26B-A4B-it-UD-IQ4_XS",
+      "permission": {
+        "edit": "allow",
+        "bash": "ask"
+      }
+    },
+    "security-auditor": {
+      "description": "Scans for security vulnerabilities and hardcoded secrets",
+      "prompt": "You are a security auditor. Focus on OWASP principles, secret detection, and dependency vulnerabilities.",
+      "mode": "subagent",
+      "model": "duskadiy/DeepSeek-Coder-V2-Lite-Instruct-Q8_0",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    }
+  }
+}
