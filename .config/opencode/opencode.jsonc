@@ -1,0 +1,278 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "llama.cpp/gemma-4-26B-A4B-it-UD-IQ4_XS",
+  "small_model": "llama.cpp/gemma-4-E4B-it-UD-Q8_K_XL",
+  "instructions": ["CLAUDE.md", "AGENTS.md"],
+  "share": "disabled",
+  "autoupdate": "notify",
+  "disabled_providers": [
+    "gemini",
+    "anthropic",
+    "groq",
+    "openrouter",
+    "opencode"
+  ],
+  "permission": {
+    "edit": "deny",
+    "webfetch": "ask",
+    "websearch": "ask",
+    "external_directory": "ask",
+    "read": {
+      "*": "allow",
+      "**/.env*": "deny",
+      "**/*.env": "deny",
+      "**/*.pem": "deny",
+      "**/*.key": "deny",
+      "**/*.p12": "deny",
+      "**/*.pfx": "deny",
+      "**/*.keystore": "deny",
+      "**/id_rsa*": "deny",
+      "**/.ssh/**": "deny",
+      "**/.aws/**": "deny",
+      "**/.npmrc": "deny",
+      "**/.netrc": "deny"
+    },
+    "bash": {
+      "*": "ask",
+
+      "ls *": "allow",
+      "cat *": "allow",
+      "grep *": "allow",
+      "rg *": "allow",
+      "find *": "allow",
+      "fd *": "allow",
+      "which *": "allow",
+      "file *": "allow",
+      "stat *": "allow",
+      "wc *": "allow",
+      "tree *": "allow",
+      "diff *": "allow",
+      "sort *": "allow",
+      "uniq *": "allow",
+      "echo *": "allow",
+      "pwd": "allow",
+      "date": "allow",
+      "whoami": "allow",
+      "jq *": "allow",
+      "tsc *": "allow",
+      "mkdir *": "allow",
+      "touch *": "allow",
+
+      "git *": "ask",
+      "git status": "allow",
+      "git status *": "allow",
+      "git diff": "allow",
+      "git diff *": "allow",
+      "git log": "allow",
+      "git log *": "allow",
+      "git show *": "allow",
+      "git branch": "allow",
+      "git remote -v": "allow",
+
+      "npm *": "ask",
+      "pnpm *": "ask",
+      "npx *": "ask",
+      "npm list": "allow",
+      "npm help": "allow",
+      "npm version": "allow",
+      "pnpm list": "allow",
+      "pnpm help": "allow",
+      "npx --version": "allow",
+
+      "curl *": "ask",
+      "wget *": "ask",
+
+      "rm *": "deny",
+      "rmdir *": "deny",
+      "dd *": "deny",
+      "mkfs*": "deny",
+      "shred *": "deny",
+      "chmod -R *": "deny",
+      "sudo *": "deny",
+      "doas *": "deny",
+
+      "npm install*": "deny",
+      "npm i": "deny",
+      "npm i *": "deny",
+      "npm ci*": "deny",
+      "pnpm install*": "deny",
+      "pnpm i": "deny",
+      "pnpm i *": "deny",
+      "pnpm add*": "deny",
+      "yarn add*": "deny",
+      "yarn install*": "deny",
+      "pip install*": "deny",
+      "pip3 install*": "deny",
+      "pipx install*": "deny",
+      "cargo install*": "deny",
+      "go install*": "deny",
+      "gem install*": "deny",
+      "brew install*": "deny",
+
+      "pacman *": "deny",
+      "yay *": "deny",
+      "apt *": "deny",
+      "apt-get *": "deny",
+      "dnf *": "deny",
+
+      "cat .env*": "deny",
+      "cat *.env": "deny",
+      "cat *.pem": "deny",
+      "cat *.key": "deny",
+      "cat *id_rsa*": "deny",
+      "cat *secret*": "deny",
+      "cat *credential*": "deny",
+      "cat ~/.ssh/*": "deny",
+      "cat ~/.aws/*": "deny",
+      "grep .env*": "deny",
+      "grep * .env*": "deny"
+    }
+  },
+  "provider": {
+    "duskadiy": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "DuskaDIY",
+      "options": {
+        "baseURL": "https://llm.duskadiy.com/api/v1"
+      },
+      "models": {
+        "gemma-4-26B-A4B-it-UD-IQ4_XS": {
+          "name": "Gemma 4 26B (remote)",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        },
+        "DeepSeek-Coder-V2-Lite-Instruct-Q8_0": {
+          "name": "DeepSeek Coder V2 (remote)",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        },
+        "Qwen3-Coder-30B-Instruct-IQ4_XS": {
+          "name": "Qwen3 Coder A3B (remote)",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        }
+      }
+    },
+    "llama.cpp": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llamacpp",
+      "options": {
+        "baseURL": "http://192.168.0.204:11343/v1"
+      },
+      "models": {
+        "DeepSeek-Coder-V2-Lite-Instruct-Q8_0": {
+          "name": "DeepSeek Coder V2",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        },
+        "gemma-4-E4B-it-UD-Q8_K_XL": {
+          "name": "Gemma 4 E4B",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        },
+        "gemma-4-26B-A4B-it-UD-IQ4_XS": {
+          "name": "Gemma 4 26B",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        },
+        "Qwen3-Coder-30B-Instruct-IQ4_XS": {
+          "name": "Qwen3 Coder A3B",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        },
+        "Qwen3.6-27B-UD-IQ3_XXS.gguf": {
+          "name": "Qwen3.6 27B",
+          "limit": {
+            "context": 81920,
+            "output": 8192
+          }
+        }
+      }
+    }
+  },
+  "agent": {
+    "plan": {
+      "mode": "primary",
+      "model": "llama.cpp/gemma-4-26B-A4B-it-UD-IQ4_XS",
+      "permission": {
+        "edit": "deny"
+      }
+    },
+    "build": {
+      "mode": "primary",
+      "model": "llama.cpp/gemma-4-26B-A4B-it-UD-IQ4_XS",
+      "permission": {
+        "edit": {
+          "*": "allow",
+          "**/.env*": "deny",
+          "**/*.env": "deny",
+          "**/*.pem": "deny",
+          "**/*.key": "deny",
+          "**/id_rsa*": "deny",
+          "**/.ssh/**": "deny",
+          "**/.aws/**": "deny",
+          "**/.git/**": "deny",
+          "**/.npmrc": "deny",
+          "**/.netrc": "deny"
+        }
+      }
+    },
+    "code-reviewer": {
+      "description": "Reviews code for best practices and potential issues",
+      "prompt": "You are a code reviewer. Focus on security, performance, and maintainability.",
+      "mode": "subagent",
+      "model": "llama.cpp/DeepSeek-Coder-V2-Lite-Instruct-Q8_0",
+      "permission": {
+        "edit": "deny"
+      }
+    },
+    "test-runner": {
+      "description": "Runs and interprets test suites",
+      "prompt": "You are a test runner. Focus on identifying failing tests and providing clear reproduction steps.",
+      "mode": "subagent",
+      "model": "llama.cpp/DeepSeek-Coder-V2-Lite-Instruct-Q8_0",
+      "permission": {
+        "edit": "deny"
+      }
+    },
+    "doc-writer": {
+      "description": "Maintains project documentation and docstrings",
+      "prompt": "You are a technical writer. Focus on clarity, accuracy, and keeping documentation in sync with code changes.",
+      "mode": "subagent",
+      "model": "llama.cpp/gemma-4-26B-A4B-it-UD-IQ4_XS",
+      "permission": {
+        "edit": {
+          "*": "deny",
+          "**/*.md": "allow",
+          "**/*.mdx": "allow",
+          "**/*.markdown": "allow",
+          "**/*.txt": "allow",
+          "**/*.rst": "allow"
+        }
+      }
+    },
+    "security-auditor": {
+      "description": "Scans for security vulnerabilities and hardcoded secrets",
+      "prompt": "You are a security auditor. Focus on OWASP principles, secret detection, and dependency vulnerabilities.",
+      "mode": "subagent",
+      "model": "llama.cpp/DeepSeek-Coder-V2-Lite-Instruct-Q8_0",
+      "permission": {
+        "edit": "deny"
+      }
+    }
+  }
+}
