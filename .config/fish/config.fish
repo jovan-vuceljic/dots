@@ -66,12 +66,12 @@ abbr lg "lazygit"
 abbr llamacpp " ~/projects/random-clones/llama.cpp/build/bin/llama-server --alias Qwen3-Coder-30B-Instruct-XXS --jinja --ctx-size 8192 --temp 1.0 --top-p 0.95 --min-p 0.01  --port 11343  -m ~/Documents/models/Qwen3-Coder-30B-A3B-Instruct-UD-IQ2_XXS.gguf"
 # abbr llamacpp "~/projects/random-clones/llama.cpp/build/bin/llama-server --port 11343 --host 192.168.0.204 --models-max 3 --models-preset /home/coja/.config/llamacpp/config.ini"
 
-abbr pwwa "~/projects/wingman/website/src/assets/"
 abbr scrp "~/projects/scripts/"
 abbr startsim "cd ~/software/wmclient/ && ./wmsimulator.sh"
 
-zoxide init --cmd cd fish | source
 export PATH="$HOME/.cargo/bin:$PATH"
+fnm env --use-on-cd --shell fish | source
+zoxide init --cmd cd fish | source
 thefuck --alias | source
 
 # Created by `pipx` on 2025-05-31 20:14:06
@@ -83,4 +83,5 @@ if not string match -q -- $PNPM_HOME $PATH
   set -gx PATH "$PNPM_HOME" $PATH
 end
 # pnpm end
+
 
