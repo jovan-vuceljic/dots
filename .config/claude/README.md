@@ -1,14 +1,23 @@
 # Claude Code config
 
 Portable [Claude Code](https://claude.com/claude-code) customizations, synced via these
-dotfiles. Claude Code still uses its default `~/.claude/` directory for everything; we only
-point its two portable config files at the copies tracked here.
+dotfiles. Claude Code still uses its default `~/.claude/` directory; we surface the tracked
+files below into it via per-file/dir symlinks, so edits made through Claude write straight
+back into this repo.
 
 ## What's tracked here
 
-- `settings.json` — global settings (permissions, `enabledPlugins`, vim mode, dark theme,
-  `effortLevel`, fullscreen TUI, statusLine command, …).
-- `statusline-command.sh` — custom status line (cwd, git branch, model, context %).
+- `settings.json` — global settings: permissions (deny git commit/push + read of secret
+  files), default `model`, `enabledPlugins`, vim mode, dark theme, `effortLevel`, fullscreen
+  TUI, `statusLine`, `hooks`, `worktree` defaults, …
+- `statusline.py` — rich status line (dir, git, model, context %, cost, RAM/CPU/temp/disk).
+- `keybindings.json` — custom keybindings (vim-style scroll/navigation).
+- `CLAUDE.md` — global user preferences applied to every project.
+- `hooks/format-lua.py` — PostToolUse hook: runs `stylua` on edited `.lua` files (only where a
+  `.stylua.toml` exists; no-ops if stylua isn't installed).
+
+Paths inside `settings.json` reference `~/.claude/...` (the symlinks), so they work regardless
+of where the dotfiles repo is cloned (`~/.dotfiles`, `~/.dots`, …).
 
 ## What is **not** tracked (stays local, per device)
 
@@ -19,31 +28,32 @@ caches, and the `plugins/` cache/binaries.
 ## Setup on a new device
 
 ```sh
-# 1. Clone these dotfiles to ~/.dotfiles and deploy with stow
-cd ~ && stow .dotfiles          # creates ~/.config/claude -> ../.dotfiles/.config/claude
+# 1. Clone these dotfiles and deploy with stow (creates ~/.config/claude -> the repo copy)
+cd ~ && stow .dotfiles
 
-# 2. Point Claude's default config dir at the tracked copies (run once)
-ln -sf ~/.config/claude/settings.json          ~/.claude/settings.json
-ln -sf ~/.config/claude/statusline-command.sh  ~/.claude/statusline-command.sh
+# 2. Point Claude's default dir at the tracked copies (run once per device)
+ln -sfn ~/.config/claude/settings.json     ~/.claude/settings.json
+ln -sfn ~/.config/claude/statusline.py     ~/.claude/statusline.py
+ln -sfn ~/.config/claude/keybindings.json  ~/.claude/keybindings.json
+ln -sfn ~/.config/claude/CLAUDE.md         ~/.claude/CLAUDE.md
+ln -sfn ~/.config/claude/hooks             ~/.claude/hooks
 
 # 3. Launch Claude and log in once (credentials are NOT synced)
 claude
 
-# 4. Reinstall plugins listed in settings.json -> enabledPlugins
-#    (typescript-lsp, frontend-design from the anthropics/claude-plugins-official marketplace)
-#    via the /plugin command inside Claude Code.
+# 4. Reinstall the plugins from settings.json -> enabledPlugins
+#    (typescript-lsp, frontend-design — anthropics/claude-plugins-official) via /plugin.
+#    Optional: install stylua (e.g. via nvim Mason) for the lua-format hook.
 ```
 
-`~/.claude/` is created by Claude on first run; the `ln -sf` above replaces its generated
-`settings.json` / `statusline-command.sh` with links to these tracked copies. Edits made later
-through Claude write straight back into this repo.
+`~/.claude/` is created by Claude on first run; the `ln -sfn` commands replace its generated
+files with links to these tracked copies.
 
 ## Adding more config later
 
-To sync additional items (e.g. custom slash commands or agents), drop them under
-`.config/claude/` here and symlink them into `~/.claude/`:
+Drop the file/dir under `.config/claude/` here and symlink it into `~/.claude/`, e.g.:
 
 ```sh
-ln -sf ~/.config/claude/commands ~/.claude/commands
-ln -sf ~/.config/claude/agents   ~/.claude/agents
+ln -sfn ~/.config/claude/commands ~/.claude/commands
+ln -sfn ~/.config/claude/agents   ~/.claude/agents
 ```

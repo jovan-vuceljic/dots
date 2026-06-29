@@ -1,0 +1,36 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-keybindings.json",
+  "$docs": "https://code.claude.com/docs/en/keybindings",
+  "bindings": [
+    {
+      "context": "Global",
+      "bindings": {
+        "alt+j": "scroll:lineDown",
+        "alt+k": "scroll:lineUp",
+        "ctrl+shift+j": "scroll:lineDown",
+        "ctrl+shift+k": "scroll:lineUp"
+      }
+    },
+    {
+      "context": "MessageSelector",
+      "bindings": {
+        "g": "messageSelector:top",
+        "shift+g": "messageSelector:bottom"
+      }
+    },
+    {
+      "context": "Select",
+      "bindings": {
+        "g": "select:first",
+        "shift+g": "select:last"
+      }
+    },
+    {
+      "context": "Footer",
+      "bindings": {
+        "j": "footer:down",
+        "k": "footer:up"
+      }
+    }
+  ]
+}
