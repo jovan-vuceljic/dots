@@ -19,9 +19,9 @@ set completion-ignore-case on
 # Ignore duplicates in history where supported
 set skip-completed-text on 
 
-
 "\C- ": shell-expand-line
 "\C-x": glob-expand-word
+"\C-l": clear-screen
 Control-g: "g\n"
 Control-y: "| ccze\n"
 Control-o: "\C-u yazi\n\C-u"
