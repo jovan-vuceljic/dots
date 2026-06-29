@@ -6,10 +6,10 @@ return {
       llama_cpp = function()
         return require("codecompanion.adapters").extend("openai_compatible", {
           env = {
-            url = "http://localhost:11343",
+            url = "https://llm.duskadiy.com",
             chat_url = "/v1/chat/completions",
             models_endpoint = "/v1/models",
-            api_key = "dummy",
+            api_key = "${DUSKADIY_API_KEY}",
           },
           schema = {
             model = {
