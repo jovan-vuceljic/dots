@@ -23,7 +23,10 @@
       "Read(**/.npmrc)",
       "Read(**/.netrc)",
       "Read(**/.git-credentials)",
-      "Read(**/.claude/.credentials.json)"
+      "Read(**/.claude/.credentials.json)",
+      "Read(**/secrets.fish)",
+      "Read(**/*.token)",
+      "Read(**/.envrc)"
     ],
     "defaultMode": "auto"
   },
@@ -36,7 +39,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "/usr/bin/python3 /home/coja/.claude/statusline.py",
+    "command": "/usr/bin/env python3 ~/.claude/statusline.py",
     "padding": 0
   },
   "hooks": {
@@ -46,9 +49,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 /home/coja/.claude/hooks/format-lua.py",
+            "command": "/usr/bin/env python3 ~/.claude/hooks/format.py",
             "timeout": 20,
-            "statusMessage": "stylua"
+            "statusMessage": "format"
           }
         ]
       }
