@@ -1,31 +1,28 @@
 # see https://github.com/sigoden/aichat/blob/main/config.example.yaml
 
+keybindings: vi 
+editor: nvim
 model: duskadiy:Qwen3-Coder-30B-Instruct-IQ4_XS
 clients:
 - type: openai-compatible
-  name: ollama
-  api_base: http://127.0.0.1:11434/v1
-  models:
-  - name: deepcoder:14b
-  - name: gemma3:12b
-  - name: gemma3n:latest
-  - name: gpt-oss:latest
-  - name: qwen3:14b
-- type: openai-compatible
-  name: llamacpp
-  api_base: http://127.0.0.1:11343/v1
-  models:
-  - name: default
-- type: openai-compatible
-  name: duskadiy
-  api_base: https://llm.duskadiy.com/api/v1
-  api_key: ***
+  name: local
+  api_base: http://192.168.0.204:11343/v1
   models:
   - name: Qwen3.5-27B-UD-Q3_K_XL
   - name: Qwen3.5-9B-Q8_0
   - name: Qwen3-Coder-30B-Instruct-IQ4_XS
   - name: GLM-4.7-Flash-UD-Q3_K_XL
-  - name: llama-3.1-8b-instruct
+  - name: DeepSeek-Coder-V2-Lite-Instruct-Q8_0
+  - name: gemma-4-E4B-it-UD-Q8_K_XL
+  - name: gemma-4-26B-A4B-it-UD-IQ4_XS
+- type: openai-compatible
+  name: duskadiy
+  api_base: https://llm.duskadiy.com/api/v1
+  models:
+  - name: Qwen3.5-27B-UD-Q3_K_XL
+  - name: Qwen3.5-9B-Q8_0
+  - name: Qwen3-Coder-30B-Instruct-IQ4_XS
+  - name: GLM-4.7-Flash-UD-Q3_K_XL
   - name: DeepSeek-Coder-V2-Lite-Instruct-Q8_0
   - name: gemma-4-E4B-it-UD-Q8_K_XL
   - name: gemma-4-26B-A4B-it-UD-IQ4_XS
