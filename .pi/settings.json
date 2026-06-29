@@ -1,0 +1,30 @@
+{
+  "defaultProvider": "duskadiy",
+  "defaultModel": "gemma-4-26B-A4B-it-UD-IQ4_XS",
+  "defaultThinkingLevel": "on",
+  "theme": "catppuccin-mocha",
+  "quietStartup": false,
+  "defaultProjectTrust": "ask",
+  "enableInstallTelemetry": false,
+  "enabledModels": [
+    "localcpp/*",
+    "duskadiy/*"
+  ],
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 16384,
+    "keepRecentTokens": 20000
+  },
+  "retry": {
+    "enabled": true,
+    "maxRetries": 3,
+    "baseDelayMs": 2000,
+    "provider": {
+      "timeoutMs": 3600000
+    }
+  },
+  "httpIdleTimeoutMs": 600000,
+  "npmCommand": ["fnm", "exec", "--using=22", "--", "npm"],
+  "showHardwareCursor": true,
+  "lastChangelogVersion": "0.80.1"
+}
