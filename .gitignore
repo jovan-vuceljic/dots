@@ -1,3 +1,4 @@
 !.gitignore
 .config/hyde/themes/
 .config/fish/greet.txt
+secrets.fish
