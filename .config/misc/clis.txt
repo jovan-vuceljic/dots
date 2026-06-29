@@ -1,0 +1,6 @@
+jq
+fq
+rg
+fd
+github-cli
+
