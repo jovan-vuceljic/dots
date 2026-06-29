@@ -1,4 +1,6 @@
 !.gitignore
 .config/hyde/themes/
 .config/fish/greet.txt
+.pi/agent/sessions/
 secrets.fish
+
