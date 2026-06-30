@@ -4,7 +4,7 @@ The custom Claude Code status line. It renders as **one line**, segments joined 
 light-gray `│`, ordered **work info (left) → system info (right)**:
 
 ```
-📁 ~/.dotfiles │ 🌿 .dotfiles main* │ 🤖 Opus 4.8 │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h │ 🧠 51% 15.9/31G │ 🖥️ 89% 9.5 12c │ 🌡️ 84°C │ 💾 81%
+📁 ~/.dotfiles │ 🌿 .dotfiles main* │ 🤖 Opus 4.8 · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h │ 🧠 51% 15.9/31G │ 🖥️ 89% 9.5 12c │ 🌡️ 84°C │ 💾 81%
 ```
 
 Every segment is defensive: if its data is missing or a command fails, the segment is
@@ -17,7 +17,7 @@ is supplementary to the main colored value.
 |---|---|---|---|
 | 📁 | **Directory** | Current working dir, with `~` for home | cyan |
 | 🌿 | **Git** | `repo branch` + `*` if dirty + `↑N`/`↓N` ahead/behind upstream | repo = magenta; branch = green when clean, yellow + red `*` when dirty; `↑` cyan, `↓` yellow. Omitted outside a repo |
-| 🤖 | **Model** | Active model display name | blue |
+| 🤖 | **Model** | Active model display name + `· effort` level (`low`/`medium`/`high`/`xhigh`) | name = blue, effort = light gray; effort omitted for models without the param |
 | 📝 | **Context** | `% of context window used` + `(Nk)` tokens | window = 1M for `[1m]` models, else 200k. Adds a red **⚠compact** at ≥80% |
 | 📊 | **5h usage** | `% of the 5-hour rolling limit used` + time until it resets | from `rate_limits.five_hour`; Pro/Max only, and absent until the first API response of a session |
 | 💰 | **Cost** | `$` session cost so far + `$/h` burn rate | burn rate shown once the session exceeds ~30s |

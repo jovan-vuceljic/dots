@@ -135,7 +135,13 @@ def git_segment(cwd):
 
 def model_segment(data):
     name = (data.get("model") or {}).get("display_name")
-    return ("🤖 " + color(name, "blue")) if name else ""
+    if not name:
+        return ""
+    out = "🤖 " + color(name, "blue")
+    level = (data.get("effort") or {}).get("level")
+    if level:
+        out += color(f" · {level}", "gray")
+    return out
 
 
 def context_segment(data, usage):
