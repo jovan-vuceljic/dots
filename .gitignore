@@ -2,5 +2,8 @@
 .config/hyde/themes/
 .config/fish/greet.txt
 .pi/agent/sessions/
+.pi/agent/npm/
+.pi/agent/git/
+.pi/agent/trust.json
 secrets.fish
 
