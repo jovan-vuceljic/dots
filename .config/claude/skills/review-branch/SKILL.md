@@ -16,21 +16,34 @@ Context auto-collected for the current branch vs. its base:
 1. **Resolve the base branch.** If a base branch was passed when invoking (it appears here:
    **$ARGUMENTS** — empty if none), use that. Otherwise use the base detected above. The changes
    to review are the diff `git merge-base <base> HEAD`..`HEAD`.
-2. **Read the full diff** for that range (`git diff <merge-base>...HEAD`) and review **only those
-   changes** — not the rest of the repo. Use the Read tool on the surrounding code whenever you
-   need context to judge a finding.
-3. **Report findings**, grouped and most-severe-first, each as one or two lines with a
-   `path:line` reference so it's scannable:
-   - 🐞 **Correctness / bugs** — logic errors, unhandled edge cases, missing error handling,
-     race conditions, wrong/loose types, off-by-ones.
+2. **Gather context.** Read the full diff for that range (`git diff <merge-base>...HEAD`) and
+   review **only the lines this branch changed** — not pre-existing code. Read surrounding code
+   with the Read tool when you need it to judge a finding. Also read the repo's `CLAUDE.md` (root,
+   and any in the directories the branch touched) and treat its guidance as a review lens.
+3. **Find issues** across three lenses:
+   - 🐞 **Correctness / bugs** — logic errors, unhandled edge cases, swallowed/ignored errors,
+     race conditions, wrong/loose types, off-by-ones, and anything that violates the repo's
+     `CLAUDE.md`.
    - ⚡ **Optimizations** — redundant work, needless allocations/copies, N+1 patterns, a simpler
      or standard-library equivalent.
-   - 📖 **Readability & scannability** — naming, structure, dead code, stale comments, formatting,
-     over-long functions, unclear control flow.
+   - 📖 **Readability & scannability** — naming, structure, dead code, stale/misleading comments,
+     formatting, over-long functions, unclear control flow.
+4. **Verify the bugs before reporting.** Double-check each 🐞 finding against the real code and
+   keep only the ones you're confident are real and will bite in practice. **Do not flag:**
+   - issues on lines the branch didn't change (pre-existing);
+   - anything a linter / type-checker / compiler / CI catches (imports, type errors, formatting) —
+     assume those run separately;
+   - pedantic nitpicks a senior engineer wouldn't raise, or "needs more tests/docs" unless the
+     repo's `CLAUDE.md` requires it;
+   - changes that are clearly intentional and part of the feature.
 
-   If a category is clean, say so in one line. No walls of text.
-4. **Then stop and ask** whether to apply the fixes. On approval, apply **only** the readability
+   (This filter is for 🐞 bugs. ⚡ optimizations and 📖 readability are the deliberate polish
+   pass — minor suggestions there are welcome, since the goal is PR-readiness.)
+5. **Report**, grouped by the three lenses, most-severe-first, each finding one or two lines with
+   a `path:line` reference so it's scannable. If a category is clean, say so in one line. No walls
+   of text.
+6. **Then stop and ask** whether to apply the fixes. On approval, apply **only** the readability
    improvements and behavior-preserving optimizations. Anything that changes behavior, public API,
    or semantics: list it separately and let me decide — do **not** apply it silently. After
    editing, re-run the repo's formatter/linter if it has one.
-5. **Never** run `git commit` or `git push` — I do that manually.
+7. **Never** run `git commit` or `git push` — I do that manually.
