@@ -19,7 +19,7 @@ fi
 mkdir -p "$DST"
 
 # Tracked items to expose in ~/.claude. Add new ones (e.g. commands agents) here.
-items="settings.json statusline.py keybindings.json CLAUDE.md hooks"
+items="settings.json statusline.py keybindings.json CLAUDE.md hooks skills"
 
 for item in $items; do
   [ -e "$SRC/$item" ] || continue

@@ -12,9 +12,12 @@ a segment is simply omitted.
 """
 import json
 import os
+import re
+import shutil
 import subprocess
 import sys
 import time
+import unicodedata
 
 # --- ANSI helpers -----------------------------------------------------------
 RESET = "\033[0m"
@@ -53,6 +56,32 @@ DIV = color(" │ ", "gray", dim=True)
 
 def join_line(segs):
     return DIV.join(s for s in segs if s)
+
+
+_ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
+
+
+def vlen(text):
+    """Visible width of a rendered string: ANSI stripped, emoji counted as 2."""
+    text = _ANSI_RE.sub("", text)
+    w = 0
+    for ch in text:
+        if ch in ("\u200d", "\ufe0f", "\ufe0e") or unicodedata.combining(ch):
+            continue  # ZWJ / variation selectors / combining marks: zero width
+        o = ord(ch)
+        if o >= 0x1F000 or 0x2600 <= o <= 0x27BF or unicodedata.east_asian_width(ch) in ("W", "F"):
+            w += 2
+        else:
+            w += 1
+    return w
+
+
+def term_cols():
+    """Terminal width. Claude Code exports COLUMNS; 0 if unknown -> stay one line."""
+    try:
+        return shutil.get_terminal_size(fallback=(0, 0)).columns
+    except Exception:
+        return 0
 
 
 # --- shared transcript usage ------------------------------------------------
@@ -137,6 +166,7 @@ def model_segment(data):
     name = (data.get("model") or {}).get("display_name")
     if not name:
         return ""
+    name = name.replace(" context)", ")")  # "Opus 4.8 (1M context)" -> "Opus 4.8 (1M)"
     out = "🤖 " + color(name, "blue")
     level = (data.get("effort") or {}).get("level")
     if level:
@@ -398,25 +428,31 @@ def main():
     )
     usage = last_usage(data)
 
-    # Single row, ordered work (left) -> system (right).
+    # Two groups: work (left) and system (right). Rendered on one line when the
+    # terminal is wide enough, otherwise stacked work-over-system.
     # Dormant helpers kept above for easy re-add: velocity_segment,
     # cache_segment, api_segment, version_segment, style_segment.
-    work = [
+    work = [s for s in (
         dir_segment(cwd),
         git_segment(cwd),
         model_segment(data),
         context_segment(data, usage),
         usage_segment(data),
         cost_segment(data),
-    ]
-    system = [
+    ) if s]
+    system = [s for s in (
         ram_segment(),
         cpu_segment(),
         temp_segment(),
         disk_segment(cwd),
-    ]
+    ) if s]
 
-    sys.stdout.write(join_line(work + system))
+    one_line = join_line(work + system)
+    cols = term_cols()
+    if cols and vlen(one_line) > cols:
+        sys.stdout.write(join_line(work) + "\n" + join_line(system))
+    else:
+        sys.stdout.write(one_line)
 
 
 if __name__ == "__main__":

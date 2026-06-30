@@ -1,10 +1,21 @@
 # Status line (`statusline.py`)
 
-The custom Claude Code status line. It renders as **one line**, segments joined by a
-light-gray `│`, ordered **work info (left) → system info (right)**:
+The custom Claude Code status line, ordered **work info (left) → system info (right)**,
+segments joined by a light-gray `│`. It's **responsive**: it stays on one line while it
+fits, and splits into two rows — **work on top, system below** — once the rendered width
+exceeds the terminal width (`$COLUMNS`, which Claude Code re-exports on resize).
+
+Wide — one line:
 
 ```
-📁 ~/.dotfiles │ 🌿 .dotfiles main* │ 🤖 Opus 4.8 · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h │ 🧠 51% 15.9/31G │ 🖥️ 89% 9.5 12c │ 🌡️ 84°C │ 💾 81%
+📁 ~/.dotfiles │ 🌿 .dotfiles main* │ 🤖 Opus 4.8 (1M) · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h │ 🧠 51% 15.9/31G │ 🖥️ 89% 9.5 12c │ 🌡️ 84°C │ 💾 81%
+```
+
+Narrow — two rows:
+
+```
+📁 ~/.dotfiles │ 🌿 .dotfiles main* │ 🤖 Opus 4.8 (1M) · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h
+🧠 51% 15.9/31G │ 🖥️ 89% 9.5 12c │ 🌡️ 84°C │ 💾 81%
 ```
 
 Every segment is defensive: if its data is missing or a command fails, the segment is
