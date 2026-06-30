@@ -11,6 +11,7 @@ back into this repo.
   files), default `model`, `enabledPlugins`, vim mode, dark theme, `effortLevel`, fullscreen
   TUI, `statusLine`, `hooks`, `worktree` defaults, …
 - `statusline.py` — rich status line (dir, git, model, context %, cost, RAM/CPU/temp/disk).
+  See [StatusBar.md](StatusBar.md) for what each segment and colour means.
 - `keybindings.json` — custom keybindings (vim-style scroll/navigation).
 - `CLAUDE.md` — global user preferences applied to every project.
 - `hooks/format.py` — PostToolUse hook: formats edited files by extension (stylua / ruff /

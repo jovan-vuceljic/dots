@@ -2,8 +2,8 @@
 """Claude Code status line.
 
 Row 1 (work):   dir | git(repo/branch +dirty +ahead/behind) | model |
-                context% (+compact warn) | cost (+burn rate) | line velocity |
-                cache hit % | api/think ratio
+                context% (+compact warn) | 5h usage (+reset eta) |
+                cost (+burn rate) | line velocity | cache hit % | api/think ratio
 Row 2 (system): RAM | disk | CPU% (+load +cores) | temp | version | output style
 
 Reads the status JSON from stdin (Claude Code statusLine command). Every segment
@@ -14,10 +14,11 @@ import json
 import os
 import subprocess
 import sys
+import time
 
 # --- ANSI helpers -----------------------------------------------------------
 RESET = "\033[0m"
-DIM = "\033[2m"
+DIM = ""  # disabled: "\033[2m" blended the gray detail text into dark backgrounds
 BOLD = "\033[1m"
 C = {
     "cyan": "\033[36m",
@@ -26,7 +27,7 @@ C = {
     "red": "\033[31m",
     "magenta": "\033[35m",
     "blue": "\033[34m",
-    "gray": "\033[90m",
+    "gray": "\033[37m",  # light gray (was "\033[90m" bright-black, too dark to read)
 }
 
 
@@ -150,9 +151,28 @@ def context_segment(data, usage):
         window = 1_000_000 if "1m" in model_id.lower() else 200_000
         pct = used / window * 100 if window else 0
         col = bucket(pct, 50, 80)
-        out = "📊 " + color(f"{pct:.0f}%", col) + color(f" ({used / 1000:.0f}k)", "gray", dim=True)
+        out = "📝 " + color(f"{pct:.0f}%", col) + color(f" ({used / 1000:.0f}k)", "gray", dim=True)
         if pct >= 80:
             out += color(" ⚠compact", "red", bold=True)
+        return out
+    except Exception:
+        return ""
+
+
+def usage_segment(data):
+    """5-hour rolling usage window: used % (+ time until it resets)."""
+    try:
+        five = (data.get("rate_limits") or {}).get("five_hour") or {}
+        pct = five.get("used_percentage")
+        if pct is None:
+            return ""
+        out = "📊 " + color(f"{pct:.0f}%", bucket(pct, 50, 80))
+        resets = five.get("resets_at")
+        if resets:
+            secs = int(resets) - int(time.time())
+            if secs > 0:
+                h, m = divmod(secs // 60, 60)
+                out += color(f" {h}h{m:02d}m" if h else f" {m}m", "gray")
         return out
     except Exception:
         return ""
@@ -380,6 +400,7 @@ def main():
         git_segment(cwd),
         model_segment(data),
         context_segment(data, usage),
+        usage_segment(data),
         cost_segment(data),
     ]
     system = [
