@@ -54,4 +54,16 @@ Context auto-collected for the current branch vs. its base:
    or semantics: list it separately and let me decide — do **not** apply it silently. Treat 🔒
    security fixes the same way: propose them, but never apply them silently. After editing, re-run
    the repo's formatter/linter if it has one.
-7. **Never** run `git commit` or `git push` — I do that manually.
+7. **Point me at the relevant built-in follow-ups.** After reporting, list the Claude Code
+   commands worth running next as separate, deeper passes — tailored to what this review
+   surfaced, not a blanket dump. Only include the ones that actually fit:
+   - `/security-review` — a deeper, whole-branch security pass; suggest whenever the 🔒 lens
+     flagged something or the diff touches auth, crypto, input handling, secrets, or network I/O.
+   - `/code-review` (add `--fix` to apply, `--comment` for inline PR comments) — a second review
+     of the working-tree diff at a chosen effort level.
+   - `/simplify` — apply reuse / simplification / efficiency cleanups beyond the safe ones applied
+     here.
+   - `/verify` — run the app to confirm the change behaves, if this branch changed behavior.
+   - `/pr-description` — draft the PR text from this branch once the review is clean.
+   - `/review` — review the PR on GitHub after it's open.
+8. **Never** run `git commit` or `git push` — I do that manually.

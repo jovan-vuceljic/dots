@@ -61,7 +61,8 @@ so Claude never auto-triggers them. Run them inside the repo whose branch you're
   findings with `file:line`, then applies the readability + safe fixes *after you approve*. Never
   commits.
   Borrows `/code-review`'s discipline: CLAUDE.md-aware, changed-lines-only, verified bugs with a
-  false-positive filter (skips what linters/CI catch and pre-existing issues).
+  false-positive filter (skips what linters/CI catch and pre-existing issues). Ends by pointing
+  you at the relevant built-in follow-ups (`/security-review`, `/code-review`, `/verify`, …).
 - **`/pr-description [base]`** — auto-detects this repo's GitHub PR template
   (`.github/pull_request_template.md`, …), fills it from the branch diff + commits, prints a
   copy-paste markdown block, and copies it to the clipboard with `wl-copy`. Leaves verification
