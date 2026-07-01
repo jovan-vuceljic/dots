@@ -15,8 +15,10 @@ back into this repo.
 - `keybindings.json` — custom keybindings (vim-style scroll/navigation).
 - `CLAUDE.md` — global user preferences applied to every project.
 - `hooks/format.py` — PostToolUse hook: formats edited files by extension (stylua / ruff /
-  prettier / gofmt / rustfmt). Opinionated formatters only run where the project opts in via a
-  config file found walking up; no-ops if the formatter isn't installed, and always exits 0.
+  prettier / gofmt / rustfmt / fish_indent / shfmt / taplo). Opinionated formatters (stylua, ruff,
+  prettier, taplo) only run where the project opts in via a config file found walking up; canonical
+  ones (gofmt, rustfmt, fish_indent, shfmt) run on sight. No-ops if the formatter isn't installed,
+  and always exits 0.
 - `skills/` — custom [Agent Skills](https://code.claude.com/docs/en/skills). See **Skills** below.
 - `link.sh` — idempotent bootstrap that creates the `~/.claude` symlinks below.
 
@@ -67,6 +69,9 @@ so Claude never auto-triggers them. Run them inside the repo whose branch you're
   (`.github/pull_request_template.md`, …), fills it from the branch diff + commits, prints a
   copy-paste markdown block, and copies it to the clipboard with `wl-copy`. Leaves verification
   checkboxes for you; never creates/pushes the PR.
+- **`/commit-msg [hint]`** — reads the **staged** diff, infers the repo's commit style from recent
+  `git log` (e.g. this repo's `[Scope] summary`), drafts a matching message, prints it, and copies
+  it to the clipboard with `wl-copy`. Never stages or commits — draft only.
 
 ## Adding more config later
 

@@ -3,10 +3,11 @@
 
 Reads the hook JSON from stdin, extracts the edited file path, and runs a
 language-appropriate formatter -- but, to avoid imposing a style on a project
-that never asked for it, opinionated formatters (stylua, ruff, prettier) only
-run when the project opts in via a config file discoverable by walking up from
-the edited file. Canonical single-style toolchains (gofmt, rustfmt) run when
-their project marker (go.mod / Cargo.toml) is present.
+that never asked for it, opinionated formatters (stylua, ruff, prettier, taplo)
+only run when the project opts in via a config file discoverable by walking up
+from the edited file. Canonical single-style toolchains run on sight: gofmt and
+rustfmt on their go.mod / Cargo.toml marker; fish_indent and shfmt whenever the
+tool itself is installed (shell and fish have one de-facto style, no config).
 
 Best-effort: always exits 0 so a format hiccup never blocks an edit. jq is not
 guaranteed on the host, hence python for the stdin JSON parse.
@@ -88,6 +89,24 @@ def rustfmt_cmd(path):
     return None
 
 
+def fish_cmd(path):
+    exe = shutil.which("fish_indent")  # ships with fish, one canonical style
+    return [exe, "-w", path] if exe else None
+
+
+def shfmt_cmd(path):
+    exe = shutil.which("shfmt")  # de-facto shell formatter, sane defaults
+    return [exe, "-w", path] if exe else None
+
+
+def taplo_cmd(path):
+    exe = shutil.which("taplo")
+    # opt-in: TOML reflow/align is intrusive, so only where the project asked.
+    if exe and find_up(path, ["taplo.toml", ".taplo.toml"]):
+        return [exe, "format", path]
+    return None
+
+
 HANDLERS = {
     ".lua": stylua_cmd,
     ".py": ruff_cmd,
@@ -98,6 +117,9 @@ HANDLERS = {
     ".md": prettier_cmd, ".yaml": prettier_cmd, ".yml": prettier_cmd,
     ".go": gofmt_cmd,
     ".rs": rustfmt_cmd,
+    ".fish": fish_cmd,
+    ".sh": shfmt_cmd, ".bash": shfmt_cmd,
+    ".toml": taplo_cmd,
 }
 
 
