@@ -73,11 +73,12 @@ so Claude never auto-triggers them. Run them inside the repo whose branch you're
   `git log` (e.g. this repo's `[Scope] summary`), drafts a matching message, prints it, and copies
   it to the clipboard with `wl-copy`. Never stages or commits — draft only.
 - **`/pr-loop [pr]`** — babysits the current branch's PR in a self-paced loop: fixes review
-  comments that don't need your input, `git add`s them, drafts the commit message (`/commit-msg`
-  style) and replies on the threads, then pings you to commit & push and re-checks every ~10 min
-  (via `ScheduleWakeup`). Resolves threads once their fix is pushed. Stops when no unresolved
-  comments remain or the Codex reviewer hits its limit. Prep-only — never commits/pushes/merges;
-  needs `gh` authed and the session left open.
+  comments that don't need your input — from **any** reviewer (Codex, Claude, humans) plus any
+  `@claude` request — `git add`s them, drafts the commit message (`/commit-msg` style) and replies
+  on the threads, then pings you to commit & push and re-checks every ~10 min (via
+  `ScheduleWakeup`). Resolves threads once their fix is pushed. Stops when no unresolved comments
+  remain or the automated reviewers (Codex/Claude) hit their limit. Prep-only — never
+  commits/pushes/merges; needs `gh` authed and the session left open.
 
 ## Adding more config later
 

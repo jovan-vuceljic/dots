@@ -1,5 +1,5 @@
 ---
-description: Babysit the current branch's PR — address review comments that don't need my input, re-check every ~10 min, and stop when there are no open comments left or the Codex reviewer hits its limit. Prep-only — stages fixes and drafts the commit message; never commits, pushes, or merges.
+description: Babysit the current branch's PR — address review comments that don't need my input, re-check every ~10 min, and stop when there are no open comments left or the automated reviewers (Codex, Claude) hit their limit. Prep-only — stages fixes and drafts the commit message; never commits, pushes, or merges.
 argument-hint: [pr number or url — optional; defaults to the current branch's PR]
 disable-model-invocation: true
 allowed-tools: Bash(gh:*), Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git rev-parse:*), Bash(git fetch:*), Bash(git add:*), Bash(wl-copy:*), Read, Edit, Write, Grep, Glob, ScheduleWakeup
@@ -9,7 +9,7 @@ allowed-tools: Bash(gh:*), Bash(git status:*), Bash(git diff:*), Bash(git log:*)
 
 A self-paced loop over one PR's review feedback: fix the comments that don't need my judgement,
 stage them, draft a commit message, then wait ~10 min and re-check — until there are no unresolved
-comments left or the Codex reviewer hits a usage limit.
+comments left or the automated reviewers (Codex/Claude) hit a usage limit.
 
 **The contract — read this first:**
 - **I never commit, push, or merge.** Each cycle you *prepare*: edit + `git add` + draft a commit
@@ -36,8 +36,8 @@ Current state (auth + the current branch's PR):
    `git rev-parse --absolute-git-dir`). It's inside `.git/`, so it never shows in `git status` and
    survives wake-ups. Shape:
    ```json
-   { "number": 0, "lastHeadOid": "", "handledThreadIds": [], "awaitingPush": false,
-     "idleCount": 0, "cycleCount": 0 }
+   { "number": 0, "lastHeadOid": "", "handledThreadIds": [], "handledCommentIds": [],
+     "awaitingPush": false, "idleCount": 0, "cycleCount": 0 }
    ```
    If it's missing or for a different `number`, start fresh. Increment `cycleCount`.
 
@@ -51,17 +51,23 @@ Current state (auth + the current branch's PR):
            comments(first:100){ nodes{ databaseId author{login} path line body } } } } } } }'
    ```
    Keep only threads with `isResolved == false`. Also grab `gh pr view NUM --json reviews,comments`
-   to see the Codex reviewer's latest activity.
+   for the automated reviewers' latest activity **and the PR conversation**. Act on feedback from
+   **any** reviewer — especially the automated ones, **Codex and Claude** (`author.login` matching
+   `codex`/`claude`, or a Bot account). And treat any comment — inline review **or** PR
+   conversation — whose body **mentions `@claude`** as an explicit request to act on, same as a
+   review comment.
 
 4. **Check stop conditions — before doing any work:**
    - **No unresolved threads** → the PR is clean. Report that it's done, save state, and **do not**
      schedule another wake-up. STOP.
-   - **Codex hit a limit** → the Codex reviewer's most recent review/comment body matches a limit
-     signal (case-insensitive: `rate/usage/quota/credit … limit`, `limit reached`,
-     `exceeded … quota`, `out of … credits`). Identify the Codex reviewer as a comment/review
-     author whose `login` matches `codex` (or a `[bot]` that leaves review comments; confirm with
-     `gh api users/<login> --jq .type` → `Bot`). If matched → STOP and report the limit. Do not
-     schedule.
+   - **The automated reviewers are spent** → an automated reviewer's most recent review/comment
+     body matches a limit signal (case-insensitive: `rate/usage/quota/credit … limit`,
+     `limit reached`, `exceeded … quota`, `out of … credits`). Automated reviewers = authors whose
+     `login` matches `codex` or `claude` (or a `[bot]` that leaves review comments; confirm with
+     `gh api users/<login> --jq .type` → `Bot`). STOP and report which reviewer hit the limit
+     **only** when no unresolved threads (incl. `@claude` requests) remain that you can still act
+     on. If one reviewer is limited but other threads still need work, handle those first, then
+     re-check.
    - **Safety caps** → if `cycleCount > 20`, or `idleCount > 6`, or
      `gh api rate_limit --jq .resources.core.remaining` is `< 100` → STOP and hand back to me with
      a summary.
@@ -72,13 +78,17 @@ Current state (auth + the current branch's PR):
    - If **changed** → I pushed. Set `awaitingPush=false`, update `lastHeadOid`, and continue —
      including resolving threads whose fix is now live (step 7's resolve note).
 
-6. **Triage** each unresolved thread **not already in `handledThreadIds`**:
+6. **Triage** each unresolved review thread and every `@claude` request **not already handled**:
    - **Auto-handle (no input needed):** typos, lint/format, naming, missing null/error checks,
      applying the reviewer's concrete suggested diff, docs/comments, and small localized bugs with
      one obvious correct fix.
    - **Leave for me (needs input):** architecture/design decisions, security or performance
      trade-offs, ambiguous or broad requests, anything needing product/domain judgement. Never
      guess these — list them for me with the `path:line` and why.
+
+   Apply the same split to Codex's and Claude's review suggestions and to every `@claude` request:
+   a concrete ask is auto-handled; a judgement call is left for me. Skip anything whose id is
+   already in `handledThreadIds` / `handledCommentIds`.
 
 7. **Prepare the auto-handled set (no commit, no push):**
    - Apply the edits (the PostToolUse format hook auto-formats). `git add` the changed files.
@@ -87,7 +97,10 @@ Current state (auth + the current branch's PR):
      gh api --method POST repos/{owner}/{repo}/pulls/NUM/comments/COMMENT_DATABASEID/replies \
        -f body="Addressed — fix staged, pending push."
      ```
-   - Add those thread ids to `handledThreadIds`; set `awaitingPush=true`.
+     For a plain PR **conversation** comment (e.g. an `@claude` request, not an inline review
+     thread), reply with `gh pr comment NUM --body "…"` instead of the replies endpoint.
+   - Add handled review-thread ids to `handledThreadIds` and handled conversation/`@claude`
+     comment ids to `handledCommentIds`; set `awaitingPush=true`.
    - **Resolve** a thread — `gh api graphql -f query='mutation($id:ID!){
      resolveReviewThread(input:{threadId:$id}){ thread{ id isResolved } } }' -F id=THREAD_ID` —
      **only** once its fix is live (a cycle where `headRefOid` advanced, per step 5) and the
