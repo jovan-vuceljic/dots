@@ -78,7 +78,9 @@ so Claude never auto-triggers them. Run them inside the repo whose branch you're
   on the threads, then pings you to commit & push and re-checks every ~10 min (via
   `ScheduleWakeup`). Resolves threads once their fix is pushed. Stops when no unresolved comments
   remain or the automated reviewers (Codex/Claude) hit their limit. Prep-only — never
-  commits/pushes/merges; needs `gh` authed and the session left open.
+  commits/pushes/merges; needs `gh` authed and the session left open. Each cycle it prints when it
+  will re-check and that `Esc` (between cycles) stops it; on the last cycle it prints a clear
+  **"Finished — no more active issues"** and does not reschedule.
 
 ## Adding more config later
 

@@ -17,7 +17,9 @@ comments left or the automated reviewers (Codex/Claude) hit a usage limit.
   resumes after I do. This honours the global no-commit/no-push rule; nothing in `settings.json`
   changes.
 - The 10-minute cadence uses `ScheduleWakeup`, so the loop only advances **while this Claude
-  session stays open**. If I close it, the loop stops.
+  session stays open**. **To stop it: press `Esc` while I'm idle between cycles** (that clears the
+  queued wake-up); closing the session also stops it. A plain message does **not** cancel a pending
+  wake-up — use `Esc`.
 
 Current state (auth + the current branch's PR):
 
@@ -72,6 +74,13 @@ Current state (auth + the current branch's PR):
      `gh api rate_limit --jq .resources.core.remaining` is `< 100` → STOP and hand back to me with
      a summary.
 
+   **When any stop fires:** save state, do **not** call `ScheduleWakeup`, and end with a clear
+   final line so I know the loop is over and won't run again — e.g.:
+   > ✅ **Finished — no more active issues.** I won't re-check again.
+
+   Adapt it to the reason: `✅ Finished — <reviewer> hit its usage limit; nothing left to address,
+   I won't re-check again.` or `⏹ Stopped — hit safety cap (<which>); re-run \`/pr-loop\` to resume.`
+
 5. **Did I push since last cycle?** Compare the current remote `headRefOid` to `lastHeadOid`.
    - If **unchanged and `awaitingPush` is true** → I haven't pushed yet. Don't re-fix anything:
      `idleCount += 1`, remind me once (briefly) to commit & push, save state, and go to step 8.
@@ -118,11 +127,16 @@ Current state (auth + the current branch's PR):
    - fixed & staged: threads (with `path:line`);
    - left for you: threads + one-line reason each;
    - resolved on GitHub this cycle (if any);
-   - the commit message (printed above) and "commit & push when ready — I'll recheck in ~10 min."
+   - the commit message (printed above), then "commit & push when ready".
 
    Save state to `<git-dir>/pr-loop-state.json`. Then call
    `ScheduleWakeup(delaySeconds=600, prompt="/pr-loop", reason="recheck PR #<num> review comments")`
-   and end the turn. (Omit the wake-up only when a stop condition in step 4 fired.)
+   and **end the turn with a sign-off that states when I'll run again and how to stop**, e.g.:
+   > ⏳ **Next check in ~10 min.** To stop, press `Esc` while I'm idle between cycles (or close the
+   > session).
+
+   (When a stop condition in step 4 fired, skip both the wake-up and this sign-off — use the
+   **Finished** line from step 4 instead.)
 
 ## Guardrails
 
