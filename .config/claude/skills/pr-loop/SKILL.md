@@ -85,8 +85,8 @@ Current state (auth + the current branch's PR):
      latestBotReviews: ([.reviews[] | select(.author.login | test("codex|claude"; "i"))]
        | group_by(.author.login) | map(max_by(.submittedAt))
        | map({author: .author.login, state, submittedAt, body})),
-     relevantComments: ([.comments[] | select((.body | test("@claude"))
-         or (.author.login | test("codex|claude"; "i")))
+     relevantComments: ([.comments[] | select((.isMinimized | not)
+         and ((.body | test("@claude")) or (.author.login | test("codex|claude"; "i"))))
        | {id, author: .author.login, body}] | .[-10:])
    }'
    ```
@@ -95,9 +95,17 @@ Current state (auth + the current branch's PR):
    **or** PR conversation — whose body **mentions `@claude`** as an explicit request to act on,
    same as a review comment.
 
+   Some bots post **findings as a plain PR-conversation comment** rather than inline review threads
+   (e.g. Claude when its tooling can't post inline). Triage those findings like thread findings;
+   since they have no thread, you "resolve" them by **minimizing** the comment once fixed (step 8).
+   `relevantComments[].id` is the comment's GraphQL node id (`IC_…`) used for that, and the
+   `isMinimized` filter above already drops ones you've resolved. A bot's pure **summary / status /
+   usage-limit** comment carries no finding — triage/minimize only comments with concrete asks.
+
 5. **Check stop conditions — before doing any work:**
-   - **No unresolved threads** → the PR is clean. Report that it's done, save state, and **do not**
-     schedule another wake-up. STOP.
+   - **Nothing left to address** → no unresolved review threads, no un-minimized bot **findings**
+     comments, and no open `@claude` requests. The PR is clean: report done, save state, and **do
+     not** schedule another wake-up. STOP.
    - **The automated reviewers are spent** → an automated reviewer's most recent review/comment
      body matches a limit signal (case-insensitive: `rate/usage/quota/credit … limit`,
      `limit reached`, `exceeded … quota`, `out of … credits`). Automated reviewers = authors whose
@@ -125,7 +133,8 @@ Current state (auth + the current branch's PR):
    - If **changed** → I pushed. Set `awaitingPush=false`, `idleCount=0`, update `lastHeadOid`, and
      continue — including resolving threads whose fix is now live (step 8's resolve note).
 
-7. **Triage** each unresolved review thread and every `@claude` request **not already handled**:
+7. **Triage** each unresolved review thread, every bot **findings** comment on the PR conversation,
+   and every `@claude` request **not already handled**:
    - **Auto-handle (no input needed):** typos, lint/format, naming, missing null/error checks,
      applying the reviewer's concrete suggested diff, docs/comments, and small localized bugs with
      one obvious correct fix.
@@ -153,6 +162,15 @@ Current state (auth + the current branch's PR):
      **only** once its fix is live (a cycle where `headRefOid` advanced, per step 6) and the
      reviewer hasn't re-flagged it. Never resolve unpushed work or a "needs input" thread. This
      resolves the review *conversation*, not any linked GitHub Issue.
+   - **Resolve a plain PR-conversation findings comment** (a bot finding with no inline thread —
+     e.g. Claude's) by **minimizing it as resolved** — the issue-comment equivalent, under the same
+     rules (only once its fix is live and not re-flagged):
+     ```bash
+     gh api graphql -f query='mutation($id:ID!){ minimizeComment(input:{subjectId:$id,
+       classifier:RESOLVED}){ minimizedComment{ isMinimized } } }' -F id=COMMENT_NODE_ID
+     ```
+     `COMMENT_NODE_ID` is the `relevantComments[].id` (`IC_…`). Never minimize unpushed work, a
+     "needs input" comment, or a summary/status/usage-limit comment.
 
 9. **Draft the commit message — exactly like `/commit-msg`:** from the staged diff and the repo's
    recent `git log` style (this repo uses `[Scope] summary`), write a message that matches. Then:
