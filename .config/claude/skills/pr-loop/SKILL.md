@@ -16,6 +16,10 @@ comments left or the automated reviewers (Codex/Claude) hit a usage limit.
   message + reply on the threads you handled. Then you **ping me to commit & push**, and the loop
   resumes after I do. This honours the global no-commit/no-push rule; nothing in `settings.json`
   changes.
+- **Resolve, don't just reply.** A handled thread gets an interim "addressed, pending push" reply
+  while unpushed; once I've pushed and its fix is live, you **resolve the thread on GitHub** (or
+  minimize the bot comment as RESOLVED) rather than leaving it open — see step 6. Never resolve
+  unpushed work or a needs-input thread.
 - The 10-minute cadence uses `ScheduleWakeup`, so the loop only advances **while this Claude
   session stays open**. **To stop it: press `Esc` while I'm idle between cycles** (that clears the
   queued wake-up); closing the session also stops it. A plain message does **not** cancel a pending
@@ -130,8 +134,13 @@ Current state (auth + the current branch's PR):
    - If **unchanged and `awaitingPush` is true** → I haven't pushed yet. Don't re-fix anything for
      threads already handled: `idleCount += 1`, then continue with step 7 **only for genuinely new
      threads/comments** (something new must exist, or step 3 would have short-circuited).
-   - If **changed** → I pushed. Set `awaitingPush=false`, `idleCount=0`, update `lastHeadOid`, and
-     continue — including resolving threads whose fix is now live (step 8's resolve note).
+   - If **changed** → I pushed. Set `awaitingPush=false`, `idleCount=0`, update `lastHeadOid`. Then,
+     **before handling anything new, resolve on GitHub every already-handled item whose fix is now
+     live** — don't leave them as lingering "addressed" comments. For each id in `handledThreadIds`
+     that is still unresolved and not re-flagged, run `resolveReviewThread`; for each id in
+     `handledCommentIds` not re-flagged, `minimizeComment` as RESOLVED (mutations in step 8).
+     Resolved threads drop out of the step-4 fetch, so each fix is resolved exactly once. Then
+     continue to any genuinely new threads.
 
 7. **Triage** each unresolved review thread, every bot **findings** comment on the PR conversation,
    and every `@claude` request **not already handled**:
