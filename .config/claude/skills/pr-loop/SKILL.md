@@ -44,7 +44,8 @@ Current state (auth + the current branch's PR):
    survives wake-ups. Shape:
    ```json
    { "number": 0, "lastHeadOid": "", "lastSeenUpdatedAt": "", "handledThreadIds": [],
-     "handledCommentIds": [], "awaitingPush": false, "idleCount": 0, "cycleCount": 0 }
+     "handledCommentIds": [], "needsInputThreadIds": [], "needsInputCommentIds": [],
+     "awaitingPush": false, "idleCount": 0, "cycleCount": 0 }
    ```
    Resolve the target PR **in this order**: my argument if given (**$ARGUMENTS**) → the `number`
    in the state file (wake-ups re-invoke `/pr-loop` *without* arguments — the state file is the
@@ -61,6 +62,10 @@ Current state (auth + the current branch's PR):
      cap (step 5) is now exceeded, STOP per step 5. Otherwise save state and jump straight to
      step 10's reschedule. Total output ≤2 lines — if `awaitingPush`, one line is a brief
      commit-&-push reminder (remind at most twice across idle cycles, then just the status line).
+     **An idle cycle is never silent while `needsInputThreadIds`/`needsInputCommentIds` are
+     non-empty: restate each parked item on its own line (`path:line` + the one-line decision it
+     needs) so a deferred item can never fade into "no changes." This overrides the ≤2-line cap
+     (one line per parked item), and it is the one thing you always re-surface on idle.**
    - Otherwise: remember the fetched `headRefOid` for step 6 and continue. (Don't update
      `lastSeenUpdatedAt` yet — step 10 refreshes it *after* you've posted replies, so your own
      replies don't defeat the next cycle's cheap check.)
@@ -145,15 +150,23 @@ Current state (auth + the current branch's PR):
 7. **Triage** each unresolved review thread, every bot **findings** comment on the PR conversation,
    and every `@claude` request **not already handled**:
    - **Auto-handle (no input needed):** typos, lint/format, naming, missing null/error checks,
-     applying the reviewer's concrete suggested diff, docs/comments, and small localized bugs with
-     one obvious correct fix.
-   - **Leave for me (needs input):** architecture/design decisions, security or performance
-     trade-offs, ambiguous or broad requests, anything needing product/domain judgement. Never
-     guess these — list them for me with the `path:line` and why.
+     applying the reviewer's concrete suggested diff, docs/comments, and localized bugs with one
+     correct fix — **including fixes that touch a shared type/contract or span multiple layers,
+     when the repo's existing conventions determine the shape.** Blast radius (multi-file,
+     contract-touching, "I'd have to pick among a few representations") is **not** a reason to
+     defer: pick the minimal idiomatic shape that matches existing patterns, implement it, and let
+     me veto. A reviewer finding that names the concrete fix is almost always auto-handleable.
+   - **Leave for me (needs input):** defer **only** for genuine ambiguity — two or more
+     *materially different* correct behaviours, a real security/performance trade-off, or missing
+     product/domain knowledge that existing code can't settle. Never guess these. Post the
+     `path:line` + a **one-line decision I can answer in a word**, and record the id in
+     `needsInputThreadIds` (or `needsInputCommentIds` for a plain conversation comment) so step 3
+     re-surfaces it every idle cycle instead of letting it fall silent.
 
    Apply the same split to Codex's and Claude's review suggestions and to every `@claude` request:
-   a concrete ask is auto-handled; a judgement call is left for me. Skip anything whose id is
-   already in `handledThreadIds` / `handledCommentIds`.
+   a concrete ask is auto-handled; a genuine judgement call is left for me. Skip anything whose id
+   is already in `handledThreadIds` / `handledCommentIds`. When I answer a needs-input item (or you
+   push a fix for it), drop its id from the needs-input arrays and handle/resolve it normally.
 
 8. **Prepare the auto-handled set (no commit, no push):**
    - Apply the edits (the PostToolUse format hook auto-formats). `git add` the changed files.
