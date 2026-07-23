@@ -1,6 +1,6 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
-SETUVAR --export BAT_THEME:gruvbox
+SETUVAR --export BAT_THEME:gruvbox\x2ddark
 SETUVAR --export EDITOR:nvim
 SETUVAR --export LIBVA_DRIVER_NAME:nvidia
 SETUVAR --export MANPAGER:nvim\x20\x2bMan\x21
