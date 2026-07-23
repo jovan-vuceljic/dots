@@ -17,7 +17,7 @@
 
 	"modules-left": ["custom/l_end","custom/power","custom/r_end","hyprland/workspaces", "custom/sl_end","hyprland/window","custom/sr_end","custom/l_end","custom/wallchange","custom/cliphist","custom/r_end"],
 	"modules-center": ["wlr/taskbar"],
-	"modules-right": ["custom/notification","custom/l_end","backlight","pulseaudio","pulseaudio#microphone","mpris","custom/r_end","custom/l_end","memory","cpu","custom/cpuinfo","battery","custom/r_end","custom/l_end","tray","custom/r_end","custom/l_end","idle_inhibitor","clock","custom/r_end"],
+	"modules-right": ["custom/notification","custom/l_end","backlight","pulseaudio","pulseaudio#microphone","mpris","custom/cava","custom/r_end","custom/l_end","memory","cpu","custom/cpuinfo","battery","custom/r_end","custom/l_end","tray","custom/r_end","custom/l_end","idle_inhibitor","clock","custom/r_end"],
 
 // sourced from modules based on config.ctl //
 
@@ -258,6 +258,13 @@
         },
         "max-length": 1000,
         "interval": 1
+    },
+
+    "custom/cava": {
+        "format": "{}",
+        "exec": "cava.sh waybar",
+        "restart-interval": 1,
+        "hide-empty": true
     },
 
     "battery": {
