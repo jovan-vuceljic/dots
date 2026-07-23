@@ -50,22 +50,25 @@ __pl_end() {
 }
 __prompt() {
     local s=$?
-    local purple='97;77;133' dark='38;35;53' white='255;255;255'
-    local green='114;241;184' yellow='254;222;93' red='254;68;80' pink='249;126;114'
+    # muted synthwave: segment colors pre-blended ~40% onto the terminal bg
+    # (#262335) so they read as semi-transparent overlays
+    local fg='205;200;220'
+    local purple='67;56;93' green='65;107;99' yellow='114;100;67'
+    local red='124;39;52' pink='122;71;77'
     PS1="\[\e]0;\w\a\]"
     __pl_bg=''
-    [[ -n $SSH_TTY ]] && __pl_seg "$pink" "$dark" '\u@\h'
-    __pl_seg "$purple" "$white" '\w'
+    [[ -n $SSH_TTY ]] && __pl_seg "$pink" "$fg" '\u@\h'
+    __pl_seg "$purple" "$fg" '\w'
     local b
     if b=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --contains --all HEAD 2>/dev/null); then
         if [[ -n $(git status --porcelain 2>/dev/null | head -n1) ]]; then
-            __pl_seg "$yellow" "$dark" "${__pl_branch} ${b} ✱"
+            __pl_seg "$yellow" "$fg" "${__pl_branch} ${b} ✱"
         else
-            __pl_seg "$green" "$dark" "${__pl_branch} ${b}"
+            __pl_seg "$green" "$fg" "${__pl_branch} ${b}"
         fi
     fi
-    ((s != 0)) && __pl_seg "$red" "$white" "✘ ${s}"
-    [[ $EUID == 0 ]] && __pl_seg "$red" "$white" '#'
+    ((s != 0)) && __pl_seg "$red" "$fg" "✘ ${s}"
+    [[ $EUID == 0 ]] && __pl_seg "$red" "$fg" '#'
     __pl_end
 }
 PROMPT_COMMAND=__prompt
