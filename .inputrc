@@ -1,13 +1,11 @@
-
 # Vi mode
 set editing-mode vi
-set keymap vi
 set show-mode-in-prompt on
 set vi-ins-mode-string "\1\e[32m\2[I] \1\e[0m\2"
 set vi-cmd-mode-string "\1\e[31m\2[N] \1\e[0m\2"
 
 # exclude .files
-set match-hidden-files off 
+set match-hidden-files off
 
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
@@ -17,12 +15,33 @@ set mark-symlinked-directories on
 set completion-ignore-case on
 
 # Ignore duplicates in history where supported
-set skip-completed-text on 
+set skip-completed-text on
 
+# ----- insert mode: keep the emacs-style defaults -----
+# (no \e-prefixed binds here — they would delay ESC switching to normal mode)
+set keymap vi-insert
+"\C-a": beginning-of-line
+"\C-e": end-of-line
+"\C-b": backward-char
+"\C-f": forward-char
+"\C-p": previous-history
+"\C-n": next-history
+"\C-r": reverse-search-history
+"\C-k": kill-line
+"\C-u": unix-line-discard
+"\C-w": unix-word-rubout
+
+# custom binds
 "\C- ": shell-expand-line
 "\C-x": glob-expand-word
+"\C-g": "g\n"
+"\C-y": "| ccze\n"
+"\C-o": "\C-u yazi\n\C-u"
+"\C-l": "\C-u clear -x && ls\n"
+
+# ----- normal (command) mode -----
+set keymap vi-command
 "\C-l": clear-screen
-Control-g: "g\n"
-Control-y: "| ccze\n"
-Control-o: "\C-u yazi\n\C-u"
-Control-l: "\C-u clear -x && ls\n"
+"\C-a": beginning-of-line
+"\C-e": end-of-line
+"\C-r": reverse-search-history
