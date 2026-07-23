@@ -4,12 +4,13 @@
 
 # Specify desired highlighting theme (e.g. "TwoDark"). Run `bat --list-themes`
 # for a list of all available themes
---theme="OneHalfDark"
+# Custom theme lives in ./themes/ — run `bat cache --build` after changing it
+--theme="synthwave84"
 --style="numbers,changes,header"
 
 # Enable this to use italic text on the terminal. This is not supported on all
 # terminal emulators (like tmux, by default):
-#--italic-text=always
+--italic-text=always
 
 # Uncomment the following line to disable automatic paging:
 #--paging=never
@@ -24,3 +25,6 @@
 #   Example 2: Use ".gitignore"-style highlighting for ".ignore" files
 --map-syntax "*.ino:C++"
 --map-syntax ".ignore:Git Ignore"
+--map-syntax "**/hypr/**/*.conf:INI"
+--map-syntax "**/kitty/*.conf:INI"
+--map-syntax "*.ctl:INI"
