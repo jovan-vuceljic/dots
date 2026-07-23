@@ -48,14 +48,14 @@ tooltip {
   background: @wb-act-bg;
   color: @wb-act-fg;
   animation: ws_active 20s ease-in-out 1;
-  transition: all 0.4s cubic-bezier(.55, -0.68, .48, 1.682);
+  transition: all 0.4s cubic-bezier(0.55, -0.68, 0.48, 1.682);
 }
 
 #workspaces button:hover {
   background: @wb-hvr-bg;
   color: @wb-hvr-fg;
   animation: ws_hover 20s ease-in-out 1;
-  transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
+  transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
 }
 
 #taskbar button {
@@ -78,7 +78,7 @@ tooltip {
   color: @wb-act-color;
   /*animation: tb_active 20s ease-in-out 1;*/
   box-shadow: 0 0 1px 1px rgba(128, 128, 128, 0.4);
-  transition: all 0.4s cubic-bezier(.55, -0.68, .48, 1.682);
+  transition: all 0.4s cubic-bezier(0.55, -0.68, 0.48, 1.682);
 }
 
 #taskbar button:hover {
@@ -86,7 +86,7 @@ tooltip {
   color: @wb-hvr-color;
   opacity: 0.8;
   animation: tb_hover 20s ease-in-out 1;
-  transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
+  transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
 }
 
 #tray menu * {
@@ -204,4 +204,3 @@ window#waybar.cavabar #custom-cava {
   margin: 0px;
   padding: 0px;
 }
-

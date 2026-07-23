@@ -365,7 +365,7 @@
     "layer": "bottom",
     "position": "top",
     "height": 36,
-    "margin-top": -30,
+    "margin-top": -33,
     "exclusive": false,
     "passthrough": true,
     "modules-center": ["custom/cava"],
