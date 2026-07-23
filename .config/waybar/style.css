@@ -193,3 +193,15 @@ window#waybar.empty #custom-sr_end {
   padding-left: 3px;
 }
 
+window#waybar.cavabar {
+  background: transparent;
+}
+
+window#waybar.cavabar #custom-cava {
+  font-size: 24px;
+  color: alpha(@main-fg, 0.4);
+  background: transparent;
+  margin: 0px;
+  padding: 0px;
+}
+
