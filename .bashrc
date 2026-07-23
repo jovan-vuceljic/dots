@@ -22,6 +22,7 @@ alias mkdir='mkdir -p'
 alias lsusb='cyme'
 alias lg='lazygit'
 alias tts='tt -notheme -bold -showwpm -json'
+h() { "$@" --help 2>&1 | bat --plain --language=help; } # colorized --help
 
 # Git
 alias gs='git status --short'

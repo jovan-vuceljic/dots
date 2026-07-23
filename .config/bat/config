@@ -6,7 +6,7 @@
 # for a list of all available themes
 # Custom theme lives in ./themes/ — run `bat cache --build` after changing it
 --theme="onedark"
---style="numbers,changes,header"
+--style="numbers,changes,header,snip"
 
 # Enable this to use italic text on the terminal. This is not supported on all
 # terminal emulators (like tmux, by default):
@@ -18,7 +18,7 @@
 # Uncomment the following line if you are using less version >= 551 and want to
 # enable mouse scrolling support in `bat` when running inside tmux. This might
 # disable text selection, unless you press shift.
---pager="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse"
+--pager="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse --ignore-case"
 
 # Syntax mappings: map a certain filename pattern to a language.
 #   Example 1: use the C++ syntax for Arduino .ino files
@@ -28,3 +28,7 @@
 --map-syntax "**/hypr/**/*.conf:INI"
 --map-syntax "**/kitty/*.conf:INI"
 --map-syntax "*.ctl:INI"
+--map-syntax ".inputrc:bash"
+--map-syntax "**/cava/config:INI"
+--map-syntax "**/mpv/*.conf:INI"
+--map-syntax "**/btop/btop.conf:INI"
