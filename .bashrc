@@ -35,7 +35,41 @@ alias gla="git log --all --decorate --oneline --graph"
 alias gm='git merge'
 alias gis='git status'
 
-PS1='[\u@\h \W]\$' 
+# Powerline prompt, synthwave palette (needs a Nerd Font for the glyphs)
+PROMPT_DIRTRIM=3
+__pl_sep=$'\ue0b0'    # powerline triangle
+__pl_branch=$'\ue0a0' # branch glyph
+__pl_seg() { # $1=bg $2=fg $3=text  (colors as "R;G;B")
+    [[ -n $__pl_bg ]] && PS1+="\[\e[38;2;${__pl_bg};48;2;${1}m\]${__pl_sep}\[\e[0m\]"
+    PS1+="\[\e[48;2;${1};38;2;${2}m\] ${3} \[\e[0m\]"
+    __pl_bg=$1
+}
+__pl_end() {
+    PS1+="\[\e[38;2;${__pl_bg}m\]${__pl_sep}\[\e[0m\] "
+    __pl_bg=''
+}
+__prompt() {
+    local s=$?
+    local purple='97;77;133' dark='38;35;53' white='255;255;255'
+    local green='114;241;184' yellow='254;222;93' red='254;68;80' pink='249;126;114'
+    PS1="\[\e]0;\w\a\]"
+    __pl_bg=''
+    [[ -n $SSH_TTY ]] && __pl_seg "$pink" "$dark" '\u@\h'
+    __pl_seg "$purple" "$white" '\w'
+    local b
+    if b=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --contains --all HEAD 2>/dev/null); then
+        if [[ -n $(git status --porcelain 2>/dev/null | head -n1) ]]; then
+            __pl_seg "$yellow" "$dark" "${__pl_branch} ${b} ✱"
+        else
+            __pl_seg "$green" "$dark" "${__pl_branch} ${b}"
+        fi
+    fi
+    ((s != 0)) && __pl_seg "$red" "$white" "✘ ${s}"
+    [[ $EUID == 0 ]] && __pl_seg "$red" "$white" '#'
+    __pl_end
+}
+PROMPT_COMMAND=__prompt
+
 set -o vi
 
 # eval "$(zoxide init --cmd cd bash)"
