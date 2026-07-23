@@ -5,6 +5,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# bat theme comes from ~/.config/bat/config; scrub stale env from old sessions
+unset BAT_THEME
+
 
 # Shorts (mirrored from fish config)
 alias grep='grep --color=auto'

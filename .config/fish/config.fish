@@ -1,3 +1,6 @@
+# bat theme comes from ~/.config/bat/config; scrub stale env from old sessions
+set -ge BAT_THEME
+
 set -gx EDITOR nvim
 set -Ux LIBVA_DRIVER_NAME nvidia
 set -gx PAGER less
@@ -53,17 +56,17 @@ abbr .3 "cd ../../.."
 abbr .4 "cd ../../../.."
 abbr .5 "cd ../../../../.."
 abbr tts "tt -notheme -bold -showwpm -json"
-abbr lsusb "cyme"
+abbr lsusb cyme
 
 abbr vpnhome "sudo wg-quick up wg0"
 abbr ipadd "sudo ip route add 192.168.0.1 dev wg0"
-abbr copy "wl-copy"
+abbr copy wl-copy
 abbr cat "bat -p"
 abbr mkdir "mkdir -p"
 abbr pacs "sudo pacman -Syu --noconfirm"
 abbr yays "yay --noconfirm --sudoloop"
 abbr nmaps "sudo nmap -sn 192.168.0.0/24"
-abbr lg "lazygit"
+abbr lg lazygit
 abbr llamacpp " ~/projects/random-clones/llama.cpp/build/bin/llama-server --alias Qwen3-Coder-30B-Instruct-XXS --jinja --ctx-size 8192 --temp 1.0 --top-p 0.95 --min-p 0.01  --port 11343  -m ~/Documents/models/Qwen3-Coder-30B-A3B-Instruct-UD-IQ2_XXS.gguf"
 # abbr llamacpp "~/projects/random-clones/llama.cpp/build/bin/llama-server --port 11343 --host 192.168.0.204 --models-max 3 --models-preset /home/coja/.config/llamacpp/config.ini"
 
@@ -81,8 +84,6 @@ set PATH $PATH /home/anon/.local/bin
 # pnpm
 set -gx PNPM_HOME "/home/coja/.local/share/pnpm"
 if not string match -q -- $PNPM_HOME $PATH
-  set -gx PATH "$PNPM_HOME" $PATH
+    set -gx PATH "$PNPM_HOME" $PATH
 end
 # pnpm end
-
-
