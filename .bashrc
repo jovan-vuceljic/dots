@@ -6,34 +6,67 @@
 [[ $- != *i* ]] && return
 
 
+# Shorts (mirrored from fish config)
 alias grep='grep --color=auto'
-alias fzf="fzf --preview color='always {}'"
-alias pacs="sudo pacman -Syu"
-alias nmaps="sudo nmap -sn 192.168.0.0/24"
-alias mem="df -H --output=source,size,used,avail | grep 480G | sort -u"
-alias kittyimg="kitten icat"
-alias vpn="sudo wg-quick up wg0"
-alias vpnoff="sudo wg-quick down wg0"
-alias xremaps="sudo xremap ~/.config/xremap/config.yml"
-alias llama="~/projects/llama.cpp/build/bin/llama-server -m /home/anon/projects/llama.cpp/models/Llama-3.2-3B-Instruct-F16.gguf"
-alias dots="cd ~/.dotfiles/.config/ && nvim"
-alias aliases="bat ~/.config/fish/config.fish"
-
-# List Directory
-# alias ls="lsd"
-alias l="ls -l"
-alias la="ls -a"
-alias lla="ls -la"
-alias lt="ls --tree"
+alias fzf="fzf --multi --preview 'bat --style=numbers --color=always {}' | xargs -n 1 nvim"
+alias fm='yazi'
+alias mem='df -H --output=source,size,used,avail | grep 480G | sort -u'
+alias kittyimg='kitten icat'
+alias xremaps='sudo xremap ~/.config/xremap/config.yml'
+alias copy='wl-copy'
+alias cat='bat -p'
+alias mkdir='mkdir -p'
+alias lsusb='cyme'
+alias lg='lazygit'
+alias tts='tt -notheme -bold -showwpm -json'
 
 # Git
-alias gs='git status'
-alias gca='git add -p . && git commit'
-alias gd="git diff --word-diff"
-alias gl='git log --graph --show-signature'
-alias gla="git log --all --decorate --oneline --graph"
-alias gm='git merge'
+alias gs='git status --short'
 alias gis='git status'
+alias gca='git add -p . && git commit'
+alias gd='git diff --word-diff'
+alias gl='git log --graph --show-signature'
+alias gla='git log --all --decorate --oneline --graph'
+alias gls='serie'
+alias gm='git merge'
+
+# Dirs / projects
+alias cdots='cd ~/.dotfiles/.config/'
+alias dots='cd ~/.dotfiles/.config/ && nvim'
+alias keybinds='cd ~/.dotfiles/.config/ && nvim ./hypr/keybindings.conf'
+alias aliases='bat ~/.bashrc'
+alias wnotes='cd ~/sync/notes && nvim'
+alias todo='cd ~/sync/notes/wm-client/ && nvim todo.md'
+alias scrp='cd ~/projects/scripts/'
+alias currdir='cd ~/projects/wingman/wm-clients/c2/'
+alias current='currdir && nvim'
+alias tilesrv='cd /home/coja/software/wmclient/ && ./martin ./mapfiles/data -W 4 --font ./mapfiles/fonts'
+alias startsim='cd ~/software/wmclient/ && ./wmsimulator.sh'
+alias blocks='~/Documents/Blocks/LinuxNoEditor/Blocks.sh -windowed -RenderOffscreen'
+alias llamacpp='~/projects/random-clones/llama.cpp/build/bin/llama-server --alias Qwen3-Coder-30B-Instruct-XXS --jinja --ctx-size 8192 --temp 1.0 --top-p 0.95 --min-p 0.01 --port 11343 -m ~/Documents/models/Qwen3-Coder-30B-A3B-Instruct-UD-IQ2_XXS.gguf'
+
+# List Directory
+alias ls='lsd'
+alias l='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+alias lt='ls --tree'
+
+# Handy change dir shortcuts
+alias ..='cd ..'
+alias ...='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
+
+# System
+alias pacs='sudo pacman -Syu --noconfirm'
+alias yays='yay --noconfirm --sudoloop'
+alias nmaps='sudo nmap -sn 192.168.0.0/24'
+alias vpn='sudo wg-quick up wg0'
+alias vpnhome='sudo wg-quick up wg0'
+alias vpnoff='sudo wg-quick down wg0'
+alias ipadd='sudo ip route add 192.168.0.1 dev wg0'
 
 # Powerline prompt, synthwave palette (needs a Nerd Font for the glyphs)
 PROMPT_DIRTRIM=3
