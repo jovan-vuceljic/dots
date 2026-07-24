@@ -15,3 +15,29 @@ device_name = "Logitech USB Keyboard"
 input = "KEY_CAPSLOCK"
 hold = ["KEY_LEFTCTRL"]
 tap = ["KEY_ESC"]
+
+# Turn RIGHT ALT into a vim-arrow layer.
+# We first neuter it: instead of ever emitting KEY_RIGHTALT (which apps treat
+# as "activate menu" on a bare tap), it becomes KEY_F13 -- a real keycode that
+# is unbound in every app, so tapping or holding right alt alone does nothing.
+# The chords below then turn F13 + h/j/k/l into the arrow keys.
+[[dual_role]]
+input = "KEY_RIGHTALT"
+hold = ["KEY_F13"]
+tap = ["KEY_F13"]
+
+[[remap]]
+input = ["KEY_F13", "KEY_H"]
+output = ["KEY_LEFT"]
+
+[[remap]]
+input = ["KEY_F13", "KEY_J"]
+output = ["KEY_DOWN"]
+
+[[remap]]
+input = ["KEY_F13", "KEY_K"]
+output = ["KEY_UP"]
+
+[[remap]]
+input = ["KEY_F13", "KEY_L"]
+output = ["KEY_RIGHT"]
