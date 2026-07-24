@@ -12,6 +12,7 @@
 
 ## Git
 - **Do not run `git commit` or `git push`, and never offer or ask to do the committing/pushing yourself** — the user reviews and commits entirely manually (these are also denied in settings.json). Stage/prepare changes and stop there. You may suggest a commit message for the user to use, but nothing more.
+- To hand off a suggested commit message, write it to the per-worktree file `$(git rev-parse --git-path CLAUDE_COMMIT_MSG)` — **not** `COMMIT_EDITMSG` (git overwrites that on `git commit`). A `prepare-commit-msg` hook prefills the editor from it (one-shot) on the next `git commit` / lazygit `C`. Just the raw message, no `#` comments.
 
 ## Formatting
 - Lua: format with `stylua` (2-space indent, 120 col, no call parentheses — see any `.stylua.toml`).
