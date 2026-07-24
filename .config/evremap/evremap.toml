@@ -49,3 +49,12 @@ output = ["KEY_PAGEUP"]
 [[remap]]
 input = ["KEY_F13", "KEY_D"]
 output = ["KEY_PAGEDOWN"]
+
+# Word-wise motion: emit Ctrl+Arrow so it jumps by word.
+[[remap]]
+input = ["KEY_F13", "KEY_B"]
+output = ["KEY_LEFTCTRL", "KEY_LEFT"]
+
+[[remap]]
+input = ["KEY_F13", "KEY_W"]
+output = ["KEY_LEFTCTRL", "KEY_RIGHT"]
