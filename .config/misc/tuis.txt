@@ -55,3 +55,4 @@ bookokrat
 tennis
 llmfit
 termdraw
+hyprmon
