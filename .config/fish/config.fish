@@ -1,5 +1,10 @@
-# bat theme comes from ~/.config/bat/config; scrub stale env from old sessions
-set -ge BAT_THEME
+# Disable XOFF/XON flow control so Ctrl+s can be used for other things
+stty -ixon
+
+# Bind Ctrl+s to the function in all modes (default, search, etc.)
+bind --mode default \cs copy-commandline
+bind --mode insert \cs copy-commandline
+bind --mode search \cs copy-commandline
 
 set -gx EDITOR nvim
 set -Ux LIBVA_DRIVER_NAME nvidia
