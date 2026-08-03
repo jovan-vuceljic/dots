@@ -16,10 +16,12 @@ comments left or the automated reviewers (Codex/Claude) hit a usage limit.
   message + reply on the threads you handled. Then you **ping me to commit & push**, and the loop
   resumes after I do. This honours the global no-commit/no-push rule; nothing in `settings.json`
   changes.
-- **Resolve, don't just reply.** A handled thread gets an interim "addressed, pending push" reply
-  while unpushed; once I've pushed and its fix is live, you **resolve the thread on GitHub** (or
-  minimize the bot comment as RESOLVED) rather than leaving it open — see step 6. Never resolve
-  unpushed work or a needs-input thread.
+- **React, don't reply — then resolve.** A handled thread gets a 👍 **reaction** on the reviewer's
+  comment while unpushed — never an "Addressed — …" reply, those are just noise. Once I've pushed
+  and its fix is live, you **resolve the thread on GitHub** (or minimize the bot comment as
+  RESOLVED) rather than leaving it open — see step 6. Never resolve unpushed work or a needs-input
+  thread. The **only** comments you ever post are the one-line decision questions for needs-input
+  items (step 7).
 - The 10-minute cadence uses `ScheduleWakeup`, so the loop only advances **while this Claude
   session stays open**. **To stop it: press `Esc` while I'm idle between cycles** (that clears the
   queued wake-up); closing the session also stops it. A plain message does **not** cancel a pending
@@ -141,7 +143,7 @@ Current state (auth + the current branch's PR):
      threads/comments** (something new must exist, or step 3 would have short-circuited).
    - If **changed** → I pushed. Set `awaitingPush=false`, `idleCount=0`, update `lastHeadOid`. Then,
      **before handling anything new, resolve on GitHub every already-handled item whose fix is now
-     live** — don't leave them as lingering "addressed" comments. For each id in `handledThreadIds`
+     live** — don't leave them lingering as open, 👍-only threads. For each id in `handledThreadIds`
      that is still unresolved and not re-flagged, run `resolveReviewThread`; for each id in
      `handledCommentIds` not re-flagged, `minimizeComment` as RESOLVED (mutations in step 8).
      Resolved threads drop out of the step-4 fetch, so each fix is resolved exactly once. Then
@@ -170,13 +172,22 @@ Current state (auth + the current branch's PR):
 
 8. **Prepare the auto-handled set (no commit, no push):**
    - Apply the edits (the PostToolUse format hook auto-formats). `git add` the changed files.
-   - Post a short reply on each thread you addressed:
+   - **React 👍 — don't reply.** Mark each item you addressed with a thumbs-up on the reviewer's
+     comment (the thread's *first* comment — the finding itself). No "Addressed — …" reply.
+
+     Inline review comment — REST, using the `databaseId` from step 4 (note: the path has no PR
+     number):
      ```bash
-     gh api --method POST repos/{owner}/{repo}/pulls/NUM/comments/COMMENT_DATABASEID/replies \
-       -f body="Addressed — fix staged, pending push."
+     gh api --method POST repos/{owner}/{repo}/pulls/comments/COMMENT_DATABASEID/reactions \
+       -f content='+1'
      ```
-     For a plain PR **conversation** comment (e.g. an `@claude` request, not an inline review
-     thread), reply with `gh pr comment NUM --body "…"` instead of the replies endpoint.
+     Plain PR **conversation** comment (an `@claude` request or a bot findings comment) — GraphQL,
+     using the `IC_…` node id from `relevantComments[].id`:
+     ```bash
+     gh api graphql -f query='mutation($id:ID!){ addReaction(input:{subjectId:$id,
+       content:THUMBS_UP}){ reaction{ content } } }' -F id=COMMENT_NODE_ID
+     ```
+     Re-reacting to the same comment is a harmless no-op, so a repeat cycle can't double-post.
    - Add handled review-thread ids to `handledThreadIds` and handled conversation/`@claude`
      comment ids to `handledCommentIds`; set `awaitingPush=true`.
    - **Resolve** a thread — `gh api graphql -f query='mutation($id:ID!){
@@ -208,8 +219,9 @@ Current state (auth + the current branch's PR):
     - resolved on GitHub this cycle (if any);
     - the commit message (printed above), then "commit & push when ready".
 
-    Refresh `lastSeenUpdatedAt` with one `gh pr view NUM --json updatedAt` call **after** your
-    replies are posted (so your own activity doesn't defeat the next cheap check), then save state
+    Refresh `lastSeenUpdatedAt` with one `gh pr view NUM --json updatedAt` call **after** any
+    needs-input questions are posted (reactions don't bump `updatedAt`, comments do — so your own
+    activity doesn't defeat the next cheap check), then save state
     to `<git-dir>/pr-loop-state.json`. Then schedule:
     - **normal cycle:** `ScheduleWakeup(delaySeconds=600, prompt="/pr-loop", reason="recheck PR
       #<num> review comments")`;
@@ -226,7 +238,8 @@ Current state (auth + the current branch's PR):
 ## Guardrails
 
 - **Never** `git commit`, `git push`, `gh pr merge`, `gh pr create`, `gh pr close`, or `gh pr edit`
-  — I do all of those. You stage, reply, resolve, and draft; nothing more.
+  — I do all of those. You stage, react, resolve, and draft; nothing more. The only comment you may
+  post is a needs-input decision question.
 - Act only on the target PR. Don't touch unrelated files or other PRs.
 - **Keep context lean:** no raw JSON dumps in replies, no re-listing threads that haven't changed,
   idle cycles ≤2 lines. Every line you emit is re-read (uncached) on every later cycle.
