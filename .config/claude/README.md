@@ -75,9 +75,10 @@ so Claude never auto-triggers them. Run them inside the repo whose branch you're
 - **`/pr-loop [pr]`** — babysits the current branch's PR in a self-paced loop: fixes review
   comments that don't need your input — from **any** reviewer (Codex, Claude, humans) plus any
   `@claude` request — `git add`s them, drafts the commit message (`/commit-msg` style) and marks
-  each handled thread with a 👍 reaction (no "Addressed — …" replies), then pings you to commit &
-  push and re-checks every ~10 min (via `ScheduleWakeup`). Resolves threads once their fix is
-  pushed; the only comments it posts are one-line questions for things needing your decision. Stops when no unresolved comments
+  each thread with a reaction instead of an "Addressed — …" reply: **👍** fixed, **👀** parked for
+  your decision, **👎** a bot false positive (bots only, always with a one-line why). Then pings you
+  to commit & push and re-checks every ~10 min (via `ScheduleWakeup`). Resolves threads once their
+  fix is pushed — dismissals right away, since there's nothing to land. Stops when no unresolved comments
   remain or the automated reviewers (Codex/Claude) hit their limit. Prep-only — never
   commits/pushes/merges; needs `gh` authed and the session left open. Each cycle it prints when it
   will re-check and that `Esc` (between cycles) stops it; on the last cycle it prints a clear

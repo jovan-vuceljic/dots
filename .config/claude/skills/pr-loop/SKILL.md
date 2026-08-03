@@ -21,7 +21,17 @@ comments left or the automated reviewers (Codex/Claude) hit a usage limit.
   and its fix is live, you **resolve the thread on GitHub** (or minimize the bot comment as
   RESOLVED) rather than leaving it open — see step 6. Never resolve unpushed work or a needs-input
   thread. The **only** comments you ever post are the one-line decision questions for needs-input
-  items (step 7).
+  items (step 7) and the one-line reason on a dismissal.
+- **The marker vocabulary — exactly these three, never others.** Every item you triage gets exactly
+  one reaction, so I can read the PR's state at a glance without opening threads:
+  - 👍 `+1` — **addressed**: fix staged; the thread gets resolved once I push.
+  - 👀 `eyes` — **parked**: needs a decision from me, paired with the one-line question (step 7).
+  - 👎 `-1` — **dismissed**: a *bot* finding that's wrong, paired with a one-line why, then
+    resolved/minimized straight away (step 8).
+
+  **Never 👎 a human's comment.** If I'm the one who's wrong, write the reasoning as a reply and
+  park it as 👀 — I decide, not you. And don't invent other reactions (🎉/❤️/🚀/😄/😕): an
+  unexplained emoji is worse than no emoji.
 - The 10-minute cadence uses `ScheduleWakeup`, so the loop only advances **while this Claude
   session stays open**. **To stop it: press `Esc` while I'm idle between cycles** (that clears the
   queued wake-up); closing the session also stops it. A plain message does **not** cancel a pending
@@ -47,7 +57,7 @@ Current state (auth + the current branch's PR):
    ```json
    { "number": 0, "lastHeadOid": "", "lastSeenUpdatedAt": "", "handledThreadIds": [],
      "handledCommentIds": [], "needsInputThreadIds": [], "needsInputCommentIds": [],
-     "awaitingPush": false, "idleCount": 0, "cycleCount": 0 }
+     "dismissedIds": [], "awaitingPush": false, "idleCount": 0, "cycleCount": 0 }
    ```
    Resolve the target PR **in this order**: my argument if given (**$ARGUMENTS**) → the `number`
    in the state file (wake-ups re-invoke `/pr-loop` *without* arguments — the state file is the
@@ -82,12 +92,14 @@ Current state (auth + the current branch's PR):
      repository(owner:$owner,name:$repo){ pullRequest(number:$number){
        reviewThreads(first:100,after:$cursor){ pageInfo{hasNextPage endCursor}
          nodes{ id isResolved isOutdated
-           comments(first:100){ nodes{ databaseId author{login} path line body } } } } } } }' \
+           comments(first:100){ nodes{ id databaseId author{login} path line body } } } } } } }' \
      --jq '.data.repository.pullRequest.reviewThreads.nodes[]
            | select(.isResolved | not)
            | {id, isOutdated,
-              comments: [.comments.nodes[] | {databaseId, author: .author.login, path, line, body}]}'
+              comments: [.comments.nodes[] | {id, databaseId, author: .author.login, path, line, body}]}'
    ```
+   Mind the two id kinds: the thread's own `id` (`PRRT_…`) is what you resolve; a
+   `comments[].id` (`PRRC_…`) is what you react to.
 
    Automated-reviewer activity + `@claude` requests from the PR conversation — latest review per
    bot (for the limit check in step 5) and only the relevant comments, not the whole history:
@@ -115,8 +127,9 @@ Current state (auth + the current branch's PR):
 
 5. **Check stop conditions — before doing any work:**
    - **Nothing left to address** → no unresolved review threads, no un-minimized bot **findings**
-     comments, and no open `@claude` requests. The PR is clean: report done, save state, and **do
-     not** schedule another wake-up. STOP.
+     comments, and no open `@claude` requests. Anything in `dismissedIds` doesn't count as
+     outstanding (if a resolve/minimize failed, the 👎 + reason still stands). The PR is clean:
+     report done, save state, and **do not** schedule another wake-up. STOP.
    - **The automated reviewers are spent** → an automated reviewer's most recent review/comment
      body matches a limit signal (case-insensitive: `rate/usage/quota/credit … limit`,
      `limit reached`, `exceeded … quota`, `out of … credits`). Automated reviewers = authors whose
@@ -158,36 +171,50 @@ Current state (auth + the current branch's PR):
      contract-touching, "I'd have to pick among a few representations") is **not** a reason to
      defer: pick the minimal idiomatic shape that matches existing patterns, implement it, and let
      me veto. A reviewer finding that names the concrete fix is almost always auto-handleable.
-   - **Leave for me (needs input):** defer **only** for genuine ambiguity — two or more
+   - **Leave for me (needs input) — 👀:** defer **only** for genuine ambiguity — two or more
      *materially different* correct behaviours, a real security/performance trade-off, or missing
      product/domain knowledge that existing code can't settle. Never guess these. Post the
      `path:line` + a **one-line decision I can answer in a word**, and record the id in
      `needsInputThreadIds` (or `needsInputCommentIds` for a plain conversation comment) so step 3
      re-surfaces it every idle cycle instead of letting it fall silent.
+   - **Not an issue (dismiss) — 👎:** a **bot** finding that is simply wrong — it misread the code,
+     the behaviour is intentional and the surrounding code proves it, or the concern is already
+     handled elsewhere. Don't "fix" it to make it go away, and don't park it as needs-input either:
+     that leaves a false positive propping the loop open until a safety cap fires. Reply with the
+     one-line reason (facts, not opinion: the line/behaviour that disproves it), 👎 it, then resolve
+     the thread / minimize the comment **immediately** — no push required, since there's no fix to
+     land. Record the id in `dismissedIds` so a re-fetch can't re-litigate it.
+     **Only bots get dismissed.** A *human* comment you think is wrong is a needs-input item: state
+     your reasoning in a reply, mark it 👀, and let me settle it. If you'd be dismissing more than
+     one or two findings in a cycle, you're probably the one who's wrong — park them for me instead.
 
    Apply the same split to Codex's and Claude's review suggestions and to every `@claude` request:
    a concrete ask is auto-handled; a genuine judgement call is left for me. Skip anything whose id
-   is already in `handledThreadIds` / `handledCommentIds`. When I answer a needs-input item (or you
+   is already in `handledThreadIds` / `handledCommentIds` / `dismissedIds`. When I answer a needs-input item (or you
    push a fix for it), drop its id from the needs-input arrays and handle/resolve it normally.
 
 8. **Prepare the auto-handled set (no commit, no push):**
    - Apply the edits (the PostToolUse format hook auto-formats). `git add` the changed files.
-   - **React 👍 — don't reply.** Mark each item you addressed with a thumbs-up on the reviewer's
-     comment (the thread's *first* comment — the finding itself). No "Addressed — …" reply.
+   - **Mark every triaged item with its reaction — never an "Addressed — …" reply.** The reaction
+     goes on the reviewer's comment (for a thread, its *first* comment — the finding itself):
+     👍 what you fixed this cycle, 👀 what you parked for me, 👎 a dismissed bot finding.
 
-     Inline review comment — REST, using the `databaseId` from step 4 (note: the path has no PR
-     number):
+     One mutation covers both surfaces. Pass the **comment** node id — `comments[].id` (`PRRC_…`)
+     from the thread query, or `relevantComments[].id` (`IC_…`) for a conversation comment; *not*
+     the thread's own `PRRT_…` id. `content` is `THUMBS_UP` / `EYES` / `THUMBS_DOWN`:
      ```bash
-     gh api --method POST repos/{owner}/{repo}/pulls/comments/COMMENT_DATABASEID/reactions \
-       -f content='+1'
+     gh api graphql -f query='mutation($id:ID!,$c:ReactionContent!){
+       addReaction(input:{subjectId:$id,content:$c}){ reaction{ content } } }' \
+       -F id=COMMENT_NODE_ID -F c=THUMBS_UP
      ```
-     Plain PR **conversation** comment (an `@claude` request or a bot findings comment) — GraphQL,
-     using the `IC_…` node id from `relevantComments[].id`:
+     Re-adding the same reaction is a harmless no-op, so a repeat cycle can't double-post. When an
+     item **changes class** — I answer a 👀, or a reviewer re-flags something you'd 👍'd — clear the
+     stale marker first, same call shape, so nothing ever carries two contradictory markers:
      ```bash
-     gh api graphql -f query='mutation($id:ID!){ addReaction(input:{subjectId:$id,
-       content:THUMBS_UP}){ reaction{ content } } }' -F id=COMMENT_NODE_ID
+     gh api graphql -f query='mutation($id:ID!,$c:ReactionContent!){
+       removeReaction(input:{subjectId:$id,content:$c}){ reaction{ content } } }' \
+       -F id=COMMENT_NODE_ID -F c=EYES
      ```
-     Re-reacting to the same comment is a harmless no-op, so a repeat cycle can't double-post.
    - Add handled review-thread ids to `handledThreadIds` and handled conversation/`@claude`
      comment ids to `handledCommentIds`; set `awaitingPush=true`.
    - **Resolve** a thread — `gh api graphql -f query='mutation($id:ID!){
@@ -195,6 +222,8 @@ Current state (auth + the current branch's PR):
      **only** once its fix is live (a cycle where `headRefOid` advanced, per step 6) and the
      reviewer hasn't re-flagged it. Never resolve unpushed work or a "needs input" thread. This
      resolves the review *conversation*, not any linked GitHub Issue.
+     **The one exception is a 👎 dismissal:** there's no fix to land, so resolve/minimize it in the
+     same cycle you post the reason — otherwise the false positive keeps the loop alive forever.
    - **Resolve a plain PR-conversation findings comment** (a bot finding with no inline thread —
      e.g. Claude's) by **minimizing it as resolved** — the issue-comment equivalent, under the same
      rules (only once its fix is live and not re-flagged):
@@ -214,8 +243,10 @@ Current state (auth + the current branch's PR):
    (Skip this step when nothing new was staged this cycle.)
 
 10. **Ping + schedule.** Give me a tight summary — deltas only, don't restate unchanged threads:
-    - fixed & staged this cycle: threads (with `path:line`);
-    - left for you: threads + one-line reason each;
+    - 👍 fixed & staged this cycle: threads (with `path:line`);
+    - 👀 left for you: threads + one-line reason each;
+    - 👎 dismissed as not-an-issue: thread + the one-line why (call these out explicitly — a
+      dismissal is me trusting your judgement, so I should see every one);
     - resolved on GitHub this cycle (if any);
     - the commit message (printed above), then "commit & push when ready".
 
