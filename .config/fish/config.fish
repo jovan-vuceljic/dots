@@ -36,8 +36,7 @@ alias fm="yazi"
 
 alias tilesrv="cd /home/coja/software/wmclient/ && ./martin ./mapfiles/data -W 4 --font ./mapfiles/fonts"
 alias blocks="~/Documents/Blocks/LinuxNoEditor/Blocks.sh -windowed -RenderOffscreen"
-alias currdir="cd ~/projects/wingman/wm-clients/c2/"
-alias current="currdir && nvim"
+alias cur="cd ~/projects/wingman/wm-clients/c2/c2-main"
 abbr todo "cd ~/sync/notes/wm-client/ && nvim todo.md"
 
 # List Directory
