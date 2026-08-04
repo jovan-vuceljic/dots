@@ -7,3 +7,5 @@
 .pi/agent/trust.json
 secrets.fish
 
+__pycache__/
+*.pyc

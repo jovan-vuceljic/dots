@@ -8,7 +8,7 @@ resize), trailing (lowest-priority) segments are dropped from the right until it
 Wide — everything:
 
 ```
-📁 ~/.dots │ 🌿 .dots main* │ 🤖 Opus 4.8 (1M) · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h │ 🧠 51% 15.9/31G │ 🖥️ 89% 9.5 12c │ 🌡️ 84°C │ 💾 81%
+📁 ~/.dots │ 🌿 .dots main* │ 🤖 Opus 4.8 (1M) · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h │ 💾 81%
 ```
 
 Narrow — trailing segments trimmed:
@@ -32,9 +32,6 @@ is supplementary to the main colored value.
 | 📝 | **Context** | `% of context window used` + `(Nk)` tokens | window = 1M for `[1m]` models, else 200k. Adds a red **⚠compact** at ≥80% |
 | 📊 | **5h usage** | `% of the 5-hour rolling limit used` + time until it resets | from `rate_limits.five_hour`; Pro/Max only, and absent until the first API response of a session |
 | 💰 | **Cost** | `$` session cost so far + `$/h` burn rate | burn rate shown once the session exceeds ~30s |
-| 🧠 | **RAM** | `% used` + `used/totalG` | from `/proc/meminfo` |
-| 🖥️ | **CPU** | `% busy` + `loadavg cores`c | live %, diffed against a cached `/proc/stat` snapshot; falls back to load average if % can't be computed |
-| 🌡️ | **Temp** | Hottest CPU thermal zone in °C | prefers `x86_pkg_temp`/`coretemp`/`k10temp`; omitted if no sensors |
 | 💾 | **Disk** | `% used` of the filesystem at the cwd | from `statvfs` |
 
 ## Colour legend
@@ -46,9 +43,6 @@ attention. Light gray = secondary detail. Thresholds (`green < … < yellow < �
 |---|---|---|---|
 | Context | `< 50%` | `50–80%` | `≥ 80%` (⚠compact) |
 | 5h usage | `< 50%` | `50–80%` | `≥ 80%` |
-| RAM | `< 70%` | `70–85%` | `≥ 85%` |
-| CPU | `< 60%` | `60–85%` | `≥ 85%` |
-| Temp | `< 60°C` | `60–80°C` | `≥ 80°C` |
 | Disk | `< 75%` | `75–90%` | `≥ 90%` |
 
 > Light gray is `\033[37m`; dimming (`\033[2m`) is disabled because it blended the gray
@@ -60,8 +54,15 @@ attention. Light gray = secondary detail. Thresholds (`green < … < yellow < �
 These functions exist in `statusline.py` but aren't in the output. Enable one by adding it
 to the `work` or `system` list in `main()`:
 
+RAM/CPU/temp were **retired 2026-07-26**: the status line only refreshes on message
+events, so system metrics sat visibly stale between turns — the tmux status bar
+(`tmux/scripts/`) owns live system metrics now.
+
 | | Function | Shows |
 |---|---|---|
+| 🧠 | `ram_segment` | `% used` + `used/totalG` from `/proc/meminfo` (green `<70%` / yellow / red `≥85%`) |
+| 🖥️ | `cpu_segment` | `% busy` (diffed `/proc/stat` snapshot) + loadavg + cores (green `<60%` / red `≥85%`) |
+| 🌡️ | `temp_segment` | hottest CPU thermal zone °C (green `<60` / red `≥80`) |
 | ✏️ | `velocity_segment` | `+added/-removed` lines this session + lines/min |
 | ♻️ | `cache_segment` | prompt-cache hit % (higher is better) |
 | ⚙️ | `api_segment` | share of wall-clock time spent in API/inference |

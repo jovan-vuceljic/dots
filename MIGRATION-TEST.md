@@ -1,12 +1,13 @@
 # Test the new `.dots` wm config (branch `migrate-new-dots`)
 
-This branch makes `dots-wm` byte-identical to what the new `~/.dots` (stow
-monorepo) deploys for host **wm** = `common + gui + wm` layered, host wins.
+This branch makes `dots-wm` match what the new `~/.dots` (stow monorepo) deploys for
+host **wm** = `common + gui + wm` layered, host wins — plus four wm-side items kept on
+purpose (see "Kept on this branch" at the bottom).
 Deploy it with your existing dots-wm mechanism, confirm nothing breaks, then
 migrate wm to the real `~/.dots`.
 
-Delta vs `main`: **43 added, ~54 modified, ~12 removed** (all removals are junk
-or intentional restructures — see the checklist below).
+Delta vs `main`: **52 added, 57 modified, 12 removed** (all removals are junk
+or intentional restructures — see the checklist below). Synced against `~/.dots` @ `b96d058`.
 
 ---
 
@@ -63,6 +64,21 @@ git -C ~/projects/dots/dots-wm diff   # inspect what got pulled in
 
 ---
 
+## 1b. Packages wm may need
+
+The new dots reference a few tools the old wm config didn't. Install before testing so
+nothing silently breaks:
+
+```fish
+pacman -S --needed eza bat fzf
+```
+
+- **eza** — `.dots` deliberately replaced `alias ls="lsd"` with
+  `eza --icons --group-directories-first` ("lsd coz its slow"). Without eza, `ls` breaks.
+- **bat**, **fzf** — used by the new `lk` fish function (directory preview).
+
+---
+
 ## 2. Verify (the intentional restructures — check each still works)
 
 | Area | What changed | Check |
@@ -112,3 +128,20 @@ to adopt. After that, delete the old dots-wm deployment.
 - **wm already runs HyDE** (the old config on `main` sources `~/.local/share/hyde/hyprland.conf`), just an older version than lw. So a HyDE update is **not required** to test this branch — test the dots on wm's current HyDE first.
 - Updating HyDE later (to align wm with lw) is **only partially reversible**: config is recoverable via git + `~/.dots/bin/reconcile-hyde.sh`, but packages and `~/.local/share/hyde/*` are not, and there are no system snapshots. Back up first.
 - **See `HYDE-UPDATE.md`** for the full explanation and the optional update/revert steps.
+
+---
+
+## Kept on this branch (not in `~/.dots`)
+
+These are yours and are **deliberately** not synced from `.dots`. They will be **lost when
+you switch wm to `~/.dots`** unless you back-port them into `~/.dots/common/` first:
+
+- `.config/fish/functions/copy-commandline.fish` + its `stty -ixon` / Ctrl+S binds in
+  `config.fish` — not in `.dots` at all
+- `.config/claude/skills/pr-loop/SKILL.md` — your expanded version (275 lines vs `.dots`' 213)
+- `.config/claude/README.md` — your pr-loop wording (merged with `.dots`' statusline bullet)
+- `config.fish` wm-only bits: `tilesrv` / `blocks` / `cur` / `todo` aliases and
+  `alias dots="cd ~/.dotfiles/.config/ && nvim"` (kept as-is for dots-wm by choice — note
+  `~/.dotfiles` no longer exists, so fix the path when you move to `~/.dots`)
+
+Everything else on this branch is `.dots` @ `b96d058` verbatim.

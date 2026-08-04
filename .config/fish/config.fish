@@ -41,14 +41,13 @@ alias gla="git log --all --decorate --oneline"
 alias gls="serie"
 alias gm="git merge"
 
-
 alias tilesrv="cd /home/coja/software/wmclient/ && ./martin ./mapfiles/data -W 4 --font ./mapfiles/fonts"
 alias blocks="~/Documents/Blocks/LinuxNoEditor/Blocks.sh -windowed -RenderOffscreen"
 alias cur="cd ~/projects/wingman/wm-clients/c2/c2-main"
 abbr todo "cd ~/sync/notes/wm-client/ && nvim todo.md"
 
-# List Directory
-alias ls="lsd"
+# List directory
+alias ls='eza --icons --group-directories-first'
 alias l="ls -l"
 alias la="ls -a"
 alias lla="ls -la"

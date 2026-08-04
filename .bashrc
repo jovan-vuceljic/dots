@@ -19,7 +19,6 @@ alias faillock="sudo faillock --reset"
 alias xremaps="sudo xremap ~/.config/xremap/config.yml"
 alias dots="cd ~/.dots/ && nvim"
 alias aliases="bat ~/.config/fish/config.fish"
-h() { "$@" --help 2>&1 | bat --plain --language=help; } # colorized --help
 alias ipadd="sudo ip route add 192.168.0.234 dev wg0"
 
 # List directory
@@ -76,6 +75,9 @@ PROMPT_COMMAND=__prompt
 
 set -o vi
 # eval "$(zoxide init --cmd cd bash)"
+
+# colorized --help
+h() { "$@" --help 2>&1 | bat --plain --language=help; } 
 
 # Record lookup against the local dmz db (adjust the db path to this machine)
 lk(){

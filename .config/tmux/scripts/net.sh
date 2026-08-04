@@ -18,13 +18,23 @@ emit() { # emit <icon-printf-escape> <rate>
 }
 
 # Reuse a fresh cache so dl and ul agree and we only sample once per refresh.
-if [ -r "$cache" ]; then
+fresh_emit() { # print from the cache and exit — if the cache is fresh enough
+  [ -r "$cache" ] || return 1
   read -r cdl cul cts < "$cache"
-  if [ -n "$cts" ] && [ "$(( $(date +%s) - cts ))" -lt 3 ]; then
-    if [ "$which" = ul ]; then emit '\U0000f093' "$cul"; else emit '\U0000f019' "$cdl"; fi
-    exit 0
-  fi
-fi
+  { [ -n "$cts" ] && [ "$(( $(date +%s) - cts ))" -lt 3 ]; } || return 1
+  if [ "$which" = ul ]; then emit '\U0000f093' "$cul"; else emit '\U0000f019' "$cdl"; fi
+  exit 0
+}
+
+fresh_emit
+
+# tmux launches the dl and ul jobs CONCURRENTLY each refresh, so without a lock
+# both miss the stale cache and compute independently — worst case the loser reads
+# the counters milliseconds after the winner rewrote them and shows a ~0 rate.
+# Serialize: the loser waits ~30ms on the lock, then hits the winner's fresh cache.
+exec 9>"$rt/tmux_net_lock"
+flock 9
+fresh_emit
 
 now=$(date +%s.%N)
 read -r rx tx < <(awk 'NR>2{gsub(/:/," "); if($1!="lo"){r+=$2; t+=$10}} END{print r+0, t+0}' /proc/net/dev)

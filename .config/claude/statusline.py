@@ -2,10 +2,13 @@
 """Claude Code status line.
 
 One line: vim mode | dir | git(repo/branch +dirty +ahead/behind) | model (+effort) |
-context% (+compact warn) | 5h usage (+reset eta) | cost (+burn rate) |
-RAM | CPU% (+load +cores) | temp | disk. If the rendered line would overflow the
-terminal, trailing (lowest-priority) segments are dropped until it fits.
-(Dormant, re-addable in main(): velocity, cache hit %, api ratio, version, style.)
+context% (+compact warn) | 5h usage (+reset eta) | cost (+burn rate) | disk. If the
+rendered line would overflow the terminal, trailing (lowest-priority) segments are
+dropped until it fits.
+(Dormant, re-addable in main(): ram, cpu%, temp -- retired 2026-07-26 because the
+status line only refreshes on message events, so system metrics sat visibly stale;
+tmux's status bar owns those now -- plus velocity, cache hit %, api ratio, version,
+style.)
 
 Reads the status JSON from stdin (Claude Code statusLine command). Every segment
 is wrapped defensively so the status line can never crash the UI -- on any error
@@ -450,7 +453,9 @@ def main():
 
     # One row: work (left) then system (right), joined. If it would overflow the
     # terminal, trailing (lowest-priority) segments are dropped so it stays one line.
-    # Dormant helpers kept above for easy re-add: velocity_segment,
+    # Dormant helpers kept above for easy re-add: ram_segment, cpu_segment,
+    # temp_segment (retired -- they only refresh on message events, so they sat
+    # stale; the tmux status bar owns system metrics now), velocity_segment,
     # cache_segment, api_segment, version_segment, style_segment.
     work = [s for s in (
         vim_segment(data),
@@ -462,9 +467,6 @@ def main():
         cost_segment(data),
     ) if s]
     system = [s for s in (
-        ram_segment(),
-        cpu_segment(),
-        temp_segment(),
         disk_segment(cwd),
     ) if s]
 

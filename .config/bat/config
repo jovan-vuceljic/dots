@@ -5,7 +5,7 @@
 # Specify desired highlighting theme (e.g. "TwoDark"). Run `bat --list-themes`
 # for a list of all available themes
 # Custom theme lives in ./themes/ — run `bat cache --build` after changing it
---theme="onedark"
+--theme="OneHalfDark"
 --style="numbers,changes,header,snip"
 
 # Enable this to use italic text on the terminal. This is not supported on all

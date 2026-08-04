@@ -10,7 +10,7 @@ back into this repo.
 - `settings.json` — global settings: permissions (deny git commit/push + read of secret
   files), default `model`, `enabledPlugins`, vim mode, dark theme, `effortLevel`, fullscreen
   TUI, `statusLine`, `hooks`, `worktree` defaults, …
-- `statusline.py` — rich status line (dir, git, model, context %, cost, RAM/CPU/temp/disk).
+- `statusline.py` — rich status line (dir, git, model, context %, cost, disk — system metrics live in the tmux bar).
   See [StatusBar.md](StatusBar.md) for what each segment and colour means.
 - `keybindings.json` — custom keybindings (vim-style scroll/navigation).
 - `CLAUDE.md` — global user preferences applied to every project.

@@ -57,10 +57,10 @@ bookokrat
 tennis
 llmfit
 termdraw
-hyprmon
 torlink
 riptide
 quien
 eilmeldung
 calcure
 weathr
+hyprmon
