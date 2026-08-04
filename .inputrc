@@ -34,7 +34,7 @@ set keymap vi-insert
 # custom binds
 "\C- ": shell-expand-line
 "\C-x": glob-expand-word
-"\C-g": "g\n"
+"\C-g": "git diff\n"
 "\C-y": "| ccze\n"
 "\C-o": "\C-u yazi\n\C-u"
 "\C-l": "\C-u clear -x && ls\n"

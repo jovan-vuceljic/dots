@@ -1,7 +1,7 @@
 # Claude Code config
 
 Portable [Claude Code](https://claude.com/claude-code) customizations, synced via these
-dotfiles. Claude Code still uses its default `~/.claude/` directory; we surface the tracked
+dots. Claude Code still uses its default `~/.claude/` directory; we surface the tracked
 files below into it via per-file/dir symlinks, so edits made through Claude write straight
 back into this repo.
 
@@ -16,15 +16,15 @@ back into this repo.
 - `CLAUDE.md` — global user preferences applied to every project.
 - `hooks/format.py` — PostToolUse hook: formats edited files by extension (stylua / ruff /
   prettier / gofmt / rustfmt / fish_indent / shfmt / taplo). Opinionated formatters (stylua, ruff,
-  prettier, taplo) only run where the project opts in via a config file found walking up; canonical
-  ones (gofmt, rustfmt, fish_indent, shfmt) run on sight. No-ops if the formatter isn't installed,
-  and always exits 0.
+  prettier, taplo) only run where the project opts in via a config file found walking up; gofmt and
+  rustfmt gate on a project marker (`go.mod` / `Cargo.toml`); fish_indent and shfmt run on sight.
+  No-ops if the formatter isn't installed, and always exits 0.
 - `skills/` — custom [Agent Skills](https://code.claude.com/docs/en/skills). See **Skills** below.
 - `link.sh` — idempotent bootstrap that creates the `~/.claude` symlinks below.
 
 Paths inside `settings.json` reference `~/.claude/...` via `$HOME`/`PATH` (`/usr/bin/env
 python3 ~/.claude/...`), so they work regardless of the username, python location, or where the
-dotfiles repo is cloned (`~/.dotfiles`, `~/.dots`, …).
+dots repo is cloned (`~/.dots`, …).
 
 ## What is **not** tracked (stays local, per device)
 
@@ -35,22 +35,23 @@ caches, and the `plugins/` cache/binaries.
 ## Setup on a new device
 
 ```sh
-# 1. Clone these dotfiles and deploy with stow (creates ~/.config/claude -> the repo copy)
-cd ~ && stow .dotfiles
+# 1. Deploy the dotfiles repo — install.sh stows ~/.config/claude AND runs link.sh for you
+cd ~/.dots && ./install.sh
 
-# 2. Point Claude's default dir at the tracked copies (run once; safe to re-run)
-bash ~/.config/claude/link.sh
-
-# 3. Launch Claude and log in once (credentials are NOT synced)
+# 2. Launch Claude and log in once (credentials are NOT synced)
 claude
 
-# 4. Reinstall the plugins from settings.json -> enabledPlugins
+# 3. Reinstall the plugins from settings.json -> enabledPlugins
 #    (typescript-lsp, frontend-design — anthropics/claude-plugins-official) via /plugin.
 #    Optional: install any formatters you want the hook to use (stylua, ruff, prettier, …).
 ```
 
-`~/.claude/` is created by Claude on first run; `link.sh` replaces its generated files with
-links to these tracked copies. Re-run it any time a link gets clobbered.
+`install.sh` deploys `~/.config/claude` (via stow) and then runs `link.sh` automatically. You only
+need to run `link.sh` by hand (`bash ~/.config/claude/link.sh`) if a link later gets clobbered
+(e.g. Claude's `/config` replaces one with a plain file) — it's idempotent and self-healing.
+
+A **new skill/hook** added to the repo shows up after a re-stow — `./install.sh` (or `dotsync`) links
+the new file into `~/.config/claude`, which `link.sh` then surfaces into `~/.claude`.
 
 ## Skills
 

@@ -18,4 +18,4 @@
 - Lua: format with `stylua` (2-space indent, 120 col, no call parentheses — see any `.stylua.toml`).
 
 ## Dotfiles
-- Configs live in the dotfiles repo under `.config/` and are surfaced via per-directory symlinks into `~/.config/` (and `~/.claude/`). Editing a file under the repo's `.config/` is editing the live config — no deploy step.
+- Configs live in the dots repo under `.config/` and are surfaced via per-directory symlinks into `~/.config/` (and `~/.claude/`). Editing a file under the repo's `.config/` is editing the live config — no deploy step.

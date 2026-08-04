@@ -5,10 +5,11 @@
 ---@type ChadrcConfig
 
 local M = {
+  lsp = { signature = true },
+
   base46 = {
     theme = "onedark",
     transparency = true,
-    lsp = { signature = true },
     hl_override = {
       NvimTreeGitDirty = {
         fg = "#DBA55D",
@@ -35,7 +36,6 @@ local M = {
       order = { "treeOffset", "buffers", "tabs", "btns" },
       modules = nil,
       bufwidth = 21,
-      transparency = true,
     },
   },
 

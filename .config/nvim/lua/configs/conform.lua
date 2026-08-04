@@ -4,12 +4,13 @@ local options = {
     css = { "prettier" },
     html = { "prettier" },
     typescript = { "prettier" },
+    javascript = { "prettier" },
   },
 
   format_on_save = {
     -- These options will be passed to conform.format()
     timeout_ms = 500,
-    lsp_fallback = true,
+    lsp_format = "fallback",
   },
 }
 

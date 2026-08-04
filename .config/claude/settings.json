@@ -34,6 +34,19 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus[1m]",
+  "enableWorkflows": false,
+  "skipWorkflowUsageWarning": true,
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "/usr/bin/env python3 ~/.claude/statusline.py",
+    "padding": 0,
+    "hideVimModeIndicator": true
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -52,19 +65,9 @@
   "worktree": {
     "baseRef": "fresh"
   },
-  "enableWorkflows": false,
-  "statusLine": {
-    "type": "command",
-    "command": "/usr/bin/env python3 ~/.claude/statusline.py",
-    "padding": 0
-  },
-  "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true
-  },
   "effortLevel": "xhigh",
+  "advisorModel": "fable",
   "tui": "fullscreen",
-  "skipWorkflowUsageWarning": false,
   "theme": "dark",
   "editorMode": "vim",
   "verbose": true,

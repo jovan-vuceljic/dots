@@ -2,7 +2,7 @@
 description: Draft a ready-to-paste PR description by filling this repo's GitHub PR template from the branch diff and commits, then copy it to the clipboard. Use after finishing a feature.
 argument-hint: [base-branch]
 disable-model-invocation: true
-allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Bash(git symbolic-ref:*), Bash(git rev-parse:*), Bash(git show-ref:*), Bash(ls:*), Bash(cat:*), Bash(wl-copy), Read, Glob
+allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Bash(git symbolic-ref:*), Bash(git rev-parse:*), Bash(git show-ref:*), Bash(ls:*), Bash(cat:*), Bash(wl-copy:*), Bash(mktemp:*), Bash(rm:*), Read, Glob
 ---
 
 # Draft this branch's PR description

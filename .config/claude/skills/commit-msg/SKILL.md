@@ -1,5 +1,5 @@
 ---
-description: Draft a commit message for the staged changes, matching this repo's commit style, then print it in the reply, save it to the repo's COMMIT_EDITMSG file, and copy it to the clipboard. Never stages or commits. Use once you've staged what you want to commit.
+description: Draft a commit message for the staged changes, matching this repo's commit style, then print it in the reply, save it to the repo's CLAUDE_COMMIT_MSG file, and copy it to the clipboard. Never stages or commits. Use once you've staged what you want to commit.
 argument-hint: [optional focus/scope hint]
 disable-model-invocation: true
 allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git status:*), Bash(git rev-parse:*), Bash(wl-copy:*), Read, Glob, Write
@@ -29,13 +29,14 @@ Context for the current commit — what's staged, plus this repo's recent style:
    ready. This in-reply copy is the durable one: it lives in the transcript, so it survives even if
    the clipboard gets overwritten later (by me copying something else, or another Claude session
    running `wl-copy`). Always print it; don't rely on the clipboard alone.
-5. **Save it to a file in the repo** so I can recover it any time (and `git commit -F …` it if I
-   want): find the git dir with `git rev-parse --absolute-git-dir`, then use the Write tool to write
-   the message to `COMMIT_EDITMSG` inside it (i.e. `<git-dir>/COMMIT_EDITMSG`). This file is
-   per-repo, lives inside `.git/` so it never shows up in `git status`, and won't be clobbered by
-   another session's clipboard writes.
-6. **Also copy it to the clipboard** as a convenience: `wl-copy < <git-dir>/COMMIT_EDITMSG`. Then
-   tell me all three places it is: **printed above**, **saved to `<git-dir>/COMMIT_EDITMSG`**, and
-   **on the clipboard** — so I never lose it to a stray copy.
+5. **Save it to a file in the repo** so I can recover it any time: resolve the path with
+   `git rev-parse --git-path CLAUDE_COMMIT_MSG` (per-worktree correct), then use the Write tool to
+   write the raw message there — **not** `COMMIT_EDITMSG`, which git overwrites on every
+   `git commit` before the editor opens. My `prepare-commit-msg` hook prefills the commit editor
+   from `CLAUDE_COMMIT_MSG` (one-shot) on the next `git commit` / lazygit `C`. The file lives
+   inside the git dir so it never shows up in `git status`.
+6. **Also copy it to the clipboard** as a convenience: `wl-copy < <path from step 5>`. Then
+   tell me all three places it is: **printed above**, **saved to `CLAUDE_COMMIT_MSG`** (hook
+   prefills the next commit), and **on the clipboard** — so I never lose it to a stray copy.
 7. **Never** run `git add`, `git commit`, or `git push`, and never offer to — I stage and commit
    manually. Draft only.

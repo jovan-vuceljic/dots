@@ -1,28 +1,55 @@
 # see https://github.com/sigoden/aichat/blob/main/config.example.yaml
-
-keybindings: vi 
+keybindings: vi
 editor: nvim
-model: duskadiy:Qwen3-Coder-30B-Instruct-IQ4_XS
+model: local:Qwen3-Coder-30B-Instruct-IQ4_XS
+
+# Sessions: persist REPL sessions and keep more history before summarizing.
+# The default compress_threshold (4000) summarizes far too early for 24k+ windows.
+save_session: true
+compress_threshold: 16000
+
+# REPL prompts show live context usage (needs max_input_tokens, set per model below)
+left_prompt:  '{color.green}{?session {session}{?role /}}{role}{color.cyan}{?rag @{rag}}{color.reset}> '
+right_prompt: '{color.purple}{?session {consume_tokens}/{max_input_tokens} }{color.reset}'
+
+# NOTE: temperature/top_p are intentionally unset — the LAN server applies tuned
+# per-model sampling via --jinja (e.g. GLM 0.6/0.95); a global value would clobber it.
+
+# max_input_tokens = real ctx-size (from the router) minus output headroom.
 clients:
+# LAN access (fast; only reachable on the home network)
 - type: openai-compatible
   name: local
   api_base: http://192.168.0.204:11343/v1
-  models:
-  - name: Qwen3.5-27B-UD-Q3_K_XL
-  - name: Qwen3.5-9B-Q8_0
+  models: &lan_models
   - name: Qwen3-Coder-30B-Instruct-IQ4_XS
-  - name: GLM-4.7-Flash-UD-Q3_K_XL
-  - name: DeepSeek-Coder-V2-Lite-Instruct-Q8_0
-  - name: gemma-4-E4B-it-UD-Q8_K_XL
+    max_input_tokens: 30000            # ctx 32768
+  - name: Qwen3-Coder-Next-UD-IQ3_XXS
+    max_input_tokens: 128000           # ctx 131072
+  - name: Qwen3.6-35B-A3B-MTP-UD-IQ3_XXS
+    max_input_tokens: 22000            # ctx 24576
+    supports_vision: true
+  - name: Qwen3.6-35B-A3B-Thinking
+    max_input_tokens: 22000            # ctx 24576
+    supports_vision: true
+  - name: Qwen3.5-9B-UD-Q6_K_XL
+    max_input_tokens: 30000            # ctx 32768
+    supports_vision: true
   - name: gemma-4-26B-A4B-it-UD-IQ4_XS
+    max_input_tokens: 22000            # ctx 24576
+    supports_vision: true
+  - name: gemma-4-E4B-it-UD-Q8_K_XL
+    max_input_tokens: 62000            # ctx 65536
+    supports_vision: true
+  - name: GLM-4.7-Flash-UD-Q4_K_XL
+    max_input_tokens: 22000            # ctx 24576
+  - name: gpt-oss-20b
+    max_input_tokens: 30000            # ctx 32768
+  - name: gpt-oss-20b-low
+    max_input_tokens: 30000            # ctx 32768
+# Remote access via duskadiy.com (reachable from anywhere; no key required)
+# Same server, same model ids — reuse the list above via a YAML anchor.
 - type: openai-compatible
   name: duskadiy
   api_base: https://llm.duskadiy.com/api/v1
-  models:
-  - name: Qwen3.5-27B-UD-Q3_K_XL
-  - name: Qwen3.5-9B-Q8_0
-  - name: Qwen3-Coder-30B-Instruct-IQ4_XS
-  - name: GLM-4.7-Flash-UD-Q3_K_XL
-  - name: DeepSeek-Coder-V2-Lite-Instruct-Q8_0
-  - name: gemma-4-E4B-it-UD-Q8_K_XL
-  - name: gemma-4-26B-A4B-it-UD-IQ4_XS
+  models: *lan_models

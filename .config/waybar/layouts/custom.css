@@ -7,10 +7,11 @@
   min-height: 10px;
 }
 
-@import "theme.css";
+@import "../theme.css"; /* HyDE/wallbash-generated colors, lives one level up */
 
 window#waybar {
-  background: @bar-bg;
+  /* transparent so the cavabar (bottom layer, same region) shows through; module pills keep @main-bg */
+  background: transparent;
 }
 
 tooltip {
@@ -199,7 +200,7 @@ window#waybar.cavabar {
 
 window#waybar.cavabar #custom-cava {
   font-size: 24px;
-  color: alpha(@main-fg, 0.4);
+  color: alpha(@main-fg, 0.7);
   background: transparent;
   margin: 0px;
   padding: 0px;

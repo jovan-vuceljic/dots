@@ -1,17 +1,35 @@
+{
     "hyprland/window": {
-        "format": "  {}",
-        "rotate": ${r_deg},
+        "format": "  {}",
+        "rotate": 0,
         "separate-outputs": true,
+        "max-length": 1000,
         "rewrite": {
-            "${USER}@${set_sysname}:(.*)": "$1 ",
-            "(.*) — Mozilla Firefox": "$1 󰈹",
-            "(.*)Mozilla Firefox": "Firefox 󰈹",
-            "(.*) - Visual Studio Code": "$1 󰨞",
-            "(.*)Visual Studio Code": "Code 󰨞",
-            "(.*) — Dolphin": "$1 󰉋",
-            "(.*)Spotify": "Spotify 󰓇",
-            "(.*)Steam": "Steam 󰓓"
-        },
-        "max-length": 1000
-    },
-
+            "(.*) — Kitty": " $1",
+            "(.*)~": " $1",
+            "(.*) — Mozilla Firefox": "󰈹 $1",
+            "(.*)Mozilla Firefox": "󰈹 Firefox",
+            "(.*) — LibreWolf": "󰈹 $1",
+            "(.*)LibreWolf": "󰈹 LibreWolf",
+            "(.*) — Chromium": " $1",
+            "(.*)Chromium": " Chromium",
+            "(.*) - VSCodium": " $1",
+            "(.*)VSCodium": " VSCodium",
+            "(.*)Code - OSS": "󰨞  $1",
+            "(.*) - Visual Studio Code": "󰨞 $1",
+            "(.*)Visual Studio Code": "󰨞 Code",
+            "(.*) — Dolphin": "󰉋 $1",
+            "(.*) - Obsidian(.*)": "󰠮 $1",
+            "(.*)Ferdium": "󰭻 Ferdium",
+            "(.*)FreeTube": " FreeTube",
+            "(.*)Freetube": " FreeTube",
+            "(.*) - VLC media player": "󰕼 $1",
+            "(.*)Steam": "󰓓 Steam",
+            "(.*)Neovide": " Nvim",
+            "(.*)Gajim": "󰭹 Gajim",
+            "(.*)KeePassXC": " KeePassXC",
+            "(.*)Betterbird": " Betterbird",
+            "(.*)Spotify": "󰓇 Spotify"
+        }
+    }
+}

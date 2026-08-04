@@ -74,10 +74,6 @@ Current state (auth + the current branch's PR):
      cap (step 5) is now exceeded, STOP per step 5. Otherwise save state and jump straight to
      step 10's reschedule. Total output ≤2 lines — if `awaitingPush`, one line is a brief
      commit-&-push reminder (remind at most twice across idle cycles, then just the status line).
-     **An idle cycle is never silent while `needsInputThreadIds`/`needsInputCommentIds` are
-     non-empty: restate each parked item on its own line (`path:line` + the one-line decision it
-     needs) so a deferred item can never fade into "no changes." This overrides the ≤2-line cap
-     (one line per parked item), and it is the one thing you always re-surface on idle.**
    - Otherwise: remember the fetched `headRefOid` for step 6 and continue. (Don't update
      `lastSeenUpdatedAt` yet — step 10 refreshes it *after* you've posted replies, so your own
      replies don't defeat the next cycle's cheap check.)
@@ -237,8 +233,10 @@ Current state (auth + the current branch's PR):
 9. **Draft the commit message — exactly like `/commit-msg`:** from the staged diff and the repo's
    recent `git log` style (this repo uses `[Scope] summary`), write a message that matches. Then:
    - **(a) Print it** in your reply as a fenced ` ```text ` block — the durable copy.
-   - **(b) Write it** to `<git-dir>/COMMIT_EDITMSG` with the Write tool (so I can `git commit -F` it).
-   - **(c) Copy it:** `wl-copy < <git-dir>/COMMIT_EDITMSG`.
+   - **(b) Write it** with the Write tool to the path from `git rev-parse --git-path CLAUDE_COMMIT_MSG`
+     (**not** `COMMIT_EDITMSG` — git overwrites that on `git commit`; the `prepare-commit-msg` hook
+     prefills the editor from `CLAUDE_COMMIT_MSG`).
+   - **(c) Copy it:** `wl-copy < <that path>`.
    - Tell me all three locations. **Never** run `git commit`.
    (Skip this step when nothing new was staged this cycle.)
 

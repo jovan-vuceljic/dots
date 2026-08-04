@@ -1,21 +1,20 @@
 # Status line (`statusline.py`)
 
 The custom Claude Code status line, ordered **work info (left) → system info (right)**,
-segments joined by a light-gray `│`. It's **responsive**: it stays on one line while it
-fits, and splits into two rows — **work on top, system below** — once the rendered width
-exceeds the terminal width (`$COLUMNS`, which Claude Code re-exports on resize).
+segments joined by a light-gray `│`. It's **responsive**: always a single line — if the
+rendered width would exceed the terminal (`$COLUMNS`, which Claude Code re-exports on
+resize), trailing (lowest-priority) segments are dropped from the right until it fits.
 
-Wide — one line:
-
-```
-📁 ~/.dotfiles │ 🌿 .dotfiles main* │ 🤖 Opus 4.8 (1M) · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h │ 🧠 51% 15.9/31G │ 🖥️ 89% 9.5 12c │ 🌡️ 84°C │ 💾 81%
-```
-
-Narrow — two rows:
+Wide — everything:
 
 ```
-📁 ~/.dotfiles │ 🌿 .dotfiles main* │ 🤖 Opus 4.8 (1M) · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h
-🧠 51% 15.9/31G │ 🖥️ 89% 9.5 12c │ 🌡️ 84°C │ 💾 81%
+📁 ~/.dots │ 🌿 .dots main* │ 🤖 Opus 4.8 (1M) · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h │ 🧠 51% 15.9/31G │ 🖥️ 89% 9.5 12c │ 🌡️ 84°C │ 💾 81%
+```
+
+Narrow — trailing segments trimmed:
+
+```
+📁 ~/.dots │ 🌿 .dots main* │ 🤖 Opus 4.8 (1M) · xhigh │ 📝 84% (843k) │ 📊 34% 2h54m │ 💰 $0.40 $12.00/h
 ```
 
 Every segment is defensive: if its data is missing or a command fails, the segment is
@@ -26,6 +25,7 @@ is supplementary to the main colored value.
 
 | | Segment | Shows | Notes |
 |---|---|---|---|
+| | **Vim mode** | `[I]`/`[N]`/`[V]` editor mode | only with `editorMode: vim`; pair with `hideVimModeIndicator: true` so the built-in one doesn't duplicate it |
 | 📁 | **Directory** | Current working dir, with `~` for home | cyan |
 | 🌿 | **Git** | `repo branch` + `*` if dirty + `↑N`/`↓N` ahead/behind upstream | repo = magenta; branch = green when clean, yellow + red `*` when dirty; `↑` cyan, `↓` yellow. Omitted outside a repo |
 | 🤖 | **Model** | Active model display name + `· effort` level (`low`/`medium`/`high`/`xhigh`) | name = blue, effort = light gray; effort omitted for models without the param |

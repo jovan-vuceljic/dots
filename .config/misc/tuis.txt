@@ -21,6 +21,7 @@ sshm
 aichat
 tt
 gittype
+toofan
 pastel
 hexyl
 tmux
@@ -29,6 +30,7 @@ nvim
 vim
 tetrigo
 pyradio
+px7-radio
 kew
 cmatrix
 neo-matrix
@@ -38,9 +40,9 @@ asciiquarium
 cbonsai
 tclock
 hunk
-gittop-tui
+gittop
 lazygit
-lazyjorunal
+lazyjournal
 lazydocker
 ctop
 colima
@@ -56,3 +58,9 @@ tennis
 llmfit
 termdraw
 hyprmon
+torlink
+riptide
+quien
+eilmeldung
+calcure
+weathr

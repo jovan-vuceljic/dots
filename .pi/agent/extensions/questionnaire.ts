@@ -245,6 +245,7 @@ export default function questionnaire(pi: ExtensionAPI) {
 					// Select option
 					if (matchesKey(data, Key.enter) && q) {
 						const opt = opts[optionIndex];
+						if (!opt) return; // empty options with allowOther=false
 						if (opt.isOther) {
 							inputMode = true;
 							inputQuestionId = q.id;

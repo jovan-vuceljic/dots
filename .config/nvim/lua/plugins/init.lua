@@ -13,33 +13,20 @@ return {
   },
 
   {
-    "olimorris/codecompanion.nvim",
-    version = "^19.0.0",
-    lazy = false,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-    },
-    opts = function()
-      return require "configs.codecompanion"
-    end,
-  },
-
-  {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
-    build = ":TSUpdate",
     opts = {
       ensure_installed = {
         "vim",
         "vimdoc",
         "lua",
+        "luadoc",
+        "printf",
         "html",
         "css",
         "typescript",
         "javascript",
         "markdown",
-        "norg",
         "scss",
         "svelte",
         "typst",
@@ -51,11 +38,15 @@ return {
 
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown", "gitcommit", "codecompanion" },
+    ft = { "markdown", "gitcommit" },
     opts = function()
       return require "configs.render-markdown"
     end,
   },
+
+  -- snacks.indent (below) draws the indent guides — disable NvChad's indent-blankline
+  -- so they don't render doubled
+  { "lukas-reineke/indent-blankline.nvim", enabled = false },
 
   {
     "folke/snacks.nvim",

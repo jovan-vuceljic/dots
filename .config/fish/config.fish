@@ -7,32 +7,40 @@ bind --mode insert \cs copy-commandline
 bind --mode search \cs copy-commandline
 
 set -gx EDITOR nvim
-set -Ux LIBVA_DRIVER_NAME nvidia
 set -gx PAGER less
-set -Ux MANPAGER "nvim +Man!"
-set -x NEWT_COLORS 'root=black,black;window=black,black;border=white,black;listbox=white,black;label=blue,black;checkbox=red,black;title=green,black;button=white,red;actsellistbox=white,red;actlistbox=white,gray;compactbutton=white,gray;actcheckbox=white,blue;entry=lightgray,black;textbox=blue,black' nmtui
+set -gx QT_FONT_DPI 96
+set -gx PI_SKIP_VERSION_CHECK 1
+set -gx OPENCODE_CONFIG "$HOME/.config/opencode/openai-gpt.jsonc"
+set -gx MANPAGER "nvim +Man!"
+set -gx NEWT_COLORS 'root=black,black;window=black,black;border=white,black;listbox=white,black;label=blue,black;checkbox=red,black;title=green,black;button=white,red;actsellistbox=white,red;actlistbox=white,gray;compactbutton=white,gray;actcheckbox=white,blue;entry=lightgray,black;textbox=blue,black' # themes nmtui
 # set -gx BAT_THEME "Catppuccin Mocha"
 
-# Shorts
-alias fzf="fzf --multi --preview 'bat --style=numbers --color=always {}' | xargs -n 1 nvim"
+# Cursor / greeting
+set -g fish_greeting
+set -g fish_cursor_insert line
+set -g fish_cursor_default block
+set -g fish_cursor_visual underscore
+
+# Misc
+alias exti=exit
+alias dmz="cat ~/.config/fish/dmz.txt"
+alias nmatrix="neo-matrix -DS 3"
 alias grep="grep --color=auto"
+alias fzf="fzf --preview 'bat --color=always {}'"
+alias fzff="fzf --multi --preview 'bat --style=numbers --color=always {}' | xargs -n 1 nvim"
+abbr scrcpyz 'scrcpy -wSK -m 1920 --window-borderless --always-on-top --power-off-on-close --no-audio'
 
 # Git
-alias gs="git status --short"
+alias gti="git"
+alias gs="git status"
 alias gca="git add -p . && git commit"
 alias gd="git diff --word-diff"
 alias gl="git log --graph --show-signature"
-alias gla="git log --all --decorate --oneline --graph"
+alias glog="git log --all --decorate --oneline --color --graph"
+alias gla="git log --all --decorate --oneline"
 alias gls="serie"
 alias gm="git merge"
-alias gm="git merge"
 
-alias cdots="cd ~/.dotfiles/.config/"
-alias dots="cd ~/.dotfiles/.config/ && nvim"
-alias keybinds="cd ~/.dotfiles/.config/ && nvim ./hypr/keybindings.conf"
-alias aliases="bat ~/.config/fish/config.fish"
-alias wnotes="cd ~/sync/notes && nvim"
-alias fm="yazi"
 
 alias tilesrv="cd /home/coja/software/wmclient/ && ./martin ./mapfiles/data -W 4 --font ./mapfiles/fonts"
 alias blocks="~/Documents/Blocks/LinuxNoEditor/Blocks.sh -windowed -RenderOffscreen"
@@ -46,48 +54,68 @@ alias la="ls -a"
 alias lla="ls -la"
 alias lt="ls --tree"
 
-# Git
-alias gs="git status --short"
-alias gd="git diff --word-diff"
-alias gl="git log --graph --show-signature"
-alias gla="git log --all --decorate --oneline --graph"
-alias gls="serie"
+# Dotfiles + notes
+alias dots="cd ~/.dotfiles/.config/ && nvim"
+alias cdots="cd ~/.dots/"
+alias cpnotes="cd ~/sync/PersonalNotes/"
+alias cnotes="cd ~/sync/CojaDuska/Notes/"
+abbr notes "cnotes && nvim"
+abbr wnotes "cd ~/sync/Wingman/notes && nvim"
+abbr wtodo "cd ~/sync/Wingman/notes/wm-client/ && nvim todo.md"
+abbr dots "cdots && nvim"
+abbr dotsync "cdots && ./bin/dotsync"
+abbr pnotes "cpnotes && nvim"
+abbr todo "cpnotes && nvim ToDoNext.md"
+abbr aliases "bat ~/.config/fish/config.fish"
 
-# Handy change dir shortcuts
+# Handy
+abbr cat "bat -p"
+abbr untar "tar -xf"
+abbr copy wl-copy
+abbr img "kitten icat"
+abbr fm yazi
+abbr lg lazygit
+abbr gcommit "git diff HEAD | aichat -r commit"
+abbr aichatdel "rm ~/.config/aichat/sessions/*.yaml"
+abbr mkdir "mkdir -p"
+abbr faillock "sudo faillock --reset"
+abbr xremaps "sudo xremap ~/.config/xremap/config.yml"
+abbr pacs "sudo pacman -Syu --noconfirm"
+abbr yays "yay --noconfirm --sudoloop"
+abbr nmaps "sudo nmap -sn 192.168.0.0/24"
+abbr scrcpyc 'scrcpy -wSK -m 1920 --window-borderless --always-on-top --power-off-on-close'
+abbr scrcpys 'scrcpy -wS --power-off-on-close'
+abbr tts "tt -notheme -bold -showwpm -json"
+abbr tuioss "tuios --show-clock --show-keys --show-cpu --show-ram --confirm-quit"
+abbr keybinds "cd ~/.dots/ && nvim gui/.config/hypr/keybindings.conf"
+abbr vpnhome "sudo wg-quick up wg0"
+abbr vpnkralizec "sudo wg-quick up kralizec-wg0"
+abbr vpnsumadija "sudo wg-quick up sumadija-wg0"
+abbr ipadd "sudo ip route add 192.168.0.234 dev wg0"
+
+# Change-dir shortcuts
 abbr .. "cd .."
 abbr ... "cd ../.."
 abbr .3 "cd ../../.."
 abbr .4 "cd ../../../.."
 abbr .5 "cd ../../../../.."
-abbr tts "tt -notheme -bold -showwpm -json"
-abbr lsusb cyme
 
-abbr vpnhome "sudo wg-quick up wg0"
-abbr ipadd "sudo ip route add 192.168.0.1 dev wg0"
-abbr copy wl-copy
-abbr cat "bat -p"
-abbr mkdir "mkdir -p"
-abbr pacs "sudo pacman -Syu --noconfirm"
-abbr yays "yay --noconfirm --sudoloop"
-abbr nmaps "sudo nmap -sn 192.168.0.0/24"
-abbr lg lazygit
-abbr llamacpp " ~/projects/random-clones/llama.cpp/build/bin/llama-server --alias Qwen3-Coder-30B-Instruct-XXS --jinja --ctx-size 8192 --temp 1.0 --top-p 0.95 --min-p 0.01  --port 11343  -m ~/Documents/models/Qwen3-Coder-30B-A3B-Instruct-UD-IQ2_XXS.gguf"
-# abbr llamacpp "~/projects/random-clones/llama.cpp/build/bin/llama-server --port 11343 --host 192.168.0.204 --models-max 3 --models-preset /home/coja/.config/llamacpp/config.ini"
-
-abbr scrp "~/projects/scripts/"
-abbr startsim "cd ~/software/wmclient/ && ./wmsimulator.sh"
-
-export PATH="$HOME/.cargo/bin:$PATH"
-fnm env --use-on-cd --shell fish | source
+# Tool init (fnm is initialized once in conf.d/fnm.fish — don't source it again here)
 zoxide init --cmd cd fish | source
-thefuck --alias | source
+fish_add_path $HOME/.cargo/bin $HOME/.local/bin
 
-# Created by `pipx` on 2025-05-31 20:14:06
-set PATH $PATH /home/anon/.local/bin
+# thefuck, lazy-loaded on first use (its --alias eval costs ~170ms of shell startup)
+function fuck
+    functions -e fuck
+    thefuck --alias | source
+    fuck $argv
+end
 
 # pnpm
-set -gx PNPM_HOME "/home/coja/.local/share/pnpm"
+set -gx PNPM_HOME "$HOME/.local/share/pnpm"
 if not string match -q -- $PNPM_HOME $PATH
     set -gx PATH "$PNPM_HOME" $PATH
 end
-# pnpm end
+
+# Per-host extras
+test -f ~/.config/fish/host.fish; and source ~/.config/fish/host.fish

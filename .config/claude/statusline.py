@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Claude Code status line.
 
-Row 1 (work):   dir | git(repo/branch +dirty +ahead/behind) | model |
-                context% (+compact warn) | 5h usage (+reset eta) |
-                cost (+burn rate) | line velocity | cache hit % | api/think ratio
-Row 2 (system): RAM | disk | CPU% (+load +cores) | temp | version | output style
+One line: vim mode | dir | git(repo/branch +dirty +ahead/behind) | model (+effort) |
+context% (+compact warn) | 5h usage (+reset eta) | cost (+burn rate) |
+RAM | CPU% (+load +cores) | temp | disk. If the rendered line would overflow the
+terminal, trailing (lowest-priority) segments are dropped until it fits.
+(Dormant, re-addable in main(): velocity, cache hit %, api ratio, version, style.)
 
 Reads the status JSON from stdin (Claude Code statusLine command). Every segment
 is wrapped defensively so the status line can never crash the UI -- on any error
@@ -110,6 +111,25 @@ def last_usage(data):
 
 
 # --- row 1: work ------------------------------------------------------------
+def vim_segment(data):
+    """Vim editor mode as a compact [I]/[N]/[V] (only present with editorMode: vim).
+
+    Pair with `"hideVimModeIndicator": true` in the statusLine settings block so
+    Claude's own built-in indicator doesn't duplicate this one.
+    """
+    mode = (data.get("vim") or {}).get("mode")
+    if not mode:
+        return ""
+    m = mode.upper()
+    if m.startswith("INSERT"):
+        return color("[I]", "green", bold=True)
+    if m.startswith("VISUAL"):
+        return color("[V]", "magenta", bold=True)
+    if m.startswith("NORMAL"):
+        return color("[N]", "blue", bold=True)
+    return color(f"[{m[:1]}]", "gray")
+
+
 def dir_segment(cwd):
     try:
         home = os.path.expanduser("~")
@@ -428,11 +448,12 @@ def main():
     )
     usage = last_usage(data)
 
-    # Two groups: work (left) and system (right). Rendered on one line when the
-    # terminal is wide enough, otherwise stacked work-over-system.
+    # One row: work (left) then system (right), joined. If it would overflow the
+    # terminal, trailing (lowest-priority) segments are dropped so it stays one line.
     # Dormant helpers kept above for easy re-add: velocity_segment,
     # cache_segment, api_segment, version_segment, style_segment.
     work = [s for s in (
+        vim_segment(data),
         dir_segment(cwd),
         git_segment(cwd),
         model_segment(data),
@@ -447,12 +468,12 @@ def main():
         disk_segment(cwd),
     ) if s]
 
-    one_line = join_line(work + system)
+    segs = work + system
     cols = term_cols()
-    if cols and vlen(one_line) > cols:
-        sys.stdout.write(join_line(work) + "\n" + join_line(system))
-    else:
-        sys.stdout.write(one_line)
+    if cols:  # trim from the right until it fits one line (cols=0 -> width unknown, keep all)
+        while len(segs) > 1 and vlen(join_line(segs)) > cols:
+            segs.pop()
+    sys.stdout.write(join_line(segs))
 
 
 if __name__ == "__main__":

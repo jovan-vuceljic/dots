@@ -1,7 +1,7 @@
 function c2-worktree
     if test (count $argv) -ne 1
-        echo "Usage: pkg-worktree <branch-name>"
-        echo "Example: pkg-worktree package/package-update"
+        echo "Usage: c2-worktree <branch-name>"
+        echo "Example: c2-worktree package/package-update"
         return 1
     end
 

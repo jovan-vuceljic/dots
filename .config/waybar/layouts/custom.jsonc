@@ -6,7 +6,6 @@
 
     "layer": "top",
     "position": "top",
-    "mod": "dock",
     "height": 33,
     "exclusive": true,
     "passthrough": false,
@@ -18,7 +17,7 @@
 
 	"modules-left": ["custom/l_end","custom/power","custom/r_end","hyprland/workspaces", "custom/sl_end","hyprland/window","custom/sr_end","custom/l_end","custom/wallchange","custom/cliphist","custom/r_end"],
 	"modules-center": ["wlr/taskbar"],
-	"modules-right": ["custom/notification","custom/l_end","backlight","pulseaudio","pulseaudio#microphone","mpris","custom/r_end","custom/l_end","memory","cpu","custom/cpuinfo","battery","custom/r_end","custom/l_end","tray","custom/r_end","custom/l_end","idle_inhibitor","clock","custom/r_end"],
+	"modules-right": ["custom/l_end","backlight","pulseaudio","pulseaudio#microphone","mpris","custom/r_end","custom/l_end","memory","cpu","custom/cpuinfo","battery","custom/r_end","custom/l_end","tray","custom/r_end","custom/l_end","idle_inhibitor","clock","custom/r_end"],
 
 // sourced from modules based on config.ctl //
 
@@ -28,41 +27,43 @@
         "spacing": 5
     },
 
+    // NOTE: keep in sync with modules/window.jsonc — this layout is launched standalone
+    // (waybar -c), so the modules/ file is NOT read here; this inline copy is what renders.
     "hyprland/window": {
-        "format": "{}",
-        "window-rewrite-default":"󰣇",
+        "format": "  {}",
         "rotate": 0,
         "separate-outputs": true,
         "max-length": 1000,
         "rewrite": {
-            "${USER}@${set_sysname}:(.*)": "$1 ",
-            "(.*) — Kitty": " $1",
-            "(.*)~": " $1",
+            "(.*) — Kitty": " $1",
+            "(.*)~": " $1",
             "(.*) — Mozilla Firefox": "󰈹 $1",
             "(.*)Mozilla Firefox": "󰈹 Firefox",
             "(.*) — LibreWolf": "󰈹 $1",
             "(.*)LibreWolf": "󰈹 LibreWolf",
-            "(.*) — Chromium": " $1",
-            "(.*)Chromium": " Chromium",
-            "(.*) - VSCodium": " $1",
-            "(.*)VSCodium": " VSCodium",
+            "(.*) — Chromium": " $1",
+            "(.*)Chromium": " Chromium",
+            "(.*) - VSCodium": " $1",
+            "(.*)VSCodium": " VSCodium",
             "(.*)Code - OSS": "󰨞  $1",
-            "(.*)Code": "󰨞  Code",
             "(.*) - Visual Studio Code": "󰨞 $1",
             "(.*)Visual Studio Code": "󰨞 Code",
-            "(.*) — Dolphin": "$1 󰉋",
-            "(.*) - Obsidian v1.6.7": " $1 ",
-            "(.*)Ferdium": " $1",
-            "(.*)Freetube": "  $1",
+            "(.*) — Dolphin": "󰉋 $1",
+            "(.*) - Obsidian(.*)": "󰠮 $1",
+            "(.*)Ferdium": "󰭻 Ferdium",
+            "(.*)FreeTube": " FreeTube",
+            "(.*)Freetube": " FreeTube",
             "(.*) - VLC media player": "󰕼 $1",
             "(.*)Steam": "󰓓 Steam",
-            "(.*)Neovide": " Nvim",
-            "(.*)Gajim": "󰟿 Gajim"
+            "(.*)Neovide": " Nvim",
+            "(.*)Gajim": "󰭹 Gajim",
+            "(.*)KeePassXC": " KeePassXC",
+            "(.*)Betterbird": " Betterbird",
+            "(.*)Spotify": "󰓇 Spotify"
         }
     },
     "hyprland/workspaces": {
-        "window-rewrite-default":"",
-        "disable-scroll": true,
+        "window-rewrite-default":"",
         "all-outputs": true,
         "active-only": false,
         "on-click": "activate",
@@ -72,17 +73,6 @@
         "persistent-workspaces": {}
       },
 
-    "bluetooth": {
-        "format": "",
-        "format-disabled": "",
-        "format-connected": " {num_connections}",
-        "format-connected-battery": "{icon} {num_connections}",
-        "format-icons": ["󰥇", "󰤾", "󰤿", "󰥀", "󰥁", "󰥂", "󰥃", "󰥄", "󰥅", "󰥆", "󰥈"],
-        "tooltip-format": "{controller_alias}\n{num_connections} connected",
-        "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
-        "tooltip-format-enumerate-connected": "{device_alias}",
-        "tooltip-format-enumerate-connected-battery": "{device_alias}\t{icon} {device_battery_percentage}%"
-    },
     "cpu": {
         "interval": 10,
         "format": "󰍛 {usage}%",
@@ -149,8 +139,8 @@
         "format": "{icon}",
         "rotate": 0,
         "format-icons": {
-            "activated": "󰥔",
-            "deactivated": ""
+            "activated": "󰅶",
+            "deactivated": "󰛊"
         }
     },
     "clock": {
@@ -196,17 +186,6 @@
         "on-click": "swwwallpaper.sh -n",
         "on-click-right": "swwwallpaper.sh -p",
         "on-click-middle": "sleep 0.1 && swwwallselect.sh",
-        "interval" : 86400, // once every day
-        "tooltip": true
-    },
-
-    "custom/theme": {
-        "format": "{}",
-        "rotate": 0,
-        "exec": "echo ; echo 󰟡 switch theme",
-        "on-click": "themeswitch.sh -n",
-        "on-click-right": "themeswitch.sh -p",
-        "on-click-middle": "sleep 0.1 && themeselect.sh",
         "interval" : 86400, // once every day
         "tooltip": true
     },
@@ -273,35 +252,6 @@
         "format-plugged": " {capacity}%",
         "format-alt": "{time} {icon}",
         "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
-    },
-
-    "custom/notifications": {
-        "format": "{icon} {}",
-        "rotate": 0,
-        "format-icons": {
-            "email-notification": "<span foreground='white'><sup></sup></span>",
-            "chat-notification": "󱋊<span foreground='white'><sup></sup></span>",
-            "warning-notification": "󱨪<span foreground='yellow'><sup></sup></span>",
-            "error-notification": "󱨪<span foreground='red'><sup></sup></span>",
-            "network-notification": "󱂇<span foreground='white'><sup></sup></span>",
-            "battery-notification": "󰁺<span foreground='white'><sup></sup></span>",
-            "update-notification": "󰚰<span foreground='white'><sup></sup></span>",
-            "music-notification": "󰝚<span foreground='white'><sup></sup></span>",
-            "volume-notification": "󰕿<span foreground='white'><sup></sup></span>",
-            "notification": "<span foreground='white'><sup></sup></span>",
-            "dnd": "",
-            "none": ""
-        },
-        "return-type": "json",
-        "exec-if": "which dunstctl",
-        "exec": "notifications.py",
-        "on-scroll-down": "sleep 0.1 && dunstctl history-pop",
-        "on-click": "dunstctl set-paused toggle",
-        "on-click-middle": "dunstctl history-clear",
-        "on-click-right": "dunstctl close-all",
-        "interval": 1,
-        "tooltip": true,
-        "escape": true
     },
 
     "backlight": {
@@ -372,9 +322,9 @@
 
     "custom/cava": {
         "format": "{}",
-        "exec": "cava.sh waybar --width 218", // width must be even (cava stereo), ~3072px / (font-size * 0.6)
+        "exec": "bash $HOME/.config/waybar/cava-waybar.sh $(cat $HOME/.config/waybar/cava.width 2>/dev/null || echo 94)", // per-host cava.width (bars, even; ~screen_px / (font-size*0.6)). gui default 94; wm overrides to 218
         "restart-interval": 1,
-        "hide-empty": true
+        "hide-empty-text": true
     }
 }
 ]

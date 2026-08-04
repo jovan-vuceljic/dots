@@ -1,76 +1,40 @@
 #
-# ~/.bashrc
+# ~/.bashrc  (shared; host-specific bits in ~/.bashrc.host)
 #
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# bat theme comes from ~/.config/bat/config; scrub stale env from old sessions
-unset BAT_THEME
-
-
-# Shorts (mirrored from fish config)
 alias grep='grep --color=auto'
-alias fzf="fzf --multi --preview 'bat --style=numbers --color=always {}' | xargs -n 1 nvim"
-alias fm='yazi'
-alias mem='df -H --output=source,size,used,avail | grep 480G | sort -u'
-alias kittyimg='kitten icat'
-alias xremaps='sudo xremap ~/.config/xremap/config.yml'
-alias copy='wl-copy'
-alias cat='bat -p'
-alias mkdir='mkdir -p'
-alias lsusb='cyme'
-alias lg='lazygit'
-alias tts='tt -notheme -bold -showwpm -json'
+alias fzf="fzf --preview 'bat --color=always {}'"
+alias copy="wl-copy"
+alias img="kitten icat"
+alias fm="yazi"
+alias lg="lazygit"
+alias mkdir="mkdir -p"
+alias pacs="sudo pacman -Syu --noconfirm"
+alias yays="yay --noconfirm --sudoloop"
+alias nmaps="sudo nmap -sn 192.168.0.0/24"
+alias faillock="sudo faillock --reset"
+alias xremaps="sudo xremap ~/.config/xremap/config.yml"
+alias dots="cd ~/.dots/ && nvim"
+alias aliases="bat ~/.config/fish/config.fish"
 h() { "$@" --help 2>&1 | bat --plain --language=help; } # colorized --help
+alias ipadd="sudo ip route add 192.168.0.234 dev wg0"
+
+# List directory
+alias l="ls -l"
+alias la="ls -a"
+alias lla="ls -la"
+alias lt="ls --tree"
 
 # Git
-alias gs='git status --short'
-alias gis='git status'
+alias gs='git status'
 alias gca='git add -p . && git commit'
-alias gd='git diff --word-diff'
+alias gd="git diff --word-diff"
 alias gl='git log --graph --show-signature'
-alias gla='git log --all --decorate --oneline --graph'
-alias gls='serie'
+alias gla="git log --all --decorate --oneline --graph"
 alias gm='git merge'
-
-# Dirs / projects
-alias cdots='cd ~/.dotfiles/.config/'
-alias dots='cd ~/.dotfiles/.config/ && nvim'
-alias keybinds='cd ~/.dotfiles/.config/ && nvim ./hypr/keybindings.conf'
-alias aliases='bat ~/.bashrc'
-alias wnotes='cd ~/sync/notes && nvim'
-alias todo='cd ~/sync/notes/wm-client/ && nvim todo.md'
-alias scrp='cd ~/projects/scripts/'
-alias currdir='cd ~/projects/wingman/wm-clients/c2/'
-alias current='currdir && nvim'
-alias tilesrv='cd /home/coja/software/wmclient/ && ./martin ./mapfiles/data -W 4 --font ./mapfiles/fonts'
-alias startsim='cd ~/software/wmclient/ && ./wmsimulator.sh'
-alias blocks='~/Documents/Blocks/LinuxNoEditor/Blocks.sh -windowed -RenderOffscreen'
-alias llamacpp='~/projects/random-clones/llama.cpp/build/bin/llama-server --alias Qwen3-Coder-30B-Instruct-XXS --jinja --ctx-size 8192 --temp 1.0 --top-p 0.95 --min-p 0.01 --port 11343 -m ~/Documents/models/Qwen3-Coder-30B-A3B-Instruct-UD-IQ2_XXS.gguf'
-
-# List Directory
-alias ls='lsd'
-alias l='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias lt='ls --tree'
-
-# Handy change dir shortcuts
-alias ..='cd ..'
-alias ...='cd ../..'
-alias .3='cd ../../..'
-alias .4='cd ../../../..'
-alias .5='cd ../../../../..'
-
-# System
-alias pacs='sudo pacman -Syu --noconfirm'
-alias yays='yay --noconfirm --sudoloop'
-alias nmaps='sudo nmap -sn 192.168.0.0/24'
-alias vpn='sudo wg-quick up wg0'
-alias vpnhome='sudo wg-quick up wg0'
-alias vpnoff='sudo wg-quick down wg0'
-alias ipadd='sudo ip route add 192.168.0.1 dev wg0'
 
 # Powerline prompt, synthwave palette (needs a Nerd Font for the glyphs)
 PROMPT_DIRTRIM=3
@@ -111,5 +75,18 @@ __prompt() {
 PROMPT_COMMAND=__prompt
 
 set -o vi
-
 # eval "$(zoxide init --cmd cd bash)"
+
+# Record lookup against the local dmz db (adjust the db path to this machine)
+lk(){
+	local DB="$HOME/projects/dmz/soft/lk/db.rec"
+	passes=0 count=0; until [ "$count" -eq "1" ] || [ "$passes" -gt 2 ] ; do \
+		query="$(recsel "$DB" -p aim,tag | recsel -iq "$query" -CP aim,tag | sort -u | fzf --preview="recsel \"$DB\" -e \"aim~{}\"")" \
+		&& count="$(recsel "$DB" -q "$query" -c )" ;\
+		passes=$(( passes + 1 )) ;\
+	done \
+	&& recsel "$DB" -q "$query" | recfmt -f "$HOME/projects/dmz/soft/lk/lists.fmt" | less
+}
+
+# Per-host extras
+[ -f ~/.bashrc.host ] && . ~/.bashrc.host
