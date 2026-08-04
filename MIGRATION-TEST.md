@@ -133,13 +133,17 @@ to adopt. After that, delete the old dots-wm deployment.
 
 ## Kept on this branch (not in `~/.dots`)
 
-These are yours and are **deliberately** not synced from `.dots`. They will be **lost when
-you switch wm to `~/.dots`** unless you back-port them into `~/.dots/common/` first:
+Back-ported to `~/.dots/common/` already (safe to lose here — `.dots` has them):
 
-- `.config/fish/functions/copy-commandline.fish` + its `stty -ixon` / Ctrl+S binds in
-  `config.fish` — not in `.dots` at all
-- `.config/claude/skills/pr-loop/SKILL.md` — your expanded version (275 lines vs `.dots`' 213)
-- `.config/claude/README.md` — your pr-loop wording (merged with `.dots`' statusline bullet)
+- `copy-commandline.fish` + its Ctrl+S binds — in `.dots` the binds live in
+  `fish_user_key_bindings.fish` (its own idiom) rather than `config.fish`; same behavior
+- `claude/skills/pr-loop/SKILL.md` — `.dots` now carries the newer 275-line version
+
+Still **only** on this branch — these are lost when you switch wm to `~/.dots` unless
+back-ported:
+
+- `.config/claude/README.md` — your pr-loop wording (merged here with `.dots`' statusline
+  bullet). Worth back-porting so `.dots`' README matches its now-updated pr-loop skill.
 - `config.fish` wm-only bits: `tilesrv` / `blocks` / `cur` / `todo` aliases and
   `alias dots="cd ~/.dotfiles/.config/ && nvim"` (kept as-is for dots-wm by choice — note
   `~/.dotfiles` no longer exists, so fix the path when you move to `~/.dots`)
