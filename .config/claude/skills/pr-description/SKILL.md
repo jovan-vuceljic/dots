@@ -19,13 +19,14 @@ This repo's PR template (first match), plus the branch's changes:
    detected base) and read the full diff + commit messages for `merge-base..HEAD`.
 2. **Fill the PR template shown above** from the *actual* changes:
    - Write the Summary / motivation and any "Implementation Notes" from the diff and commits.
-   - Tick the **Type of Change** boxes that genuinely match (feature / fix / refactor / perf /
-     tests / docs / chore).
+   - Fill the **Type of Change** field or boxes with the kinds that genuinely match (feature /
+     fix / refactor / perf / tests / docs / chore).
    - Tick `Self-reviewed` and `LLM-assisted` if those boxes exist.
    - **Leave verification boxes unchecked** — e.g. "tests passed", "`validate:full` passes",
      "pre-commit hooks passed". I confirm those myself; never tick them for me.
-   - Fill **Related Issues** from issue numbers in the branch name or commit trailers; otherwise
-     keep the template's placeholder lines.
+   - Fill **Related Issues** from issue numbers in the branch name or commit trailers; delete any
+     placeholder lines you can't fill (never leave a dangling `Closes #`), and drop the whole
+     section if there are no issues to reference.
    - If a multi-template dir was listed (no single file), pick the most fitting one and say which.
    - **If no template exists**, use this fallback: `## Summary` / `## Changes` / `## Testing` /
      `## Notes`.
