@@ -1,7 +1,7 @@
 # see https://github.com/sigoden/aichat/blob/main/config.example.yaml
 keybindings: vi
 editor: nvim
-model: local:Qwen3-Coder-30B-Instruct-IQ4_XS
+model: duskadiy:gemma-4-E4B-it-UD-Q8_K_XL
 
 # Sessions: persist REPL sessions and keep more history before summarizing.
 # The default compress_threshold (4000) summarizes far too early for 24k+ windows.
