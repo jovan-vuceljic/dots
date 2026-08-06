@@ -208,3 +208,52 @@ for f in (git ls-files)
     test (readlink -f ~/$f) = "$HOME/.dotfiles/$f"; or echo "BROKEN: $f"
 end
 ```
+
+---
+
+## Back-port list — fixes that belong in `~/.dots`
+
+This branch was `.dots` @ `b96d058` **verbatim**, so most of what was fixed here are bugs
+that still exist in `~/.dots` and are therefore live on lw. Work through this before
+`install.sh` overwrites wm with the unfixed versions.
+
+Nothing below is speculative about wm — it was all reproduced here. What *is* unverified
+is lw, so each universal item names the check to run there first.
+
+### Universal — port to `~/.dots`
+
+| Fix | Where | Why it isn't wm-specific |
+|-----|-------|--------------------------|
+| **Six dead hyprlock keys** — `general:{no_fade_in,grade,fade_in_time,disable_loading_bar}`, `label:{animation,opacity}` | `hypr/hyprlock.conf` | hyprlock ≥0.9.6 rejects all six and prints `config option does not exist`, then carries on, so they silently do nothing. Check with `hyprlock --version` on lw; if it's 0.9.6+, its lock screen ignores them too. |
+| **Bar blur layerrules** | `hypr/userprefs.conf` | `cavabar` is defined in `waybar/layouts/custom.jsonc:315`, a `.dots` file — so lw has the bar. But the only blur rule for it ever lived in wm's HyDE-generated `hypr/themes/theme.conf`, which `.dots` doesn't carry. **lw's cavabar has no blur behind it.** Note the syntax: current hyprland wants `blur true,match:namespace <ns>`; the old `blur,<ns>` form is silently rejected. |
+| **`Super+Ctrl h/l` focus binds** | `hypr/keybindings.conf` | The de-dupe that removed them kept `changegroupactive`, which is a no-op outside a group. Hyprland fires *every* bind matching a combo, so both can coexist — that was the pre-migration behaviour. |
+| **`$ANIMATION_PATH` must be absolute** | `hypr/animations.conf` | HyDE re-sources `$ANIMATION_PATH` from `~/.local/share/hyde/`, where a `./animations/…` path doesn't resolve. Check for `source= globbing error` in lw's `hyprland.log`. |
+| **hyprlock layout + assets** | `hypr/hyprlock.conf`, `hypr/hyprlock/assets/` | The three-band percentage layout is resolution-independent and worth having everywhere. The background/logo previously pointed at `~/sync/Drive/pics/`, which doesn't exist here — **check whether it exists on lw**; if not, lw's lock screen has no wallpaper either. Assets now live in-repo (268 KB) so this can't recur. |
+
+Two things in that last row are host-specific and should **not** be copied verbatim: the
+`$fs*` type scale (tuned for 3072x1728 logical) and `$fontFamily`/`$timeFontFamily`
+(needs `cantarell-fonts` + `adobe-source-code-pro-fonts` installed).
+
+### wm-only — do NOT port
+
+- **`hypr/themes/{colors,theme,wallbash}.conf`** — restored only because wm's older HyDE
+  hard-sources them. lw's HyDE generates its own. Drop these when wm's HyDE is updated.
+- **`hypr/animations/theme.conf` inline block** — the `source = ./HyDE.conf` stub it
+  replaced is a newer-HyDE artifact. Confirm `~/.config/hypr/animations/HyDE.conf` exists
+  on lw before assuming the stub is fine there.
+- **`userprefs.conf` gaps/rounding** — personal deltas over wm's theme; lw's generated
+  theme has different base values.
+- **`fish/config.fish` alias removals** — the `~/.dots`-era aliases (`cdots`, `cpnotes`,
+  `cnotes`, `notes`, `pnotes`, `wnotes`, `wtodo`, `dotsync`) were removed because their
+  targets don't exist on wm. **On lw they do.** Porting this deletion would break lw.
+- **`.bashrc`** — `dots`/`keybinds` point at `~/.dotfiles`, plus a wm-only alias block.
+
+### Then re-check the thing that hid all of this
+
+`hyprctl configerrors` returns empty for a missing `source =`. On lw, check the log and
+the `set:` flag instead:
+
+```fish
+grep -cE 'globbing error|Error parsing gradient' /run/user/1000/hypr/*/hyprland.log
+hyprctl getoption decoration:rounding   # set: false means nothing ever assigned it
+```

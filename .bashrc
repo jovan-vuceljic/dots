@@ -5,8 +5,13 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Mirrors the aliases + abbrs in .config/fish/config.fish (see README). fish abbrs only
+# expand at the prompt; here they are plain aliases, which is as close as bash gets.
+# Keep the two in step — if you add one there, add it here.
+alias exti=exit
 alias grep='grep --color=auto'
-alias fzf="fzf --preview 'bat --color=always {}'"
+alias cat="bat -p"
+alias untar="tar -xf"
 alias copy="wl-copy"
 alias img="kitten icat"
 alias fm="yazi"
@@ -18,22 +23,62 @@ alias nmaps="sudo nmap -sn 192.168.0.0/24"
 alias faillock="sudo faillock --reset"
 alias xremaps="sudo xremap ~/.config/xremap/config.yml"
 alias dots="cd ~/.dotfiles/.config/ && nvim"
+alias keybinds="cd ~/.dotfiles/.config/ && nvim ./hypr/keybindings.conf"
 alias aliases="bat ~/.config/fish/config.fish"
-alias ipadd="sudo ip route add 192.168.0.234 dev wg0"
+alias dmz="cat ~/.config/fish/dmz.txt"
+alias nmatrix="neo-matrix -DS 3"
+alias tts="tt -notheme -bold -showwpm -json"
+alias tuioss="tuios --show-clock --show-keys --show-cpu --show-ram --confirm-quit"
+alias fzf="fzf --preview 'bat --color=always {}'"
+alias fzff="fzf --multi --preview 'bat --style=numbers --color=always {}' | xargs -n 1 nvim"
+alias gcommit="git diff HEAD | aichat -r commit"
+alias aichatdel="rm ~/.config/aichat/sessions/*.yaml"
 
-# List directory
+# Network
+alias ipadd="sudo ip route add 192.168.0.234 dev wg0"
+alias vpnhome="sudo wg-quick up wg0"
+alias vpnkralizec="sudo wg-quick up kralizec-wg0"
+alias vpnsumadija="sudo wg-quick up sumadija-wg0"
+
+# scrcpy
+alias scrcpyc='scrcpy -wSK -m 1920 --window-borderless --always-on-top --power-off-on-close'
+alias scrcpys='scrcpy -wS --power-off-on-close'
+alias scrcpyz='scrcpy -wSK -m 1920 --window-borderless --always-on-top --power-off-on-close --no-audio'
+
+# List directory — `ls` must be aliased first or `lt` falls through to coreutils ls,
+# which has no --tree. bash re-expands the first word of an alias, so l/la/lla/lt
+# all pick up eza from here.
+alias ls='eza --icons --group-directories-first'
 alias l="ls -l"
 alias la="ls -a"
 alias lla="ls -la"
 alias lt="ls --tree"
 
 # Git
+alias gti="git"
 alias gs='git status'
 alias gca='git add -p . && git commit'
 alias gd="git diff --word-diff"
 alias gl='git log --graph --show-signature'
-alias gla="git log --all --decorate --oneline --graph"
+alias glog="git log --all --decorate --oneline --color --graph"
+alias gla="git log --all --decorate --oneline"
+alias gls="serie"
 alias gm='git merge'
+
+# wm-only (paths exist on this box; drop them if this file ever moves to another host)
+alias tilesrv="cd /home/coja/software/wmclient/ && ./martin ./mapfiles/data -W 4 --font ./mapfiles/fonts"
+alias blocks="~/Documents/Blocks/LinuxNoEditor/Blocks.sh -windowed -RenderOffscreen"
+alias cur="cd ~/projects/wingman/wm-clients/c2/c2-main"
+alias c2m="cd ~/projects/wingman/wm-clients/c2/c2-main"
+alias c2b="cd ~/projects/wingman/wm-clients/c2/c2-building"
+alias todo="cd ~/sync/notes/wm-client/ && nvim todo.md"
+
+# Up N directories
+alias ..="cd .."
+alias ...="cd ../.."
+alias .3="cd ../../.."
+alias .4="cd ../../../.."
+alias .5="cd ../../../../.."
 
 # Powerline prompt, synthwave palette (needs a Nerd Font for the glyphs)
 PROMPT_DIRTRIM=3
