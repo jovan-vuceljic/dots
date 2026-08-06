@@ -17,7 +17,7 @@ alias yays="yay --noconfirm --sudoloop"
 alias nmaps="sudo nmap -sn 192.168.0.0/24"
 alias faillock="sudo faillock --reset"
 alias xremaps="sudo xremap ~/.config/xremap/config.yml"
-alias dots="cd ~/.dots/ && nvim"
+alias dots="cd ~/.dotfiles/.config/ && nvim"
 alias aliases="bat ~/.config/fish/config.fish"
 alias ipadd="sudo ip route add 192.168.0.234 dev wg0"
 

@@ -44,6 +44,8 @@ alias gm="git merge"
 alias tilesrv="cd /home/coja/software/wmclient/ && ./martin ./mapfiles/data -W 4 --font ./mapfiles/fonts"
 alias blocks="~/Documents/Blocks/LinuxNoEditor/Blocks.sh -windowed -RenderOffscreen"
 alias cur="cd ~/projects/wingman/wm-clients/c2/c2-main"
+alias c2m="cd ~/projects/wingman/wm-clients/c2/c2-main"
+alias c2b="cd ~/projects/wingman/wm-clients/c2/c2-building"
 abbr todo "cd ~/sync/notes/wm-client/ && nvim todo.md"
 
 # List directory
@@ -55,16 +57,6 @@ alias lt="ls --tree"
 
 # Dotfiles + notes
 alias dots="cd ~/.dotfiles/.config/ && nvim"
-alias cdots="cd ~/.dots/"
-alias cpnotes="cd ~/sync/PersonalNotes/"
-alias cnotes="cd ~/sync/CojaDuska/Notes/"
-abbr notes "cnotes && nvim"
-abbr wnotes "cd ~/sync/Wingman/notes && nvim"
-abbr wtodo "cd ~/sync/Wingman/notes/wm-client/ && nvim todo.md"
-abbr dots "cdots && nvim"
-abbr dotsync "cdots && ./bin/dotsync"
-abbr pnotes "cpnotes && nvim"
-abbr todo "cpnotes && nvim ToDoNext.md"
 abbr aliases "bat ~/.config/fish/config.fish"
 
 # Handy
@@ -86,7 +78,7 @@ abbr scrcpyc 'scrcpy -wSK -m 1920 --window-borderless --always-on-top --power-of
 abbr scrcpys 'scrcpy -wS --power-off-on-close'
 abbr tts "tt -notheme -bold -showwpm -json"
 abbr tuioss "tuios --show-clock --show-keys --show-cpu --show-ram --confirm-quit"
-abbr keybinds "cd ~/.dots/ && nvim gui/.config/hypr/keybindings.conf"
+abbr keybinds "cd ~/.dotfiles/.config/ && nvim ./hypr/keybindings.conf"
 abbr vpnhome "sudo wg-quick up wg0"
 abbr vpnkralizec "sudo wg-quick up kralizec-wg0"
 abbr vpnsumadija "sudo wg-quick up sumadija-wg0"
