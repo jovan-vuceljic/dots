@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Claude Code status line.
 
-One line: vim mode | dir | git(repo/branch +dirty +ahead/behind) | model (+effort) |
+One line: vim mode | dir (repo-relative, hidden at the root) |
+git(repo/branch +dirty +ahead/behind) | model (+effort) |
 context% (+compact warn) | 5h usage (+reset eta) | cost (+burn rate) | disk. If the
 rendered line would overflow the terminal, trailing (lowest-priority) segments are
 dropped until it fits.
@@ -133,14 +134,39 @@ def vim_segment(data):
     return color(f"[{m[:1]}]", "gray")
 
 
-def dir_segment(cwd):
+def abbrev(path):
+    """fish-style prompt_pwd: shrink every component but the last to one char,
+    keeping a leading dot (`.config` -> `.c`)."""
+    parts = path.split(os.sep)
+    out = []
+    for i, p in enumerate(parts):
+        if i == len(parts) - 1 or p in ("", "~"):
+            out.append(p)
+        elif p.startswith("."):
+            out.append(p[:2])
+        else:
+            out.append(p[:1])
+    return os.sep.join(out)
+
+
+def dir_segment(cwd, top=None):
+    """Path *inside* the repo -- git_segment already names the repo itself, so
+    repeating the full ~-path here was pure duplication. Empty at the repo root;
+    a fish-shortened ~-path when we're not in a repo at all."""
     try:
-        home = os.path.expanduser("~")
-        shown = cwd
-        if cwd == home:
-            shown = "~"
-        elif cwd.startswith(home + os.sep):
-            shown = "~" + cwd[len(home):]
+        rel = os.path.relpath(cwd, top) if top else None
+        if rel and not rel.startswith(os.pardir):  # `..` -> cwd is outside `top` (symlinked in); use the ~-path
+            if rel == os.curdir:
+                return ""
+            shown = rel if len(rel) <= 28 else abbrev(rel)
+        else:
+            home = os.path.expanduser("~")
+            shown = cwd
+            if cwd == home:
+                shown = "~"
+            elif cwd.startswith(home + os.sep):
+                shown = "~" + cwd[len(home):]
+            shown = abbrev(shown)
         return "📁 " + color(shown, "cyan")
     except Exception:
         return ""
@@ -152,12 +178,20 @@ def _git(cwd, *args):
     )
 
 
-def git_segment(cwd):
+def git_top(cwd):
+    """Absolute path of the enclosing work tree, or None."""
     try:
-        top = _git(cwd, "rev-parse", "--show-toplevel")
-        if top.returncode != 0:
+        r = _git(cwd, "rev-parse", "--show-toplevel")
+        return r.stdout.strip() or None if r.returncode == 0 else None
+    except Exception:
+        return None
+
+
+def git_segment(cwd, top):
+    try:
+        if not top:
             return ""
-        repo = os.path.basename(top.stdout.strip()) or "repo"
+        repo = os.path.basename(top) or "repo"
         branch = _git(cwd, "rev-parse", "--abbrev-ref", "HEAD").stdout.strip() or "?"
         dirty = bool(_git(cwd, "status", "--porcelain").stdout.strip())
 
@@ -450,6 +484,7 @@ def main():
         or os.getcwd()
     )
     usage = last_usage(data)
+    top = git_top(cwd)
 
     # One row: work (left) then system (right), joined. If it would overflow the
     # terminal, trailing (lowest-priority) segments are dropped so it stays one line.
@@ -459,8 +494,8 @@ def main():
     # cache_segment, api_segment, version_segment, style_segment.
     work = [s for s in (
         vim_segment(data),
-        dir_segment(cwd),
-        git_segment(cwd),
+        dir_segment(cwd, top),
+        git_segment(cwd, top),
         model_segment(data),
         context_segment(data, usage),
         usage_segment(data),
