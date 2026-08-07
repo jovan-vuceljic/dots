@@ -5,6 +5,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# fzf's built-in walker ignores .ignore files; fd honours them. Mirrors config.fish.
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
+
 # Mirrors the aliases + abbrs in .config/fish/config.fish (see README). fish abbrs only
 # expand at the prompt; here they are plain aliases, which is as close as bash gets.
 # Keep the two in step — if you add one there, add it here.

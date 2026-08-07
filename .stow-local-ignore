@@ -1,5 +1,8 @@
 \.git
 \.gitignore
+# Repo-local search config. MUST NOT be deployed: ~/.ignore sits on the parent chain of
+# every search under ~, so linking it would make its `!.*` apply to the whole home dir.
+\.ignore
 LICENSE
 README\.md
 MIGRATION-TEST\.md

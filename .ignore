@@ -1,0 +1,9 @@
+# Search config for THIS repo only (ripgrep / fd / telescope read .ignore).
+#
+# Everything this repo holds lives in dotfiles and dotdirs — .config, .pi, .librewolf,
+# .bashrc, .inputrc — which rg and fd skip by default, so an unqualified search here
+# returned nothing at all. Un-hide them, then put .git back: negating .* alone drags in
+# ~690 files of git internals. Scoped to this directory tree; searches elsewhere on the
+# machine are unaffected.
+!.*
+.git/

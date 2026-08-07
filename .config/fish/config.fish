@@ -12,6 +12,10 @@ set -gx QT_FONT_DPI 96
 set -gx PI_SKIP_VERSION_CHECK 1
 set -gx OPENCODE_CONFIG "$HOME/.config/opencode/openai-gpt.jsonc"
 set -gx MANPAGER "nvim +Man!"
+# fzf's built-in walker is the one search tool that ignores .ignore files, so point it at
+# fd, which honours them. fd still hides dotfiles by default everywhere else — this only
+# changes what fzf sees inside trees that opt in (e.g. ~/.dotfiles/.ignore).
+set -gx FZF_DEFAULT_COMMAND 'fd --type f --strip-cwd-prefix'
 set -gx NEWT_COLORS 'root=black,black;window=black,black;border=white,black;listbox=white,black;label=blue,black;checkbox=red,black;title=green,black;button=white,red;actsellistbox=white,red;actlistbox=white,gray;compactbutton=white,gray;actcheckbox=white,blue;entry=lightgray,black;textbox=blue,black' # themes nmtui
 # set -gx BAT_THEME "Catppuccin Mocha"
 
