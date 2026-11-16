@@ -1,0 +1,98 @@
+/* rofi — HyDE-style launcher: image panel on the left, search + list on the right.
+   Used by every menu (drun/window/filebrowser and the dmenu scripts).
+   Colors: Catppuccin Mocha (HyDE's values, with a dark highlight instead of its lavender one).
+   Panel image: the hyprlock background. */
+
+/* start from an empty theme: as config.rasi, rofi would otherwise layer this on top of its
+   built-in default theme, whose light alternate rows and dashed separators leak through */
+@theme "/dev/null"
+
+configuration {
+    modi:                "drun,window,filebrowser,run";
+    show-icons:          true;
+    icon-theme:          "Papirus-Dark";
+    font:                "JetBrainsMono Nerd Font 11";
+    drun-display-format: "{name}";
+    display-drun:        "󰀻 ";
+    display-window:      "󰖲 ";
+    display-filebrowser: "󰉋 ";
+    display-run:         "󰆍 ";
+    hover-select:        true;
+    me-select-entry:     "";
+    me-accept-entry:     "MousePrimary";
+}
+
+* {
+    bg:     #11111be6;
+    bg-alt: #313244;
+    fg:     #cdd6f4;
+    fg-dim: #7f849c;
+    accent: #cba6f7;
+    sel-bg: #45475a;
+    sel-fg: #cdd6f4;
+
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+window {
+    width:            700px;
+    border:           2px;
+    border-color:     @accent;
+    border-radius:    14px;
+    background-color: @bg;
+}
+
+mainbox {
+    orientation: horizontal;
+    children:    [ "imagebox", "listbox" ];
+}
+
+imagebox {
+    expand:           false;
+    width:            220px;
+    border-radius:    12px 0px 0px 12px;
+    background-image: url("~/.config/hypr/hyprlock/assets/background.jpg", height);
+}
+
+listbox {
+    spacing:  10px;
+    padding:  16px;
+    children: [ "inputbar", "listview" ];
+}
+
+inputbar {
+    padding:          8px 12px;
+    border-radius:    10px;
+    background-color: @bg-alt;
+    children:         [ "prompt", "entry" ];
+    spacing:          8px;
+}
+
+prompt { text-color: @accent; }
+entry  { text-color: @fg; placeholder: "search…"; placeholder-color: @fg-dim; cursor: text; }
+
+listview {
+    lines:     8;
+    columns:   1;
+    spacing:   4px;
+    scrollbar: false;
+    cycle:     true;
+}
+
+element {
+    padding:       7px 10px;
+    border-radius: 8px;
+    spacing:       10px;
+}
+
+element selected.normal,
+element selected.active {
+    background-color: @sel-bg;
+    text-color:       @sel-fg;
+    border:           1px;
+    border-color:     @accent;
+}
+
+element-icon { size: 22px; }
+element-text { text-color: inherit; vertical-align: 0.5; }

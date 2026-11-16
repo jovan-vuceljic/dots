@@ -1,0 +1,86 @@
+/* waybar style — the dots custom.css with filled pills; the cava bar (window#waybar.cavabar,
+   at the end) draws behind the main bar. Colours: theme.css. */
+
+@import "theme.css";
+
+* {
+    border: none;
+    border-radius: 0px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-weight: bold;
+    font-size: 12px;
+    min-height: 10px;
+}
+
+window#waybar { background: @bar-bg; }
+
+tooltip {
+    background: @main-bg;
+    color: @main-fg;
+    border-radius: 8px;
+    border: 1px solid @accent;
+}
+
+#workspaces button,
+#taskbar button {
+    box-shadow: none;
+    text-shadow: none;
+    padding: 0px 4px;
+    border-radius: 6px;
+    margin: 3px 1px;
+    color: @main-fg;
+}
+
+#workspaces button.active,
+#taskbar button.active {
+    background: @wb-act-bg;
+    color: @wb-act-fg;
+    transition: all 0.4s cubic-bezier(0.55, -0.68, 0.48, 1.682);
+}
+
+#workspaces button:hover,
+#taskbar button:hover {
+    background: @wb-hvr-bg;
+    color: @wb-hvr-fg;
+    transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
+}
+
+#workspaces button.urgent { color: @urgent; }
+
+#clock, #cpu, #idle_inhibitor, #memory, #mpris, #network,
+#pulseaudio, #taskbar, #tray, #window, #workspaces,
+#custom-power, #custom-cliphist, #custom-keybindhint,
+#custom-l_end, #custom-r_end, #custom-sl_end, #custom-sr_end {
+    color: @main-fg;
+    background: @main-bg;
+    margin: 4px 0px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#custom-power, #custom-cliphist, #custom-keybindhint { padding: 0 7px; }
+#custom-power { color: @accent; }
+#pulseaudio.muted { color: @urgent; }
+
+/* the window title and its caps vanish on an empty workspace */
+window#waybar.empty #window,
+window#waybar.empty #custom-sl_end,
+window#waybar.empty #custom-sr_end { opacity: 0; }
+
+#custom-l_end { border-radius: 10px 0px 0px 10px; margin-left: 4px; padding-left: 2px; }
+#custom-r_end { border-radius: 0px 10px 10px 0px; margin-right: 4px; padding-right: 2px; }
+#custom-sl_end { border-radius: 8px 0px 0px 8px; margin-left: 8px; padding-left: 3px; }
+#custom-sr_end { border-radius: 0px 8px 8px 0px; margin-right: 8px; padding-right: 3px; }
+#taskbar { border-radius: 10px; padding: 0 6px; }
+
+/* cava bar (second bar, bottom layer, behind this one) */
+window#waybar.cavabar {
+    background: alpha(@main-bg, 0.1);
+}
+
+window#waybar.cavabar #custom-cava {
+    font-size: 24px;
+    color: alpha(@main-fg, 0.5);
+    margin: 0px;
+    padding: 0px;
+}

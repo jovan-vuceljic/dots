@@ -1,0 +1,69 @@
+# dunst — Catppuccin Mocha.
+[global]
+    monitor = 0
+    follow = mouse
+    width = 340
+    height = 300
+    origin = top-right
+    offset = (12, 12)
+    notification_limit = 5
+    progress_bar = true
+    progress_bar_height = 8
+    progress_bar_frame_width = 0
+    progress_bar_corner_radius = 4
+    indicate_hidden = yes
+    separator_height = 2
+    padding = 10
+    horizontal_padding = 12
+    text_icon_padding = 12
+    frame_width = 2
+    frame_color = "#cba6f7"
+    highlight = "#cba6f7"
+    gap_size = 6
+    separator_color = frame
+    sort = yes
+    font = JetBrainsMono Nerd Font 10
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    show_age_threshold = 60
+    ellipsize = middle
+    stack_duplicates = true
+    show_indicators = yes
+    enable_recursive_icon_lookup = true
+    icon_theme = Papirus-Dark
+    icon_position = left
+    min_icon_size = 32
+    max_icon_size = 48
+    sticky_history = yes
+    history_length = 30
+    dmenu = rofi -dmenu -p dunst
+    browser = xdg-open
+    corner_radius = 10
+    mouse_left_click = do_action, close_current
+    mouse_middle_click = close_all
+    mouse_right_click = close_current
+
+[urgency_low]
+    background = "#1e1e2ee6"
+    foreground = "#a6adc8"
+    frame_color = "#45475a"
+    timeout = 4
+
+[urgency_normal]
+    background = "#1e1e2ee6"
+    foreground = "#cdd6f4"
+    timeout = 6
+
+[urgency_critical]
+    background = "#1e1e2ee6"
+    foreground = "#cdd6f4"
+    frame_color = "#f38ba8"
+    timeout = 0
+
+# volume / brightness OSD from ~/.config/hypr/scripts/osd.sh
+[osd]
+    appname = osd
+    history_ignore = yes
+    timeout = 1500ms

@@ -1,0 +1,71 @@
+{
+  "defaultProvider": "localcpp",
+  "defaultModel": "Ornith-1.5-35B-A3B-IQ3_XXS",
+  "defaultThinkingLevel": "medium",
+  "thinkingBudgets": {
+    "minimal": 512,
+    "low": 1024,
+    "medium": 2048,
+    "high": 3072
+  },
+  "theme": "catppuccin-mocha",
+  "quietStartup": false,
+  "collapseChangelog": true,
+  "defaultProjectTrust": "ask",
+  "enableInstallTelemetry": false,
+  "enabledModels": [
+    "duskadiy/*",
+    "localcpp/*"
+  ],
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 8192,
+    "keepRecentTokens": 4000
+  },
+  "retry": {
+    "enabled": true,
+    "maxRetries": 3,
+    "baseDelayMs": 2000,
+    "provider": {
+      "timeoutMs": 3600000
+    }
+  },
+  "httpIdleTimeoutMs": 600000,
+  "npmCommand": [
+    "fnm",
+    "exec",
+    "--using=22",
+    "--",
+    "npm"
+  ],
+  "showHardwareCursor": true,
+  "piVim": {
+    "clipboardMirror": "yank",
+    "exCommand": {
+      "piDispatch": true,
+      "copyInputToClipboard": false
+    },
+    "modeColors": {
+      "insert": "success",
+      "normal": "accent",
+      "visual": "warning",
+      "ex": "bashMode"
+    },
+    "borderSync": {
+      "insert": "host",
+      "normal": "mode",
+      "visual": "mode",
+      "ex": "host"
+    },
+    "labelSync": {
+      "insert": "mode",
+      "normal": "mode",
+      "visual": "mode",
+      "ex": "mode"
+    }
+  },
+  "lastChangelogVersion": "1.5.2",
+  "packages": [
+    "npm:pi-vim"
+  ]
+}

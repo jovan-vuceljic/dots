@@ -1,0 +1,4 @@
+# wayvnc — started by hyprland.lua as `wayvnc -o HEADLESS-VNC` (the headless output it may
+# resize to the viewer's size). Localhost only: reach it over `ssh -L 5900:127.0.0.1:5900`.
+address=127.0.0.1
+port=5900

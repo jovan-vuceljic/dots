@@ -1,0 +1,146 @@
+// waybar — the dots "custom" layout: main bar + cava bar behind it. Module actions use
+// ~/.config/hypr/scripts. Plain `waybar` reads this + style.css.
+[
+{
+    "layer": "top",
+    "position": "top",
+    "height": 32,
+    "exclusive": true,
+    "passthrough": false,
+    "reload_style_on_change": true,
+
+    "modules-left": ["custom/l_end", "custom/power", "custom/r_end", "hyprland/workspaces", "custom/sl_end", "hyprland/window", "custom/sr_end", "custom/l_end", "custom/cliphist", "custom/keybindhint", "custom/r_end"],
+    "modules-center": ["wlr/taskbar"],
+    "modules-right": ["custom/l_end", "pulseaudio", "pulseaudio#microphone", "mpris", "custom/r_end", "custom/l_end", "memory", "cpu", "custom/r_end", "custom/l_end", "network", "tray", "custom/r_end", "custom/l_end", "idle_inhibitor", "clock", "custom/r_end"],
+
+    "custom/power": {
+        "format": "\uf011",
+        "tooltip-format": "power menu",
+        "on-click": "$HOME/.config/hypr/scripts/menu.sh power"
+    },
+    "custom/cliphist": {
+        "format": "󰅇",
+        "tooltip-format": "clipboard: click paste · right delete · middle wipe",
+        "on-click": "sleep 0.1 && $HOME/.config/hypr/scripts/menu.sh clip",
+        "on-click-right": "sleep 0.1 && $HOME/.config/hypr/scripts/menu.sh clip-del",
+        "on-click-middle": "$HOME/.config/hypr/scripts/menu.sh clip-wipe"
+    },
+    "custom/keybindhint": {
+        "format": "\uf11c",
+        "tooltip-format": "keybinds (Super+/)",
+        "on-click": "$HOME/.config/hypr/scripts/menu.sh keys"
+    },
+
+    "hyprland/workspaces": {
+        "all-outputs": true,
+        "active-only": false,
+        "on-click": "activate",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "hyprland/window": {
+        "format": "\uf2d0  {}",
+        "separate-outputs": true,
+        "max-length": 60,
+        "rewrite": {
+            "(.*) — Dolphin": "󰉋 $1",
+            "nvim (.*)": " $1",
+            "(.*)~": " $1"
+        }
+    },
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "icon-theme": "Papirus-Dark",
+        "spacing": 0,
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}",
+        "format-muted": "󰝟",
+        "on-click": "pavucontrol -t 3",
+        "on-click-middle": "$HOME/.config/hypr/scripts/osd.sh vol mute",
+        "on-scroll-up": "$HOME/.config/hypr/scripts/osd.sh vol up",
+        "on-scroll-down": "$HOME/.config/hypr/scripts/osd.sh vol down",
+        "tooltip-format": "{icon} {desc} // {volume}%",
+        "format-icons": { "headphone": "\uf025", "headset": "\uf025", "default": ["\uf026", "\uf027", "\uf028"] }
+    },
+    "pulseaudio#microphone": {
+        "format": "{format_source}",
+        "format-source": "\uf130",
+        "format-source-muted": "\uf131",
+        "on-click": "pavucontrol -t 4",
+        "on-click-middle": "$HOME/.config/hypr/scripts/osd.sh mic",
+        "tooltip-format": "{format_source} {source_desc} // {source_volume}%"
+    },
+    "mpris": {
+        "format": "{player_icon} {dynamic}",
+        "format-paused": "{status_icon} <i>{dynamic}</i>",
+        "player-icons": { "default": "▶", "mpv": "󰝚", "firefox": "󰈹" },
+        "status-icons": { "paused": "\uf04c" },
+        "max-length": 40
+    },
+    "memory": {
+        "interval": 30,
+        "format": "󰾆 {used:0.1f}G",
+        "format-alt": "󰾆 {percentage}%",
+        "tooltip-format": "󰾆 {percentage}%\n\uf2db {used:0.1f}GB/{total:0.1f}GB"
+    },
+    "cpu": {
+        "interval": 10,
+        "format": "󰍛 {usage}%",
+        "format-alt": "{icon0}{icon1}{icon2}{icon3}",
+        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+    },
+    "network": {
+        "format-wifi": "\uf1eb  {essid}",
+        "format-ethernet": "󰈀",
+        "format-linked": "󰈀 {ifname} (No IP)",
+        "format-disconnected": "󰖪",
+        "format-alt": "\uf019 {bandwidthDownBytes}  \uf093 {bandwidthUpBytes}",
+        "tooltip-format": "{ifname} {ipaddr}/{cidr}\nGateway {gwaddr}",
+        "on-click-right": "nm-connection-editor",
+        "interval": 2
+    },
+    "tray": { "icon-size": 12, "spacing": 5 }, // 12 = the bar font size; 16 made tray icons (nm-applet) bigger than the rest
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": { "activated": "󰅶", "deactivated": "󰛊" }
+    },
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "{:%R 󰃭 %d·%m·%y}",
+        "tooltip-format": "<span>{calendar}</span>",
+        "calendar": { "mode": "month", "on-scroll": 1 },
+        "actions": { "on-click-right": "mode", "on-scroll-up": "shift_up", "on-scroll-down": "shift_down" }
+    },
+
+    // pill caps
+    "custom/l_end": { "format": " ", "interval": "once", "tooltip": false },
+    "custom/r_end": { "format": " ", "interval": "once", "tooltip": false },
+    "custom/sl_end": { "format": " ", "interval": "once", "tooltip": false },
+    "custom/sr_end": { "format": " ", "interval": "once", "tooltip": false }
+},
+
+{
+    // full-width cava visualizer behind the main bar (the dots rig); bars = cava.width
+    "name": "cavabar",
+    "layer": "bottom",
+    "position": "top",
+    "height": 36,
+    "margin-top": -32,
+    "exclusive": false,
+    "passthrough": true,
+    "modules-center": ["custom/cava"],
+
+    "custom/cava": {
+        "format": "{}",
+        "exec": "bash $HOME/.config/waybar/cava-waybar.sh $(cat $HOME/.config/waybar/cava.width 2>/dev/null || echo 94)",
+        "restart-interval": 1,
+        "hide-empty-text": true
+    }
+}
+]

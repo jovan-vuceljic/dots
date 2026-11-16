@@ -1,0 +1,12 @@
+# Upstream example files as last reviewed against pi 0.85.1.
+# Written by pi-upgrade-check -a. A file is only re-raised when UPSTREAM moves,
+# so our own local edits stop generating noise on every run.
+55502f82109df07e922ef3ec41af1b1a5ed33d4d6d56076654ab2bc88e2e0888  confirm-destructive.ts
+70e4333e09ce00d546c116fd2e918abf7616c70b5da6e88ba8ee21a326afd483  notify.ts
+e32086ba9dd9b4ba0fd308b65241d9affa0b5ecd3f90ef7ea1b9f2b30cab8cc1  permission-gate.ts
+9ca66b1f3b1b9a61cc5ddc660f92cca2ea66c4264a1bdb6b00e0da5844399fe2  protected-paths.ts
+3f1f719d81152ff013f5d36a97cc3976388d43f2d89bff0f19827d3443d903e6  questionnaire.ts
+a0b9fd94e2cc827931150cc409238b473da635ab1a1cddce633cae5937a3ae24  session-name.ts
+e46824d00217e25242c186d41837cc84ca81b23f978500323448502a9a424ee2  todo.ts
+90fae53e2fada97165f7488520bd54f3cbfe5d2c7e4cfd3bd2aa07ee796e61e8  plan-mode/index.ts
+12ea28d57cc55e68e8d52a2f1d16df8b2e7f2749cd694d41453028002a2bdad9  plan-mode/utils.ts

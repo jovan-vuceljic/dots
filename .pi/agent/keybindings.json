@@ -1,0 +1,5 @@
+{
+  "app.thinking.cycle": ["alt+t"],
+  "tui.editor.cursorUp": ["up", "ctrl+p"],
+  "app.model.cycleForward": ["alt+p"]
+}

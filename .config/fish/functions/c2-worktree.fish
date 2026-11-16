@@ -1,0 +1,30 @@
+function c2-worktree
+    if test (count $argv) -ne 1
+        echo "Usage: c2-worktree <branch-name>"
+        echo "Example: c2-worktree package/package-update"
+        return 1
+    end
+
+    set branch $argv[1]
+
+    set root (git rev-parse --show-toplevel)
+    or return 1
+    set dir $root/.worktrees/(basename $branch)
+
+    mkdir -p $root/.worktrees
+    or return 1
+
+    git checkout -b $branch
+    or return 1
+
+    git checkout master
+    or return 1
+
+    git worktree add $dir $branch
+    or return 1
+
+    cd $dir
+    or return 1
+
+    pnpm i
+end

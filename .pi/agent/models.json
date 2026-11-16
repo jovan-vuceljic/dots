@@ -1,0 +1,274 @@
+{
+  "providers": {
+    "duskadiy": {
+      "baseUrl": "https://llm.duskadiy.com/api/v1",
+      "api": "openai-completions",
+      "apiKey": "$DUSKADIY_API_KEY",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false,
+        "maxTokensField": "max_tokens"
+      },
+      "models": [
+        {
+          "id": "gemma-4-E4B-it-UD-Q8_K_XL",
+          "name": "Gemma 4 E4B · 64k · vision — fast generalist, long docs (~57 t/s)",
+          "reasoning": false,
+          "input": ["text", "image"],
+          "contextWindow": 65536,
+          "maxTokens": 16384,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "gemma-4-26B-A4B-it-UD-IQ4_XS",
+          "name": "Gemma 4 26B · 24k · vision — quality generalist (~34 t/s)",
+          "reasoning": false,
+          "input": ["text", "image"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3-Coder-30B-Instruct-UD-Q3_K_XL",
+          "name": "Qwen3 Coder 30B · 32k — main agent coder (~30 t/s)",
+          "reasoning": false,
+          "input": ["text"],
+          "contextWindow": 32768,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3-Coder-Next-UD-IQ3_XXS",
+          "name": "Qwen3 Coder Next 80B · 128k — long sessions (~16 t/s)",
+          "reasoning": false,
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 16384,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3.6-35B-A3B-MTP-UD-IQ3_XXS",
+          "name": "Qwen3.6 35B · 24k · vision — daily driver (~36 t/s)",
+          "reasoning": false,
+          "input": ["text", "image"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3.6-35B-A3B-Thinking",
+          "name": "Qwen3.6 35B Thinking · 24k · vision — hard problems (~39 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text", "image"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3.5-9B-UD-Q6_K_XL",
+          "name": "Qwen3.5 9B · 32k · vision — quick tasks (~32 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text", "image"],
+          "contextWindow": 32768,
+          "maxTokens": 8192,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3.8-27B-UD-IQ3_XXS",
+          "name": "Qwen3.8 27B · 24k · vision — hybrid reasoner, quiet desktop only (~15 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text", "image"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "GLM-4.7-Flash-UD-Q4_K_XL",
+          "name": "GLM-4.7 Flash · 24k — quality coder (~21 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "GLM-4.7-Flash-UD-Q3_K_XL",
+          "name": "GLM-4.7 Flash Q3 · 24k — fast coder (~28 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Ornith-1.5-35B-A3B-IQ3_XXS",
+          "name": "Ornith 1.5 35B · 32k · vision — agentic coder, thinking (~32 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template", "thinkingTokenBudgetField": "thinking_budget_tokens" },
+          "input": ["text", "image"],
+          "contextWindow": 32768,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "gpt-oss-20b",
+          "name": "gpt-oss 20B · 64k — fast reasoning + tools (~38 t/s)",
+          "reasoning": true,
+          "input": ["text"],
+          "contextWindow": 65536,
+          "maxTokens": 8192,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "gpt-oss-20b-low",
+          "name": "gpt-oss 20B low · 64k — snappy answers (~37 t/s)",
+          "reasoning": true,
+          "input": ["text"],
+          "contextWindow": 65536,
+          "maxTokens": 8192,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        }
+      ]
+    },
+    "localcpp": {
+      "baseUrl": "http://192.168.0.204:11343/v1",
+      "api": "openai-completions",
+      "apiKey": "no-key-required",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false,
+        "maxTokensField": "max_tokens"
+      },
+      "models": [
+        {
+          "id": "gemma-4-E4B-it-UD-Q8_K_XL",
+          "name": "Gemma 4 E4B · 64k · vision — fast generalist, long docs (~57 t/s)",
+          "reasoning": false,
+          "input": ["text", "image"],
+          "contextWindow": 65536,
+          "maxTokens": 16384,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "gemma-4-26B-A4B-it-UD-IQ4_XS",
+          "name": "Gemma 4 26B · 24k · vision — quality generalist (~34 t/s)",
+          "reasoning": false,
+          "input": ["text", "image"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3-Coder-30B-Instruct-UD-Q3_K_XL",
+          "name": "Qwen3 Coder 30B · 32k — main agent coder (~30 t/s)",
+          "reasoning": false,
+          "input": ["text"],
+          "contextWindow": 32768,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3-Coder-Next-UD-IQ3_XXS",
+          "name": "Qwen3 Coder Next 80B · 128k — long sessions (~16 t/s)",
+          "reasoning": false,
+          "input": ["text"],
+          "contextWindow": 131072,
+          "maxTokens": 16384,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3.6-35B-A3B-MTP-UD-IQ3_XXS",
+          "name": "Qwen3.6 35B · 24k · vision — daily driver (~36 t/s)",
+          "reasoning": false,
+          "input": ["text", "image"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3.6-35B-A3B-Thinking",
+          "name": "Qwen3.6 35B Thinking · 24k · vision — hard problems (~39 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text", "image"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3.5-9B-UD-Q6_K_XL",
+          "name": "Qwen3.5 9B · 32k · vision — quick tasks (~32 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text", "image"],
+          "contextWindow": 32768,
+          "maxTokens": 8192,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Qwen3.8-27B-UD-IQ3_XXS",
+          "name": "Qwen3.8 27B · 24k · vision — hybrid reasoner, quiet desktop only (~15 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text", "image"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "GLM-4.7-Flash-UD-Q4_K_XL",
+          "name": "GLM-4.7 Flash · 24k — quality coder (~21 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "GLM-4.7-Flash-UD-Q3_K_XL",
+          "name": "GLM-4.7 Flash Q3 · 24k — fast coder (~28 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template" },
+          "input": ["text"],
+          "contextWindow": 24576,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "Ornith-1.5-35B-A3B-IQ3_XXS",
+          "name": "Ornith 1.5 35B · 32k · vision — agentic coder, thinking (~32 t/s)",
+          "reasoning": true,
+          "compat": { "thinkingFormat": "qwen-chat-template", "thinkingTokenBudgetField": "thinking_budget_tokens" },
+          "input": ["text", "image"],
+          "contextWindow": 32768,
+          "maxTokens": 4096,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "gpt-oss-20b",
+          "name": "gpt-oss 20B · 64k — fast reasoning + tools (~38 t/s)",
+          "reasoning": true,
+          "input": ["text"],
+          "contextWindow": 65536,
+          "maxTokens": 8192,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "gpt-oss-20b-low",
+          "name": "gpt-oss 20B low · 64k — snappy answers (~37 t/s)",
+          "reasoning": true,
+          "input": ["text"],
+          "contextWindow": 65536,
+          "maxTokens": 8192,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,50 @@
+[general]
+import = ["theme.toml"]
+
+[window]
+
+opacity = 0.7
+
+padding.x = 25
+padding.y = 25
+
+decorations = "Full"
+decorations_theme_variant = "Dark"
+
+[font]
+size = 12.0
+
+[font.bold]
+family = "CaskaydiaCove Nerd Font Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "CaskaydiaCove Nerd Font Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "CaskaydiaCove Nerd Font Mono"
+style = "Italic"
+
+[font.normal]
+family = "CaskaydiaCove Nerd Font Mono"
+style = "Regular"
+# family = "Source Code Pro"
+# family = "Liberation Mono"
+
+[cursor]
+blink_interval = 400
+blink_timeout = 15
+
+[cursor.style]
+shape = "Block"
+blinking = "On"
+
+[keyboard]
+
+bindings = [
+	{ key = "J", mods = "Control|Shift", action = "ScrollLineDown" },
+	{ key = "K", mods = "Control|Shift", action = "ScrollLineUp" },
+	{ key = "D", mods = "Control|Shift", action = "ScrollPageDown" },
+	{ key = "U", mods = "Control|Shift", action = "ScrollPageUp" },
+]

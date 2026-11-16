@@ -1,0 +1,14 @@
+# KDE app defaults (HyDE's kdeglobals): kitty for "Open Terminal Here", Papirus icons, no
+# wallet prompts, and the Catppuccin Mocha color scheme (~/.local/share/color-schemes/
+# CatppuccinMocha.colors). Same XDG_CONFIG_DIRS trick as dolphinrc next to it.
+[General]
+TerminalApplication=kitty
+
+[Icons]
+Theme=Papirus-Dark
+
+[Wallet]
+Enabled=false
+
+[UiSettings]
+ColorScheme=CatppuccinMocha

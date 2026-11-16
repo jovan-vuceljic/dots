@@ -1,0 +1,35 @@
+# Dolphin defaults: HyDE's dolphinrc minus its machine-specific lines. Read as a default
+# through XDG_CONFIG_DIRS (hyprland.lua), so Dolphin saves its own state to
+# ~/.config/dolphinrc (not in the repo) and keys there win over these.
+[General]
+ShowSelectionToggle=false
+ShowStatusBar=false
+Version=202
+
+[IconsMode]
+MaximumTextLines=1
+PreviewSize=112
+
+[InformationPanel]
+dateFormat=ShortFormat
+
+[KFileDialog Settings]
+Places Icons Auto-resize=false
+Places Icons Static Size=16
+
+[MainWindow]
+MenuBar=Disabled
+ToolBarsMovable=Disabled
+
+[MainWindow][Toolbar mainToolBar]
+IconSize=16
+ToolButtonStyle=IconOnly
+
+[PlacesPanel]
+IconSize=16
+
+[PreviewSettings]
+Plugins=appimagethumbnail,audiothumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,svgthumbnail,ffmpegthumbs
+
+[Toolbar mainToolBar]
+ToolButtonStyle=IconOnly

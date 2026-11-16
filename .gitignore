@@ -1,0 +1,17 @@
+# Secrets and per-machine files the configs read when present: keep them out of the repo.
+# (stow --no-folding normally leaves files the apps create in ~, not here; this covers the case
+# where one gets created inside the repo, since `gcap` runs `git add .`)
+secrets.fish
+.config/fish/host.fish
+.bashrc.host
+.pi/agent/auth.json
+
+# Runtime state written by the apps
+.config/fish/greet.txt
+.pi/agent/sessions/
+.pi/agent/npm/
+.pi/agent/git/
+.pi/agent/trust.json
+
+__pycache__/
+*.pyc

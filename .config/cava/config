@@ -1,0 +1,19 @@
+## cava — only this repo's own settings. Every key left out falls back to cava's built-in
+## default; cava documents them all in the config it writes to an empty ~/.config/cava/config,
+## and it regenerates its own shaders/ and themes/ there on first run (so the repo ships none
+## of cava's files).
+
+[general]
+framerate = 60
+autosens = 1
+
+[color]
+gradient = 1
+gradient_color_1 = '#d34b11'
+gradient_color_2 = '#cc5933'
+gradient_color_3 = '#cc8033'
+gradient_color_4 = '#cca633'
+gradient_color_5 = '#cccc33'
+gradient_color_6 = '#a6cc33'
+gradient_color_7 = '#80cc33'
+gradient_color_8 = '#59cc33'
