@@ -124,6 +124,9 @@ hl.config({
 		sensitivity = 0,
 		touchpad = { natural_scroll = false },
 	},
+	-- Software cursor (1 = never use the GPU's cursor plane): on libreworld's R7 360 the hardware
+	-- cursor stayed invisible on the monitor, while the same cursor drawn into the frame shows.
+	cursor = { no_hardware_cursors = 1 },
 })
 
 -- HyDE theme animation set (same curves the dots layer ports from animations/theme.conf)
