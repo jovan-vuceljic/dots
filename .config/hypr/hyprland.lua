@@ -146,3 +146,9 @@ hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "wind" }
 -- ── Rules + binds ────────────────────────────────────────────────────────────
 require("rules")
 require("binds")
+
+
+
+-- ── Tests ────────────────────────────────────────────────────────────
+
+hl.workspace_rule({ workspace = "10", layout = "scrolling" })

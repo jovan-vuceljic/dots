@@ -151,16 +151,26 @@ bind(MOD .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }), "[Workspace] n
 bind(MOD .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }), "[Workspace] previous (scroll)")
 
 -- ── Workspaces ───────────────────────────────────────────────────────────────
--- r~N = Nth workspace of the focused monitor (dots' multi-monitor sets)
+-- Pin each workspace NAME to a physical monitor so the two extended screens
+-- never share a name. r~N ("Nth workspace of the FOCUSED monitor") then lands
+-- on the right set: 1..10 on the Dell, 11..20 on the Samsung. This is the
+-- mechanism that makes per-monitor Super+num work: hl.get_active_monitor()
+-- tracks window focus, not the physical monitor, so it must NOT be used here.
 for i = 1, 10 do
-	local key = i % 10
-	bind(MOD .. " + " .. key, hl.dsp.focus({ workspace = "r~" .. i }), "[Workspace] go to " .. i)
-	bind(MOD .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = "r~" .. i }), "[Workspace] move window to " .. i)
-	bind(MOD .. " + CTRL + " .. key, hl.dsp.window.move({ workspace = "r~" .. i }), "[Workspace] move window to " .. i)
+	hl.workspace_rule({ workspace = tostring(i), monitor = "DP-2", default = (i == 1) })
+	hl.workspace_rule({ workspace = tostring(i + 10), monitor = "HDMI-A-2", default = (i == 1) })
+end
+
+-- r~N = Nth workspace of the focused monitor (monitor-relative).
+for i = 1, 10 do
+	local key = (i == 10) and 0 or i
+	bind(MOD .. " + " .. key, hl.dsp.focus({ workspace = "r~" .. i }), "[Workspace] go to workspace " .. i .. " (this monitor)")
+	bind(MOD .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = "r~" .. i }), "[Workspace] move window to workspace " .. i .. " (this monitor)")
+	bind(MOD .. " + CTRL + " .. key, hl.dsp.window.move({ workspace = "r~" .. i }), "[Workspace] move window to workspace " .. i .. " (this monitor)")
 	bind(
 		MOD .. " + ALT + " .. key,
 		hl.dsp.window.move({ workspace = "r~" .. i, follow = false }),
-		"[Workspace] move window to " .. i .. " silently"
+		"[Workspace] move window to workspace " .. i .. " (this monitor) silently"
 	)
 end
 bind(MOD .. " + RIGHT", hl.dsp.focus({ workspace = "r+1" }), "[Workspace] next")
